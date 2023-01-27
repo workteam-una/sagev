@@ -1,0 +1,59 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Fecha</th>
+      <th scope="col">Hora</th>
+      <th scope="col">Nombre contribuyente</th>
+      <th scope="col">Cédula contribuyente</th>
+      <th scope="col">Motivo</th>
+      <th scope="col">Estado</th>
+      <th scope="col">Reagendar Cita</th>
+      <th scope="col">Cambiar Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let cita of citasFuncionario">
+      <th scope="row">{{cita.fecha}}</th>
+        <td>{{cita.hora}}</td>
+        <td>{{cita.nombreContribuyente}}</td>
+        <td>{{cita.apellido1Contribuyente}}</td>
+        <td>{{cita.detalle}}</td>
+        <td>{{cita.estado}}</td>
+        <td>
+          <button type="button" class="btn btn-primary">Reagendar</button
+            ></td>
+        <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
+        <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
+        <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
+        <td>
+          <button type="button" class="btn btn-primary" (click)="actualizarEstado(cita.id)">Cambiar</button>
+        </td>
+        <td>
+          <td><button type="button" class="btn btn-primary" (click)="show(1)">Cambiar Pop Up</button></td>
+      <!-- (click)="goToPage('formulario')"  entre button y type -->
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal -->
+<div class="uc-modal" *ngIf="showModal === 1">
+  <div class="uc-m-content">
+      <div class="uc-m-header">
+          <span class="material-symbols-outlined" (click)="close()">
+              close
+          </span>
+          <h4>Cambiar estado de una cita</h4>
+      </div>
+      <div class="uc-m-body">
+        <h5>Seleccione el estado que desea asignar a la cita</h5>
+          <select class="cbEstado" name="cambiarEstado" id="estado">
+              <option selected value="none">--------</option>
+              <option value="completada">Completada</option>
+              <option value="noPresente">No se presentó</option>
+          </select>
+      </div>
+      <div class="uc-m-footer">
+          <button>Guardar Estado</button>
+      </div>
+  </div>
+</div>

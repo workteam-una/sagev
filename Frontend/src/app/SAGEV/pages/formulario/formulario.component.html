@@ -1,0 +1,49 @@
+<form class="row g-3 divFormulario">
+    <div class="col-md-4">
+        <label for="validationDefault01" class="form-label">Fecha</label>
+        <input name="fecha" type="text" class="form-control" id="validationDefault01" value="{{fechaCitaString}}" required disabled >
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault02" class="form-label">Hora</label>
+        <input [(ngModel)]="citaPadre.hora" name="hora" type="text" class="form-control" id="validationDefault02" value="" required disabled>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault03" class="form-label">Funcionario</label>
+        <input [(ngModel)]="citaPadre.idFuncionario" name="idFuncionario" type="text" class="form-control" id="validationDefault03" value="" required disabled>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault01" class="form-label">Nombre</label>
+        <input [(ngModel)]="citaPadre.nombreContribuyente" name="nombreContribuyente" type="text" class="form-control" id="validationDefault01" value="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault02" class="form-label">Primer Apellido</label>
+        <input [(ngModel)]="citaPadre.apellido1Contribuyente" name="apellido1Contribuyente" type="text" class="form-control" id="validationDefault02" value="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault03" class="form-label">Segundo Apellido</label>
+        <input [(ngModel)]="citaPadre.apellido2Contribuyente" name="apellido2Contribuyente" type="text" class="form-control" id="validationDefault03" value="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault04" class="form-label">Cédula</label>
+        <input [(ngModel)]="citaPadre.idContribuyente" name="idContribuyente" type="text" class="form-control" id="validationDefault04" value="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault05" class="form-label">Teléfono</label>
+        <input [(ngModel)]="citaPadre.telefonoContribuyente" name="telefonoContribuyente" type="text" class="form-control" id="validationDefault05" value="" required>
+    </div>
+    <div class="col-md-4">
+        <label for="validationDefault06" class="form-label">Correo Electrónico</label>
+        <input [(ngModel)]="citaPadre.correoContribuyente" name="correoContribuyente" type="text" class="form-control" id="validationDefault06" value="" required>
+    </div>
+
+    <div class="col-md-4 divDescr">
+        <label for="validationDefault06" class="form-label">Motivo de la cita</label>
+        <textarea [(ngModel)]="citaPadre.detalle" name="descripcion" class="form-control" id="validationDefault06"></textarea>  <!-- type="text" class="form-control" id="validationDefault06" value="" required> -->
+    </div>
+
+
+    <div class="col-12 divEnviar">
+        <button class="btn btn-primary btnEnviar" (click)="GuadarCita(citaPadre)">Enviar formulario</button>
+    </div>
+
+</form>

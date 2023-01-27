@@ -1,0 +1,50 @@
+.divAD {
+    display: flex;
+    margin: auto;
+    width: 75%;
+    padding: 10px;
+
+
+}
+
+.divArea {
+    margin-right: 15%;
+    margin-right: 5%;
+    resize: none;
+}
+
+.divDpto {
+    margin-right: 5%;
+    margin-left: 15%;
+    resize: none;
+}
+
+.cbDpto {
+    margin: auto;
+}
+
+.liTramites {
+    border-bottom: 1px solid #ccc;
+}
+
+.liNombreFuncionario {
+    border-bottom: 1px solid #ccc;
+}
+
+.tablaCitas {
+    margin: auto;
+    width: 75%;
+    padding: 10px;
+}
+
+.tituloTabla {
+    margin-left: 46%;
+    width: 12%;
+}
+
+
+.tituloBienvenida{
+    margin: auto;
+    width: 17%;
+    padding: 10px;
+}

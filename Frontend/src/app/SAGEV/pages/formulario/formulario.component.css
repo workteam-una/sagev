@@ -1,0 +1,21 @@
+.divFormulario{
+    margin: auto;
+    width: 75%;
+    padding: 10px;
+}
+
+.divEnviar{
+    margin: auto;
+    width: 25%;
+    padding: 10px;
+}
+
+.btnEnviar{
+    background-color: #039dfc;
+}
+
+.divDescr{
+    margin: auto;
+    width: 100%;
+    padding: 10px;
+}

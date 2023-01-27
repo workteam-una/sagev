@@ -1,0 +1,74 @@
+/* CSS para el pop up */
+.uc-modal {
+    position: fixed;
+    background: #000000bf;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.uc-m-content {
+    background-color: #fff;
+    width: 50%;
+    margin: 3% auto;
+    border-radius: 6px;
+}
+
+.uc-m-header {
+    padding: 20px;
+    background-color: #265cbe;
+    color: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    position: relative;
+}
+
+.uc-m-header h4{
+    margin: 0;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.uc-m-header .material-symbols-outlined{
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.uc-m-body{
+    padding: 20px;
+    min-height: 200px;
+}
+
+.uc-m-footer{
+    padding: 20px;
+    border-top: 1px dashed #ccc;
+    text-align: right;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.uc-m-footer button{
+    margin-left: 20px;
+    margin-right: 0px;
+
+    padding: 15px 30px;
+    background-color: #265cbe;
+    font-size: 14px;
+    border: 0;
+    border-radius: 6px;
+    margin-right: 20px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.cbEstado{
+    margin-top: 5%;
+    border-radius: 6px;
+    font-size: 120%;
+}
+
+/* Fin de CSS para pop up */

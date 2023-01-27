@@ -1,0 +1,65 @@
+element{
+    --colorPag: #33be74;
+}
+
+.principal{
+    align-content: center;
+    display: flex;
+    height: 35vh;
+    margin-bottom: 1%;
+    color: var(--colorPag);
+    
+}
+
+#fondoCasa{
+    
+    background-image: url('src\assets\images\casaAdobe.jfif');
+    width: 100vw;
+    height: 31vh;
+    background-repeat: no-repeat;
+    background-size:  cover;
+    background-position: center;
+}
+
+
+
+
+.logo{
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    margin-right: 20px;
+    width: 75%;
+    height: 75%;
+}
+
+
+.divNombre{
+    align-content: right;
+    margin-left: 35%;
+    font-size: 150%;
+}
+
+.divMenu{
+    background-color: #039dfc;
+    border-radius: 40px;
+}
+
+.nombre{
+    margin-top: 4%;
+    font-family: "Myriad-Pro";  
+    src: url(http://www.anaveer.in/honda/font/MYRIADPRO-REGULAR.OTF) format("truetype");
+}
+
+.opciones{
+    font-weight: bold;
+}
+
+.opciones:hover{
+    height: 150%;
+    background-color: rgb(28, 60, 88);
+    font-weight: bold;
+    opacity: 90%;
+    border-radius: 10px;
+    text-decoration: underline;
+}
