@@ -35,8 +35,6 @@ export class LoginComponent implements OnInit {
       pero si lo hago asi como esta, validarCredenciales no espera a que obtnerFuncionario cumpla su promesa de retornar un funcionario
       le pasa por encima, hay que hacer que lo espere*/
     });
-    //Forward a la vista del funcionario
-    this.router.navigate(["citasFunc"])
     
   }
 
@@ -58,7 +56,8 @@ export class LoginComponent implements OnInit {
     this.guardarLocalStorage(this.modeloFuncionarioCargado);
 
     //Aqui se pasa a la otra vista
-    
+    //Forward a la vista del funcionario
+    this.router.navigate(["citasFunc"])
   }
 
   guardarLocalStorage(funclogeado: Funcionario){
