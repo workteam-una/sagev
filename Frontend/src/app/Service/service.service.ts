@@ -42,6 +42,7 @@ export class ServiceService {
     return this.http.put<number>(this.url + "citas" + "/" + id, id);
   }
 
+  //actualizarEstadoAusente
 
   getCitasFuncionario(idFuncionario: number) {
     return this.http.get<Cita[]>(this.url + "citas" + "/funcionario/" + idFuncionario)

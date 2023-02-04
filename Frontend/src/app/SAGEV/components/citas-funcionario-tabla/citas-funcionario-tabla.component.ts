@@ -33,7 +33,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }
 
   //Mostrar el pop up
-  showModal = -1;
+  showModal: number = -1;
 
   show(index: number){
     this.showModal = index;
@@ -60,6 +60,8 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // this.router.navigate(['citasFunc']); 
     // });
     //Refrescar el componente
+
+    //Cosas ricas
   }
 
 }
