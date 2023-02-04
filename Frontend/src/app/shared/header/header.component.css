@@ -12,17 +12,13 @@ element{
 }
 
 #fondoCasa{
-    
     background-image: url('src\assets\images\casaAdobe.jfif');
-    width: 100vw;
-    height: 31vh;
+    width: 100%;
+    height: 10%;
     background-repeat: no-repeat;
     background-size:  cover;
     background-position: center;
 }
-
-
-
 
 .logo{
     margin-top: 20px;

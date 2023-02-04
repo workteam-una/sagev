@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
@@ -8,12 +7,10 @@ import { SAGEVModule } from './SAGEV/sagev.module';
 import { ReservaComponent } from './SAGEV/pages/reserva/reserva.component';
 import { ServiceService } from './Service/service.service';
 import { HttpClientModule } from '@angular/common/http';
-import { CancelarComponent } from './app/sagev/pages/cancelar/cancelar.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    CancelarComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
