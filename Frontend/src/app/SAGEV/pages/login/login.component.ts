@@ -30,12 +30,13 @@ export class LoginComponent implements OnInit {
     .subscribe(data => {
       this.modeloFuncionarioCargado = data
       console.log("Funcionario Obtenido --->"+ this.modeloFuncionarioCargado.nombre + " " + this.modeloFuncionarioCargado.contrasenna);
-      this.validarCredenciales();
       /*Arreglar: ValidarCredenciales deberia llamar a obtenerFuncionario y no al reves
       pero si lo hago asi como esta, validarCredenciales no espera a que obtnerFuncionario cumpla su promesa de retornar un funcionario
       le pasa por encima, hay que hacer que lo espere*/
     });
     
+    
+    // this.validarCredenciales();
   }
 
   validarCredenciales(): void {

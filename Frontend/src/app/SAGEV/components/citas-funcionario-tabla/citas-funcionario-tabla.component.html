@@ -20,22 +20,20 @@
         <td>{{cita.detalle}}</td>
         <td>{{cita.estado}}</td>
         <td>
-          <button type="button" class="btn btn-primary">Reagendar</button
-            ></td>
+          <button type="button" class="btn btn-primary">Reagendar</button>
+        </td>
         <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
         <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
         <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
         <td>
-          <button type="button" class="btn btn-primary" (click)="actualizarEstado(cita.id)">Cambiar</button>
+          <button type="button" class="btn btn-primary" (click)="show(1, cita.id)">Cambiar</button>
         </td>
-        <td>
-          <td><button type="button" class="btn btn-primary" (click)="show(1)">Cambiar</button></td>
       <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
 
-<!-- Modal -->
+<!-- Popup -->
 <div class="uc-modal" *ngIf="showModal === 1">
   <div class="uc-m-content">
       <div class="uc-m-header">
@@ -46,14 +44,15 @@
       </div>
       <div class="uc-m-body">
         <h5>Seleccione el estado que desea asignar a la cita</h5>
-          <select class="cbEstado" name="cambiarEstado" id="estado">
+          <select #selectEstado class="cbEstado" name="cambiarEstado" id="estado">
               <!-- <option selected value="none">  </option> -->
               <option value="completada">Completada</option>
-              <option value="noPresente">Ausente</option>
+              <option value="ausente">Ausente</option>
           </select>
       </div>
       <div class="uc-m-footer">
-          <button>Guardar Estado</button>
+          <!-- Este botón va a disparar el evento -->
+          <button (click)="actualizarEstado(selectEstado.value)">Guardar Estado</button>
       </div>
   </div>
 </div>

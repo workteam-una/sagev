@@ -24,11 +24,13 @@ public class CitaControlador {
         return service.listar();
     }
 
+    //Devuelve todas las citas
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
     public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") int idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
 
+    //Guarda la cita en la BD
     @PostMapping
     public Cita agregar(@RequestBody Cita c){
         return service.save(c);
@@ -40,10 +42,20 @@ public class CitaControlador {
         return service.listarId(id);
     }
 
-    @PutMapping(path = {"/{id}"})
-    public Cita editar(@PathVariable("id") int id){
+    //Marca la cita como completada
+    @PutMapping(path = {"/completada/{id}"})
+    public Cita completada(@PathVariable("id") int id){
         Cita cita = service.listarId(id);
         cita.setEstado("Completada");
         return service.edit(cita);
     }
+
+    //Marca la cita como ausente
+    @PutMapping(path = {"/ausente/{id}"})
+    public Cita ausente(@PathVariable("id") int id){
+        Cita cita = service.listarId(id);
+        cita.setEstado("Ausente");
+        return service.edit(cita);
+    }
+
 }

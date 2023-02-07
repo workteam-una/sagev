@@ -34,17 +34,19 @@ export class ServiceService {
     return this.http.get<Funcionario>(this.url + "funcionarios" + "/" + id);
   }
 
-  guardarCita(cita: Cita) {
-    return this.http.post<Cita>(this.url + "citas", cita)
-  }
-
-  actualizarEstado(id: number){
-    return this.http.put<number>(this.url + "citas" + "/" + id, id);
-  }
-
-  //actualizarEstadoAusente
-
   getCitasFuncionario(idFuncionario: number) {
     return this.http.get<Cita[]>(this.url + "citas" + "/funcionario/" + idFuncionario)
+  }
+
+  guardarCita(cita: Cita) {
+    return this.http.post<Cita>(this.url + "citas", cita);
+  }
+
+  actualizarEstadoCompletada(id: number){
+    return this.http.put<number>(this.url + "citas" + "/completada/" + id, id);
+  }
+
+  actualizarEstadoAusente(id: number){
+    return this.http.put<number>(this.url + "citas" + "/ausente/" + id, id);
   }
 }
