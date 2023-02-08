@@ -10,12 +10,11 @@ import { Funcionario } from '../../modelo/funcionario';
 })
 export class LoginComponent implements OnInit {
 
+  // Tiene el id y contraseña digitado en los campos de texto
   modeloFuncionario: Funcionario = new Funcionario()
-  modeloFuncionarioCargado: Funcionario = new Funcionario()
 
-  imprimir(): void {
-    console.log(this.modeloFuncionario)
-  }
+  // Al validarse las credenciales se carga con todos los datos del funcionario
+  modeloFuncionarioCargado: Funcionario = new Funcionario()
 
   constructor(private service: ServiceService, private router: Router) { }
 
@@ -23,45 +22,48 @@ export class LoginComponent implements OnInit {
     
   }
 
+  /* 
+    Obtiene el id del funcionario del campo de texto y lo busca en la base de datos.
+    Una vez que encuentra al funcionario, valida si la contraseña es correcta apoyandose en una
+    llamada al método "validarCredenciales()" para hacer el forward a la vista del funcionario.
+  */
   obtenerFuncionario(): void {
-    //Guardando el id del textfield de login
+    // Guardando el id del textfield de login
     let id = this.modeloFuncionario.idFuncionario
-    this.service.getFuncionarioId(id)
-    .subscribe(data => {
-      this.modeloFuncionarioCargado = data
-      console.log("Funcionario Obtenido --->"+ this.modeloFuncionarioCargado.nombre + " " + this.modeloFuncionarioCargado.contrasenna);
-      /*Arreglar: ValidarCredenciales deberia llamar a obtenerFuncionario y no al reves
-      pero si lo hago asi como esta, validarCredenciales no espera a que obtnerFuncionario cumpla su promesa de retornar un funcionario
-      le pasa por encima, hay que hacer que lo espere*/
-    });
-    
-    
-    // this.validarCredenciales();
+      this.service.getFuncionarioId(id)
+      .subscribe(data => {
+        this.modeloFuncionarioCargado = data
+        // Este try está validando la existencia del id del funcionario
+        try {
+          this.validarCredenciales();
+        }
+        catch (error) {
+          //Se debe sustituir por un pop-up
+          alert("La cédula o contraseña son incorrectas")
+        }
+      });
   }
 
+  // Valida tanto el id como la contraseña del funcionario
   validarCredenciales(): void {
-    console.log("Funcionario a Validar --->"+ this.modeloFuncionarioCargado.nombre + " " + this.modeloFuncionarioCargado.contrasenna);
-    console.log("Funcionario a Comparar --->"+ this.modeloFuncionario.nombre + " " + this.modeloFuncionario.contrasenna);
-
-    let idmal: Boolean;
-    let passwordmal: Boolean;
-    if(this.modeloFuncionarioCargado === null){idmal = true};
-    if(this.modeloFuncionarioCargado.contrasenna != this.modeloFuncionario.contrasenna){passwordmal = true};
-
-    if(idmal || passwordmal){
-      //Aqui hay sustituir ese alert por algo mas bonito
-      alert("La cedula o contraseña estan mal")
+    let idMal: Boolean;
+    let passwordMal: Boolean;
+    if(this.modeloFuncionarioCargado === null){idMal = true};
+    if(this.modeloFuncionarioCargado.contrasenna != this.modeloFuncionario.contrasenna){passwordMal = true};
+    if(idMal || passwordMal) {
+      //Se debe sustituir por un pop-up
+      alert("La cédula o contraseña son incorrectas")
       return;
     }
-    //Usar el LocalStorage es algo provicional, hay que mandar un objeto de un modulo a otro
+    // Usar el Local storage es algo provisional, en realidad 
+    // lo correcto es enviar el objeto de un módulo a otro
     this.guardarLocalStorage(this.modeloFuncionarioCargado);
-
-    //Aqui se pasa a la otra vista
-    //Forward a la vista del funcionario
+    // Forward a la vista del funcionario
     this.router.navigate(["citasFunc"])
   }
 
-  guardarLocalStorage(funclogeado: Funcionario){
+  // Guardar el objeto funcionario en el local storage del navegador
+  guardarLocalStorage(funclogeado: Funcionario): void {
     this.modeloFuncionario = funclogeado;
     this.modeloFuncionario.contrasenna = "";
     localStorage.setItem("modeloFuncionario",JSON.stringify(this.modeloFuncionario));

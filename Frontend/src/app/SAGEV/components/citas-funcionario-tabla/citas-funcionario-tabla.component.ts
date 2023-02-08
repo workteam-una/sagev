@@ -60,6 +60,8 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       this.service.actualizarEstadoCompletada(this.idCitaSeleccionada)
       .subscribe(data => {
       alert("Estado de cita actualizado a completado con exito!")
+      // Se vuelven a cargar todas las citas para que se actualice su estado en la tabla de citas,
+      // del funcionario, lo malo de esto es que si son muchas citas puede llegar a ser mucha carga.
       this.ngOnInit();
     })
     }
