@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th scope="col">Fecha</th>
+      <th scope="col">Día</th>
       <th scope="col">Hora</th>
       <th scope="col">Funcionario</th>
       <th scope="col">Seleccionar</th>
@@ -9,25 +10,13 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th scope="row">16/11/2022</th>
-      <td>9:30</td>
+    <tr *ngFor="let cita of citasDisponibles">
+      <th scope="row">{{cita.fecha.toLocaleDateString()}}</th>
+      <td>{{devuelveDiaSemana(cita.fecha)}}</td>
+      <td>{{cita.hora}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}}</td>
-      <td><button  type="button" class="btn btn-primary" (click)="seleccionar(); cargarCitaPadre()">Reserva</button></td>
-<!-- (click)="goToPage('formulario')"  entre button y type -->
-    </tr>
-    <tr>
-      <th scope="row">16/11/2022</th>
-      <td>10:30</td>
-      <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}}</td>
-      <!-- Se cambian todos los botones a la vez, porque los botones agarran el valor de status y status se cambia cada que se ejecuta cargarCita() desde cualquier boton -->
-      <td><button type="button" id="btn_reserva" class="btn btn-primary" (click)="seleccionar(); cargarCitaPadre()">{{status}}</button></td>
-    </tr>
-    <tr>
-      <th scope="row">16/11/2022</th>
-      <td>11:30</td>
-      <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}}</td>
-      <td><button type="button" id="btn_reserva" class="btn btn-primary" (click)="seleccionar(); cargarCitaPadre()">Reserva</button></td>
+      <td><button  type="button" class="btn btn-primary" (click)="seleccionar();">Reserva</button></td>
+    <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
