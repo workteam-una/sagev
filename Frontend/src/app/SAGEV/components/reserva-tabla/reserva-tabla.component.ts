@@ -9,54 +9,62 @@ import { Funcionario } from '../../modelo/funcionario';
 })
 export class ReservaTablaComponent implements OnInit {
 
-  @Input() funcionarioEncargado: Funcionario
-  citaPadre: Cita = new Cita()
-  fechaCitaString: String
-
-  //9 de Febrero
-  fechaPrueba: String = new Date().toLocaleString('en-US', {hour12: false})
-  citasDisponibles: Cita[] = []
-
   constructor() { }
 
-  seleccionado = true; //Creo que esto esta al revez XD
+  @Input() funcionarioEncargado: Funcionario
+  citaPadre: Cita = new Cita()
+
+  // Para mostrar la fecha como un string 
+  fechaCitaString: String
+
+  // Para Mostrar la hora formateada en el formulario 
+  horaCitaFormateada: String
+
+  // Para mostrar el nombre del funcionario en el formulario 
+  nombreFuncionario: String
+
+  // Array para cargar las citas auxiliares que se muestran en la tabla
+  citasDisponibles: Cita[] = []
+
+  seleccionado = false; //Creo que esto esta al revez XD
   status = 'Reserva';
+
+  botonEstilo = {'background-color': 'blue', 'value': 'seleccionado'};
 
   ngOnInit(): void {
     this.generaCitas();
   }
 
-  seleccionar(): void {
-    this.seleccionado = !this.seleccionado
-    this.status = this.seleccionado ? 'Reserva' : 'Seleccionada'
+  botonEstiloCambiaColor(): void {
+    this.botonEstilo["background-color"] = 'green'
+  } 
+
+  seleccionar(idCita: number): void {
+    let boton = document.getElementById(idCita.toString());
+    boton.classList.toggle("btnselect");
   }
 
-  // stringToDate(_date,_format,_delimiter)
-  // {
-  //   let formatLowerCase = _format.toLowerCase();
-  //   let formatItems = formatLowerCase.split(_delimiter);
-  //   let dateItems = _date.split(_delimiter);
-  //   let monthIndex = formatItems.indexOf("mm");
-  //   let dayIndex = formatItems.indexOf("dd");
-  //   let yearIndex = formatItems.indexOf("yyyy");
-  //   let month = parseInt(dateItems[monthIndex]);
-  //   month -= 1;
-  //   let formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
-  //   return formatedDate;
-  // }
+  // citaPadre es la cita que se va a cargar con los datos reales que el usuario desee seleccionar
+  // En este metodo citaPadre toma la hora y fecha de las citas disponibles que se generaron
+  
+  /*
+    Comentario temporal:
+    Creo que con estos seteos ya no es necesario hacer una citaHija, porque ya cita padre agarro lo que 
+    quiso de cita monito, sin tener que agarrar su Id, es decir, cita padre queda con ID null, como debede ser
+  */
 
-  // La idea de este método era asignarle una fecha, hora y id del funcionario a la cita
-  cargarCitaPadre(): void {
-    this.citaPadre.fecha = new Date();
-    console.log("Linea 50 en reserva-tabla: " + this.citaPadre.fecha)
-    this.citaPadre.hora = "9:30"
+  cargarCitaPadre(citaSelec: Cita): void {
+    this.citaPadre.fecha = citaSelec.fecha;
+    this.citaPadre.hora = citaSelec.hora;
     this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
+
+    // Estas igualaciones se podrían separar en otro método
     this.fechaCitaString = this.citaPadre.fecha.toLocaleDateString()
-    console.log("Linea 54 en reserva-tabla: " + this.fechaCitaString)
-    console.log("Linea 55 en reserva-tabla: " + this.citaPadre.idFuncionario)
+    this.horaCitaFormateada = this.citaPadre.hora
+    this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
   }
 
-  devolverLunesSemanaActual() : Date{
+  devolverLunesSemanaActual() : Date {
     let fechaLunes = new Date() //Fecha del lunes de la semana actual
     let hoy = new Date().getDay() //Dia de la semana actual
 
@@ -71,10 +79,12 @@ export class ReservaTablaComponent implements OnInit {
     return fechaLunes
   }
 
-  //Este metodo devuelve la fecha exacta en la cual se va a realizar la cita disponible
-  //El primer parametro es el atributo de tipo Date que retorna el metodo devolverLunesSemanaActual()
-  //Al tener el lunes, lo comparo con el atributo "dia" proveniente de Horario, para encontrar la fecha
-  //del dia de la cita comienzo a sumar dias partiendo desde el dia lunes
+  /* 
+    Este metodo devuelve la fecha exacta en la cual se va a realizar la cita disponible
+    El primer parametro es el atributo de tipo Date que retorna el metodo devolverLunesSemanaActual()
+    Al tener el lunes, lo comparo con el atributo "dia" proveniente de Horario, para encontrar la fecha
+    del dia de la cita comienzo a sumar dias partiendo desde el dia lunes
+  */
   obtenerFechaDiaSemana(diaCita: String) {
 
     let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
@@ -134,19 +144,22 @@ export class ReservaTablaComponent implements OnInit {
     let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesF.setHours(16, 0, 0)
     
+    
     // Genera citas disponibles los días martes de la semana actual
     for (let i = fechaMartesI; i < fechaMartesF; i.setMinutes(fechaMartesI.getMinutes() + 30)) {
 
       // Generando el objeto cita auxiliar
       let citaAux = new Cita()
       
-      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día martes
+      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado,fecha, hora y del dia martes
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = fechaMartesI
-      citaAux.hora = fechaMartesI.toLocaleTimeString('en-US', {hour12: true})
+      citaAux.hora = fechaMartesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
+      
 
       this.citasDisponibles.push(citaAux)
       // console.log(diaSemana[fechaMetodoPruebaMartesI.getDay()] + " " + fechaMetodoPruebaMartesI.toLocaleTimeString('en-US', {hour12: true}))
+     
     }
 
     //Genera citas disponibles los dias jueves de la semana actual
@@ -158,15 +171,19 @@ export class ReservaTablaComponent implements OnInit {
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día jueves
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = fechaJuevesI
-      citaAux.hora = fechaJuevesI.toLocaleTimeString('en-US', {hour12: true})
-      
+      citaAux.hora = fechaJuevesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
+
+
       this.citasDisponibles.push(citaAux)
       // console.log(diaSemana[fechaMetodoPruebaJuevesI.getDay()] + " " + fechaMetodoPruebaJuevesI.toLocaleTimeString('en-US', {hour12: true}))
+
     }
 
-    this.citasDisponibles.forEach(c => {
-      console.log(c.fecha.toString() + " " + c.hora + " ID_F:" + c.idFuncionario);
-    })
+    // Mostrar la citas en consola
+
+    // this.citasDisponibles.forEach(c => {
+    //   console.log(c.fecha.toString() + " " + c.hora + " ID_F:" + c.idFuncionario);
+    // })
   }
 
   devuelveDiaSemana(d: Date): String {
@@ -176,3 +193,17 @@ export class ReservaTablaComponent implements OnInit {
     return dia
   }
 }
+
+  // stringToDate(_date,_format,_delimiter)
+  // {
+  //   let formatLowerCase = _format.toLowerCase();
+  //   let formatItems = formatLowerCase.split(_delimiter);
+  //   let dateItems = _date.split(_delimiter);
+  //   let monthIndex = formatItems.indexOf("mm");
+  //   let dayIndex = formatItems.indexOf("dd");
+  //   let yearIndex = formatItems.indexOf("yyyy");
+  //   let month = parseInt(dateItems[monthIndex]);
+  //   month -= 1;
+  //   let formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
+  //   return formatedDate;
+  // }

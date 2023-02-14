@@ -12,6 +12,8 @@ export class FormularioComponent implements OnInit {
 
   @Input() citaPadre: Cita
   @Input() fechaCitaString: String
+  @Input() horaCitaFormateada: String
+  @Input() nombreFuncionario: String
 
   constructor(private service: ServiceService, private router: Router) {
     
@@ -20,13 +22,13 @@ export class FormularioComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  GuadarCita(cita: Cita){
+  guardarCita(cita: Cita){
+    console.log("El id de la cita a guardar: " + cita.id)
     console.log(cita)
     this.service.guardarCita(cita)
     .subscribe(data =>{
       alert("Se agrego con exito");
-      // this.router.navigate(["listar"]);
+      //this.router.navigate(["listar"]);
     })
   }
-
 }

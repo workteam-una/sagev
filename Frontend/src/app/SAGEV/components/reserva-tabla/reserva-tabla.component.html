@@ -11,14 +11,17 @@
   </thead>
   <tbody>
     <tr *ngFor="let cita of citasDisponibles">
-      <th scope="row">{{cita.fecha.toLocaleDateString()}}</th>
+      <td>{{cita.fecha.toLocaleDateString()}}</td>
       <td>{{devuelveDiaSemana(cita.fecha)}}</td>
       <td>{{cita.hora}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}}</td>
-      <td><button  type="button" class="btn btn-primary" (click)="seleccionar();">Reserva</button></td>
+      <td>
+        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita);"><span></span></button>
+      </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
 
-<app-formulario [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString"></app-formulario>
+<app-formulario [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
+[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario"></app-formulario>

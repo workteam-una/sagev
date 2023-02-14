@@ -1,15 +1,15 @@
 <form class="row g-3 divFormulario">
     <div class="col-md-4">
         <label for="validationDefault01" class="form-label">Fecha</label>
-        <input name="fecha" type="text" class="form-control" id="validationDefault01" value="{{fechaCitaString}}" required disabled >
+        <input name="fecha" type="text" class="form-control" id="validationDefault01" value="{{fechaCitaString}}" required disabled>
     </div>
     <div class="col-md-4">
         <label for="validationDefault02" class="form-label">Hora</label>
-        <input [(ngModel)]="citaPadre.hora" name="hora" type="text" class="form-control" id="validationDefault02" value="" required disabled>
+        <input name="hora" type="text" class="form-control" id="validationDefault02" value="{{horaCitaFormateada}}" required disabled>
     </div>
     <div class="col-md-4">
         <label for="validationDefault03" class="form-label">Funcionario</label>
-        <input [(ngModel)]="citaPadre.idFuncionario" name="idFuncionario" type="text" class="form-control" id="validationDefault03" value="" required disabled>
+        <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{nombreFuncionario}}" required disabled>
     </div>
     <div class="col-md-4">
         <label for="validationDefault01" class="form-label">Nombre</label>
@@ -43,7 +43,7 @@
 
 
     <div class="col-12 divEnviar">
-        <button class="btn btn-primary btnEnviar" (click)="GuadarCita(citaPadre)">Enviar formulario</button>
+        <button class="btn btn-primary btnEnviar" (click)="guardarCita(citaPadre)">Enviar formulario</button>
     </div>
 
 </form>
