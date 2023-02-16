@@ -22,7 +22,7 @@ export class ServiceService {
   }
 
   getDepartamentos(){
-    console.log(this.url + "departamentos");
+    // console.log(this.url + "departamentos");
     return this.http.get<Departamento[]>(this.url + "departamentos");
   }
 

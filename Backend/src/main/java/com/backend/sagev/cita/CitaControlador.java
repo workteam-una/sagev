@@ -19,12 +19,13 @@ public class CitaControlador {
     @Autowired
     CitaService service;
 
+    //Devuelve todas las citas
     @GetMapping
     public List<Cita>listar(){
         return service.listar();
     }
 
-    //Devuelve todas las citas
+    //Devuelve las citas reservadas con un funcionario
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
     public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") int idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
