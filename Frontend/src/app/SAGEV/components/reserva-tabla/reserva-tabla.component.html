@@ -1,6 +1,6 @@
 <table class="table table-striped">
   <thead>
-    <tr>
+    <tr *ngIf="citasDisponibles.length !== 0; else sinCitas">
       <th scope="col">Fecha</th>
       <th scope="col">Día</th>
       <th scope="col">Hora</th>
@@ -8,6 +8,7 @@
       <th scope="col">Seleccionar</th>
       <!-- <th scope="col">{{recibidoDePadre}}</th> -->
     </tr>
+    <ng-template #sinCitas style="color:red"><h3>No hay citas disponibles</h3></ng-template>
   </thead>
   <tbody>
     <tr *ngFor="let cita of citasDisponibles">

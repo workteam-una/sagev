@@ -1,8 +1,73 @@
-<div class="principal" id="fondoCasa">
+<!-- <div class="principal" id="fondoCasa">
   <div class="divLogo">
     <img class="logo" src="assets\images\logoSD.svg" alt="Logo Municipalidad">
   </div>
+</div> -->
+
+<div id="contentItemsCarrusel">
+  <div class="itemCarrusel" id="itemCarrusel-1" data-bs-interval="100">
+    <div class="tarjetaCarrusel" id="tarjetaCarrusel-1">
+      <img src="assets\images\casa2.jpg" alt="item1">
+    </div>
+    <div class="flechasCarrusel">
+      <a href="#itemCarrusel-3">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+      <a href="#itemCarrusel-2">
+        <i class="fa-solid fa-chevron-right"></i>
+      </a>
+    </div>
+    <div class="itemCarrusel" id="itemCarrusel-2" data-bs-interval="100">
+      <div class="tarjetaCarrusel" id="tarjetaCarrusel-2">
+        <img src="assets\images\casaAdobe.jfif" alt="item1">
+      </div>
+      <div class="flechasCarrusel">
+        <a href="#itemCarrusel-1">
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <a href="#itemCarrusel-3">
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+    <div class="itemCarrusel" id="itemCarrusel-3" data-bs-interval="100">
+      <div class="tarjetaCarrusel" id="tarjetaCarrusel-3">
+        <img src="assets\images\iglesia.jfif" alt="item1">
+      </div>
+      <div class="flechasCarrusel">
+        <a href="#itemCarrusel-2">
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <a href="#itemCarrusel-1">
+          <i class="fa-solid fa-chevron-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
 </div>
+
+<!-- <div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active" data-bs-interval="1000">
+      <img src="assets\images\casaAdobe.jfif" class="d-block w-100" alt="casaAdobe">
+    </div>
+    <div class="carousel-item" data-bs-interval="1000">
+      <img src="assets\images\iglesia.jfif" class="d-block w-100" alt="iglesia">
+    </div>
+    <div class="carousel-item" data-bs-interval="1000">
+      <img src="assets\images\casa2.jpg" class="d-block w-100" alt="casa2">
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div> -->
+
 
 <div class="divNombre">
   <h1 class="nombre">Sistema de Agenda Virtual</h1>
@@ -12,10 +77,12 @@
   <nav class="navbar-expand-lg navbar-dark bg-primay">
     <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
       <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item opciones" style="margin: 0vw 10vw 0vw 0vw;">
+        <li routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item opciones"
+          style="margin: 0vw 10vw 0vw 0vw;">
           <a class="nav-link active" aria-current="page">RESERVAR UNA CITA</a>
         </li>
-        <li routerLink="cancelar" routerLinkActive="active" class="nav-item opciones" style="margin: 0vw 10vw 0vw 10vw;">
+        <li routerLink="cancelar" routerLinkActive="active" class="nav-item opciones"
+          style="margin: 0vw 10vw 0vw 10vw;">
           <a class="nav-link active" aria-current="page">CANCELAR UNA CITA</a>
         </li>
         <li routerLink="login" routerLinkActive="active" class="nav-item opciones" style="margin: 0vw 0vw 0vw 10vw;">

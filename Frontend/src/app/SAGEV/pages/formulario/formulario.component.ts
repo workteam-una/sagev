@@ -23,11 +23,12 @@ export class FormularioComponent implements OnInit {
   }
 
   guardarCita(cita: Cita){
-    console.log("El id de la cita a guardar: " + cita.id)
+    // console.log("El id de la cita a guardar: " + cita.id)
     console.log(cita)
     this.service.guardarCita(cita)
     .subscribe(data =>{
-      alert("Se agrego con exito");
+      alert("Se agregó la cita con éxito")
+      window.location.reload()
       //this.router.navigate(["listar"]);
     })
   }

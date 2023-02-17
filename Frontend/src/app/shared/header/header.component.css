@@ -12,13 +12,17 @@ element{
 }
 
 #fondoCasa{
+    
     background-image: url('src\assets\images\casaAdobe.jfif');
-    width: 100%;
-    height: 10%;
+    width: 100vw;
+    height: 31vh;
     background-repeat: no-repeat;
     background-size:  cover;
     background-position: center;
 }
+
+
+
 
 .logo{
     margin-top: 20px;
@@ -43,10 +47,8 @@ element{
 
 .nombre{
     margin-top: 4%;
-    /* 
-    font-family: "Myriad-Pro";
+    font-family: "Myriad-Pro";  
     src: url(http://www.anaveer.in/honda/font/MYRIADPRO-REGULAR.OTF) format("truetype");
-    */
 }
 
 .opciones{
@@ -60,4 +62,57 @@ element{
     opacity: 90%;
     border-radius: 10px;
     text-decoration: underline;
+}
+
+/* CSS de carrusel */
+.itemCarrusel{
+    border: 1px solid black;
+    height: 40vh;
+    position: relative;
+}
+
+.tarjetaCarrusel{
+    height: 100%;
+}
+
+.flechasCarrusel{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1%;
+}
+
+#contentItemsCarrusel{
+    border: 2% solid black;
+    height: 35vh;
+    overflow: hidden;
+}
+
+#tarjetaCarrusel-1{
+    background-color: rgb(157, 49, 157);
+}
+
+#tarjetaCarrusel-2{
+    background-color: #6e37e6;
+}
+
+#tarjetaCarrusel-3{
+background-color: aquamarine;
+}
+
+a{
+    text-decoration: none;
+}
+
+i{
+    color: rgb(12, 145, 201)
+}
+
+img{
+    width: 100%;
+    height: 100%;
 }

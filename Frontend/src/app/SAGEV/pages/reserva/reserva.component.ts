@@ -174,7 +174,7 @@ export class ReservaComponent implements OnInit {
 
     // Jueves de la semana actual a la 1:30 p.m
     let fechaJuevesI = this.obtenerFechaDiaSemana("Jueves")
-    fechaJuevesI.setHours(13, 30, 0)
+    fechaJuevesI.setHours(13, 0, 0)
 
     // Jueves de la semana actual a las 4:00 p.m
     let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
@@ -220,10 +220,8 @@ export class ReservaComponent implements OnInit {
   // Filtra las citas disponibles para que muestre solo las que no han sido reservadas
   filtrarCitasDisponibles(): void {
 
-    console.log("Longitud del array de citas reservadas: " + this.citasReservadas.length)
-
     // 32 unicode del espacio en blanco
-    console.log("3:30 PM")
+    // console.log("3:30 PM")
 
     // this.citasDisponibles.forEach(c => {
     //   console.log(c.fecha.toLocaleString() + " " + c.hora + " ID_F:" + c.idFuncionario);
@@ -248,15 +246,15 @@ export class ReservaComponent implements OnInit {
         // " // " + this.citasReservadas[j].fecha.toString() + " " + this.citasReservadas[j].hora)
 
         // Esta comparación entre la hora y la fecha sí funciona
-        if (this.citasDisponibles[i].hora === this.citasReservadas[j].hora) {
+        if (this.convertDate(this.citasDisponibles[i].fecha) === this.citasReservadas[j].fecha.toString() &&
+         this.citasDisponibles[i].hora.substring(0, 5) === this.citasReservadas[j].hora.substring(0, 5)) {
           
           // 8239 unicode del espacio en blanco
           // console.log(this.citasDisponibles[j].hora)
 
           // 160 unicode del espacio en blanco
-          console.log(this.citasReservadas[i].hora)  
+          // console.log(this.citasReservadas[i].hora)  
 
-          console.log("--------------Me cumplí--------------")
           // Cuando un elemento del array de citasDispobles coincide con un elemento del array de citasReservadas
           // se elimina la posición del array donde se encontró la coincidencia con la hora y la fecha 
           this.citasDisponibles.splice(i, 1)
