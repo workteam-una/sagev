@@ -95,6 +95,17 @@ export class ReservaComponent implements OnInit {
     this.service.getCitasFuncionario(id)
     .subscribe(data => {
       this.citasReservadas = data
+ 
+      // Se están parseando las fechas aquí para solo tener que hacerlo una vez
+      this.citasReservadas.forEach(c => {
+        c.fecha = this.sqlToJsDate(c.fecha)
+      })
+
+      // Imprimiendo las fechas parseadas de las citas reservadas
+      this.citasReservadas.forEach(c => {
+        console.log(c.fecha)
+      })
+      
       // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
       this.generaCitasDisponibles()
     })
@@ -172,7 +183,7 @@ export class ReservaComponent implements OnInit {
     let fechaMartesF = this.obtenerFechaDiaSemana("Martes")
     fechaMartesF.setHours(12, 0, 0)
 
-    // Jueves de la semana actual a la 1:30 p.m
+    // Jueves de la semana actual a la 1:00 p.m
     let fechaJuevesI = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesI.setHours(13, 0, 0)
 
@@ -242,13 +253,25 @@ export class ReservaComponent implements OnInit {
     {
       for (let j = 0; j < this.citasReservadas.length; j++)
       {
-        // console.log("Comparación: " + i + ": " + this.convertDate(this.citasDisponibles[i].fecha) + " " + this.citasDisponibles[i].hora +
-        // " // " + this.citasReservadas[j].fecha.toString() + " " + this.citasReservadas[j].hora)
+        
+        // console.log("sqlToJsDate: " + this.sqlToJsDate(this.citasReservadas[j].fecha))
+
+        // console.log("Cita disponible #" + i + ": " + this.convertDate(this.citasDisponibles[i].fecha) + " " + this.citasDisponibles[i].hora +
+        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toString() + " " + this.citasReservadas[j].hora)
+
+        // console.log("Disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleDateString())
+        // console.log("Reservada #" + j + ": " + this.sqlToJsDate(this.citasReservadas[j].fecha).toLocaleDateString())
 
         // Esta comparación entre la hora y la fecha sí funciona
-        if (this.convertDate(this.citasDisponibles[i].fecha) === this.citasReservadas[j].fecha.toString() &&
+        if (this.citasDisponibles[i].fecha.toLocaleDateString() === this.citasReservadas[j].fecha.toLocaleDateString() &&
          this.citasDisponibles[i].hora.substring(0, 5) === this.citasReservadas[j].hora.substring(0, 5)) {
-          
+
+          // console.log("Me cumplí con disponible #" + i + " y con reservada #" + j)
+          // console.log("\n")
+
+          // this.citasDisponibles.forEach(c => {
+          // console.log(this.convertDate(c.fecha) + " " + c.hora + " " + c.idFuncionario);
+          // })
           // 8239 unicode del espacio en blanco
           // console.log(this.citasDisponibles[j].hora)
 
@@ -281,6 +304,42 @@ export class ReservaComponent implements OnInit {
   
     return yyyy + '-' + (mmChars[1] ? mm: "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
   }
+
+  // Convierte un objeto DateTime de SQL a un objeto Date de TS
+  sqlToJsDate(sqlDate: any) : Date {
+
+    //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
+    let sqlDateArr1 = sqlDate.split("-")
+    //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
+    let sYear = sqlDateArr1[0]
+    let sMonth = (Number(sqlDateArr1[1]) - 1)
+    let sqlDateArr2 = sqlDateArr1[2].split("T")
+    //format of sqlDateArr2[] = ['dd', 'hh:mm:ss.ms']
+    let sDay = sqlDateArr2[0]
+    let sqlDateArr3 = sqlDateArr2[1].split(":")
+    //format of sqlDateArr3[] = ['hh','mm','ss.ms']
+    let sHour = sqlDateArr3[0]
+    let sMinute = sqlDateArr3[1]
+    let sqlDateArr4 = sqlDateArr3[2].split(".")
+    //format of sqlDateArr4[] = ['ss','ms']
+    let sSecond = sqlDateArr4[0]
+    let sMillisecond = sqlDateArr4[1]
+
+    // console.log("sqlDate: " + sqlDate)
+    // console.log("sqlDateArr1: " + sqlDateArr1)
+    // console.log("sYear: " + sYear)
+    // console.log("sMonth: " + sMonth)
+    // console.log("sqlDateArr2: " + sqlDateArr2)
+    // console.log("sDay: " + sDay)
+    // console.log("sqlDateArr3: " + sqlDateArr3)
+    // console.log("sHour: " + sHour)
+    // console.log("sMinute: " + sMinute)
+    // console.log("sqlDateArr4: " + sqlDateArr4)
+    // console.log("sSecond: " + sSecond)
+    // console.log("sMillisecond: " + sMillisecond)
+
+    return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
+}
 
   // obtenerFuncionarioEncargado(): void {
   //   if (this.funcionariosPorDepa.length != 0) {

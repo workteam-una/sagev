@@ -1,6 +1,7 @@
 package com.backend.sagev.cita;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 // import org.hibernate.annotations.GenericGenerator;
@@ -60,7 +61,7 @@ public class Cita {
     //Hoy 11/2/2022 se tomo la decisión de mantenerlo así para poder
     //realizar filtrados a fechas en específico desde la base de datos
     @Column(name = "Fecha")
-    private LocalDate fecha;
+    private LocalDateTime fecha;
 
     @Column(name = "Detalle")
     private String detalle;
@@ -146,11 +147,11 @@ public class Cita {
         this.hora = hora;
     }
 
-    public LocalDate getFecha() {
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
 
