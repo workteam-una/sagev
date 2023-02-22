@@ -33,7 +33,7 @@ export class ReservaComponent implements OnInit {
 
   // Array para cargar las citas auxiliares que se muestran en la tabla
   citasDisponibles: Cita[] = []
-  
+
   funcionarioEncargado: Funcionario = new Funcionario
 
   constructor(private service: ServiceService, private router: Router) {
@@ -201,10 +201,10 @@ export class ReservaComponent implements OnInit {
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado,fecha, hora y del dia martes
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = new Date(fechaMartesI)
+
       // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
       // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
-      citaAux.hora = fechaMartesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
-    
+
       this.citasDisponibles.push(citaAux)
     }
 
@@ -217,9 +217,9 @@ export class ReservaComponent implements OnInit {
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día jueves
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = new Date(fechaJuevesI)
+      
       // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
       // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
-      citaAux.hora = fechaJuevesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
 
       this.citasDisponibles.push(citaAux)
     }

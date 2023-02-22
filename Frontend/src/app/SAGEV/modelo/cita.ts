@@ -7,7 +7,6 @@ export class Cita {
     apellido2Contribuyente?: String
     correoContribuyente?: String
     telefonoContribuyente?: String
-    hora?: String
     fecha?: Date
     detalle?: String
     estado: String = "Pendiente"

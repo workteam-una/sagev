@@ -13,8 +13,8 @@
   </thead>
   <tbody>
     <tr *ngFor="let cita of citasFuncionario">
-      <td>{{cita.fecha}}</td>
-      <td>{{cita.hora}}</td>
+      <td>{{cita.fecha.toLocaleDateString()}}</td>
+      <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{cita.nombreContribuyente}}</td>
       <td>{{cita.idContribuyente}}</td>
       <td>{{cita.detalle}}</td>

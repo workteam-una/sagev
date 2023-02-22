@@ -49,16 +49,15 @@ export class ReservaTablaComponent implements OnInit {
     quiso de cita monito, sin tener que agarrar su Id, es decir, cita padre queda con ID null, como debede ser
   */
 
-  cargarCitaPadre(citaSelec: Cita): void {
-    this.citaPadre.fecha = citaSelec.fecha;
-    this.citaPadre.hora = citaSelec.hora;
-    this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
-
-    // Estas igualaciones se podrían separar en otro método
+  cargarDatosFormulario(): void {
     this.fechaCitaString = this.citaPadre.fecha.toLocaleDateString()
-    // Hora formateada en formato de 12 horas
     this.horaCitaFormateada = this.citaPadre.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
     this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
+  }
+
+  cargarCitaPadre(citaSelec: Cita): void {
+    this.citaPadre.fecha = citaSelec.fecha;
+    this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
   }
 
   devuelveDiaSemana(d: Date): String {

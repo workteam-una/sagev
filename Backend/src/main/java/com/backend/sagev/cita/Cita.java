@@ -54,9 +54,6 @@ public class Cita {
     // @Column(name = "IdAdministrador")
     // private String idAdministrador;
 
-    @Column(name = "Hora")
-    private String hora;
-
     //El tipo de dato se va a quedar como date en la base de datos
     //Hoy 11/2/2022 se tomo la decisión de mantenerlo así para poder
     //realizar filtrados a fechas en específico desde la base de datos
@@ -137,14 +134,6 @@ public class Cita {
 
     public void setTelefonoContribuyente(String telefonoContribuyente) {
         this.telefonoContribuyente = telefonoContribuyente;
-    }
-
-    public String getHora() {
-        return hora;
-    }
-
-    public void setHora(String hora) {
-        this.hora = hora;
     }
 
     public LocalDateTime getFecha() {
