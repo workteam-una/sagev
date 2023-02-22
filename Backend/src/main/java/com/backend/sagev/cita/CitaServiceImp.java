@@ -18,7 +18,7 @@ public class CitaServiceImp implements CitaService {
 
     @Override
     public List<Cita> listarIdFuncionario(int idFuncionario) {
-        return repositorio.findByidFuncionario(idFuncionario);
+        return repositorio.findByidFuncionarioOrderByFecha(idFuncionario);
     }
 
     @Override

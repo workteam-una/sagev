@@ -28,12 +28,13 @@ export class ReservaComponent implements OnInit {
   funcionariosEncargadosPorDepa: Funcionario[] = []
   descripcionesPorDepa: Departamento[] = []
 
-  funcionarioEncargado: Funcionario = new Funcionario
-
   // Array para cargar las citas reservadas de un funcionario en específico
   citasReservadas: Cita[] = []
+
   // Array para cargar las citas auxiliares que se muestran en la tabla
   citasDisponibles: Cita[] = []
+  
+  funcionarioEncargado: Funcionario = new Funcionario
 
   constructor(private service: ServiceService, private router: Router) {
     
@@ -96,14 +97,13 @@ export class ReservaComponent implements OnInit {
     .subscribe(data => {
       this.citasReservadas = data
  
+      // this.citasReservadas.forEach(c => {
+      //   console.log(c)
+      // })
+
       // Se están parseando las fechas aquí para solo tener que hacerlo una vez
       this.citasReservadas.forEach(c => {
         c.fecha = this.sqlToJsDate(c.fecha)
-      })
-
-      // Imprimiendo las fechas parseadas de las citas reservadas
-      this.citasReservadas.forEach(c => {
-        console.log(c.fecha)
       })
       
       // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
@@ -200,13 +200,12 @@ export class ReservaComponent implements OnInit {
       
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado,fecha, hora y del dia martes
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
-      citaAux.fecha = fechaMartesI
+      citaAux.fecha = new Date(fechaMartesI)
+      // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
+      // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
       citaAux.hora = fechaMartesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
-      
-
+    
       this.citasDisponibles.push(citaAux)
-      // console.log(diaSemana[fechaMetodoPruebaMartesI.getDay()] + " " + fechaMetodoPruebaMartesI.toLocaleTimeString('en-US', {hour12: true}))
-     
     }
 
     //Genera citas disponibles los dias jueves de la semana actual
@@ -217,66 +216,38 @@ export class ReservaComponent implements OnInit {
 
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día jueves
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
-      citaAux.fecha = fechaJuevesI
+      citaAux.fecha = new Date(fechaJuevesI)
+      // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
+      // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
       citaAux.hora = fechaJuevesI.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
 
       this.citasDisponibles.push(citaAux)
-      // console.log(diaSemana[fechaMetodoPruebaJuevesI.getDay()] + " " + fechaMetodoPruebaJuevesI.toLocaleTimeString('en-US', {hour12: true}))
-
     }
 
     this.filtrarCitasDisponibles()
   }
 
-  // Filtra las citas disponibles para que muestre solo las que no han sido reservadas
+  /*
+    Filtra las citas disponibles para que muestre solo las que no han sido reservadas.
+    Itera las citas disponibles y comparando su fecha una a una con las fechas de todas las citas rerservadas,
+    en caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array
+  */
   filtrarCitasDisponibles(): void {
 
-    // 32 unicode del espacio en blanco
-    // console.log("3:30 PM")
-
-    // this.citasDisponibles.forEach(c => {
-    //   console.log(c.fecha.toLocaleString() + " " + c.hora + " ID_F:" + c.idFuncionario);
-    // })
-
-    // this.citasReservadas.forEach(c => {
-    //   console.log(c.fecha.toLocaleString() + " " + c.hora + " ID_F:" + c.idFuncionario);
-    // })
-
-    // Mostrar la citas en consola
-
-    // this.citasDisponibles.forEach(c => {
-    //   console.log(c.fecha.toLocaleString() + " " + c.hora + " " + c.idFuncionario);
-    // })
-
-    // Se recorren los dos arrays para comparar los elementos de ambos
+    // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
     for (let i = 0; i < this.citasDisponibles.length; i++)
     {
       for (let j = 0; j < this.citasReservadas.length; j++)
       {
-        
-        // console.log("sqlToJsDate: " + this.sqlToJsDate(this.citasReservadas[j].fecha))
 
-        // console.log("Cita disponible #" + i + ": " + this.convertDate(this.citasDisponibles[i].fecha) + " " + this.citasDisponibles[i].hora +
-        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toString() + " " + this.citasReservadas[j].hora)
+        // console.log("Cita disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleString() + " " + this.citasDisponibles[i].hora +
+        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toLocaleString() + " " + this.citasReservadas[j].hora)
 
-        // console.log("Disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleDateString())
-        // console.log("Reservada #" + j + ": " + this.sqlToJsDate(this.citasReservadas[j].fecha).toLocaleDateString())
-
-        // Esta comparación entre la hora y la fecha sí funciona
-        if (this.citasDisponibles[i].fecha.toLocaleDateString() === this.citasReservadas[j].fecha.toLocaleDateString() &&
-         this.citasDisponibles[i].hora.substring(0, 5) === this.citasReservadas[j].hora.substring(0, 5)) {
+        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal
+        if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasReservadas[j].fecha.toLocaleString()) {
 
           // console.log("Me cumplí con disponible #" + i + " y con reservada #" + j)
           // console.log("\n")
-
-          // this.citasDisponibles.forEach(c => {
-          // console.log(this.convertDate(c.fecha) + " " + c.hora + " " + c.idFuncionario);
-          // })
-          // 8239 unicode del espacio en blanco
-          // console.log(this.citasDisponibles[j].hora)
-
-          // 160 unicode del espacio en blanco
-          // console.log(this.citasReservadas[i].hora)  
 
           // Cuando un elemento del array de citasDispobles coincide con un elemento del array de citasReservadas
           // se elimina la posición del array donde se encontró la coincidencia con la hora y la fecha 
@@ -293,18 +264,6 @@ export class ReservaComponent implements OnInit {
     return dia
   }
 
-  // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
-  convertDate(date: Date) {
-    let yyyy = date.getFullYear().toString();
-    let mm = (date.getMonth() + 1).toString();
-    let dd  = date.getDate().toString();
-  
-    let mmChars = mm.split('');
-    let ddChars = dd.split('');
-  
-    return yyyy + '-' + (mmChars[1] ? mm: "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
-  }
-
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
   sqlToJsDate(sqlDate: any) : Date {
 
@@ -318,28 +277,28 @@ export class ReservaComponent implements OnInit {
     let sDay = sqlDateArr2[0]
     let sqlDateArr3 = sqlDateArr2[1].split(":")
     //format of sqlDateArr3[] = ['hh','mm','ss.ms']
-    let sHour = sqlDateArr3[0]
+    let sHour = (sqlDateArr3[0])
+    // let sHour = (Number(sqlDateArr3[0]) - 6)
     let sMinute = sqlDateArr3[1]
     let sqlDateArr4 = sqlDateArr3[2].split(".")
     //format of sqlDateArr4[] = ['ss','ms']
     let sSecond = sqlDateArr4[0]
     let sMillisecond = sqlDateArr4[1]
 
-    // console.log("sqlDate: " + sqlDate)
-    // console.log("sqlDateArr1: " + sqlDateArr1)
-    // console.log("sYear: " + sYear)
-    // console.log("sMonth: " + sMonth)
-    // console.log("sqlDateArr2: " + sqlDateArr2)
-    // console.log("sDay: " + sDay)
-    // console.log("sqlDateArr3: " + sqlDateArr3)
-    // console.log("sHour: " + sHour)
-    // console.log("sMinute: " + sMinute)
-    // console.log("sqlDateArr4: " + sqlDateArr4)
-    // console.log("sSecond: " + sSecond)
-    // console.log("sMillisecond: " + sMillisecond)
-
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
 }
+
+  // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
+  // convertDate(date: Date) {
+  //   let yyyy = date.getFullYear().toString();
+  //   let mm = (date.getMonth() + 1).toString();
+  //   let dd  = date.getDate().toString();
+  
+  //   let mmChars = mm.split('');
+  //   let ddChars = dd.split('');
+  
+  //   return yyyy + '-' + (mmChars[1] ? mm: "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
+  // }
 
   // obtenerFuncionarioEncargado(): void {
   //   if (this.funcionariosPorDepa.length != 0) {

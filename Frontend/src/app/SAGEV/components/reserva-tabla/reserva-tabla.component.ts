@@ -14,7 +14,6 @@ export class ReservaTablaComponent implements OnInit {
   constructor(private service: ServiceService, private router: Router) { }
 
   @Input() funcionarioEncargado: Funcionario
-
   @Input() citasDisponibles: Cita[] = []
 
   citaPadre: Cita = new Cita()
@@ -57,7 +56,8 @@ export class ReservaTablaComponent implements OnInit {
 
     // Estas igualaciones se podrían separar en otro método
     this.fechaCitaString = this.citaPadre.fecha.toLocaleDateString()
-    this.horaCitaFormateada = this.citaPadre.hora
+    // Hora formateada en formato de 12 horas
+    this.horaCitaFormateada = this.citaPadre.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
     this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
   }
 

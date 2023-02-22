@@ -23,8 +23,9 @@ export class FormularioComponent implements OnInit {
   }
 
   guardarCita(cita: Cita){
-    // console.log("El id de la cita a guardar: " + cita.id)
     console.log(cita)
+    // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
+    cita.fecha.setHours(cita.fecha.getHours() - 6)
     this.service.guardarCita(cita)
     .subscribe(data =>{
       alert("Se agregó la cita con éxito")

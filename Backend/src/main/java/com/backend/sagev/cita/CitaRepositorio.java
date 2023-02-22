@@ -5,7 +5,8 @@ import org.springframework.data.repository.Repository;
 public interface CitaRepositorio extends Repository<Cita, Integer>{
 
     List<Cita>findAll();
-    List<Cita>findByidFuncionario(int idFuncionario);
+    // Retorna las citas de un funcionario en específico y las ordena por fecha de forma ascendente
+    List<Cita>findByidFuncionarioOrderByFecha(int idFuncionario);
     Cita findByid(int id);
     Cita save(Cita c);
     Cita delete(Cita c);
