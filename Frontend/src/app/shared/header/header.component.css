@@ -4,24 +4,28 @@ element{
 
 .principal{
     align-content: center;
-    display: flex;
-    height: 35vh;
-    margin-bottom: 1%;
-    color: var(--colorPag);
+    
+    width: 100%;
+    height: 25vh;
+    /* margin-bottom: 1%; */
+    /* color: var(--colorPag); */
     
 }
 
 #fondoCasa{
     
-    background-image: url('src\assets\images\casaAdobe.jfif');
-    width: 100vw;
-    height: 31vh;
     background-repeat: no-repeat;
     background-size:  cover;
     background-position: center;
+    
 }
 
-
+.collage{
+    
+    margin-bottom: 20px;
+    width: 100%;
+    height: 25vh;
+}
 
 
 .logo{
@@ -41,11 +45,14 @@ element{
 }
 
 .divMenu{
+    /* margin-top: 2%; */
+    margin-bottom: 0.5%;
     background-color: #039dfc;
     border-radius: 40px;
 }
 
 .nombre{
+    align-content: center;
     margin-top: 4%;
     font-family: "Myriad-Pro";  
     src: url(http://www.anaveer.in/honda/font/MYRIADPRO-REGULAR.OTF) format("truetype");
@@ -69,6 +76,7 @@ element{
     border: 1px solid black;
     height: 40vh;
     position: relative;
+    background-image: linear-gradient(90deg,rgba(0,51,160,0.6),rgba(0,51,160,0.6),rgba(0,51,160,0.6),rgba(0,114,206,0.6),rgba(0,114,206,0.6),rgba(0,114,206,0.6));
 }
 
 .tarjetaCarrusel{
@@ -78,18 +86,24 @@ element{
 .flechasCarrusel{
     position: absolute;
     top: 0;
-    height: 100%;
+    height: 50%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1%;
+    
 }
 
 #contentItemsCarrusel{
-    border: 2% solid black;
-    height: 35vh;
+    /* margin-top: 2%;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 30%; */
+    height: 22vh;
+    width: 100%;
     overflow: hidden;
+    align-items: center;
 }
 
 #tarjetaCarrusel-1{
@@ -114,5 +128,5 @@ i{
 
 img{
     width: 100%;
-    height: 100%;
+    height: 55%;
 }

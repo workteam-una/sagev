@@ -74,7 +74,7 @@ create table Cita
   CorreoContribuyente varchar(100) not null,
   telefonoContribuyente varchar(30) not null,
   Fecha datetime not null,
-  Detalle varchar(255) not null,
+  Detalle varchar(255) null,
   Estado varchar(50) not null,
   RazonReagenda varchar(255) null
 );
