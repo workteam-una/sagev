@@ -11,6 +11,7 @@ import { CitasFuncionarioTablaComponent } from './components/citas-funcionario-t
 import { CitasFuncionarioPopupComponent } from './components/citas-funcionario-popup/citas-funcionario-popup.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { FormsModule } from '@angular/forms';
     CancelarComponent
   ],
   imports: [
+    ReactiveFormsModule,
     CommonModule,
     RouterModule,
     FormsModule
