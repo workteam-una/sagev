@@ -4,13 +4,20 @@
     margin-bottom: 5%;
 }
 
-.tablaCitasFunc{
+.div-tablaCitasFunc{
     margin: auto;
     width: 85%;
     padding: 10px;
+    overflow-y: scroll;
 }
 
 .tituloTablaCitas{
     margin: auto;
     width: 25%;
+}
+
+.div-titulo {
+    width: 90%;
+    margin-top: 2%; 
+    margin-left: 5%;
 }

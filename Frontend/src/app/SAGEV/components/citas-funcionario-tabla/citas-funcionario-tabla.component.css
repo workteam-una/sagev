@@ -72,3 +72,21 @@
 }
 
 /* Fin de CSS para pop up */
+
+.btn-reagendar:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#4cae4c !important;
+}
+
+.btn-cambiar:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#4cae4c !important;
+}
+
+.btn-guardar:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#4cae4c !important;
+}

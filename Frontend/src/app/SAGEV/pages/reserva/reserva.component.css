@@ -1,22 +1,26 @@
-.divAD {
+.div-area-depto-info {
     display: flex;
-    margin: auto;
-    width: 75%;
-    padding: 10px;
-
-
+    margin-top: 2%;
+    margin-bottom: 2.5%;
 }
 
-.divArea {
-    margin-right: 15%;
+.div-area-depto {
+    width: 40%;
     margin-right: 5%;
-    resize: none;
+    margin-left: 10%;
+}
+.div-info {
+    width: 60%;
+    margin-top: 3%;
+    margin-right: 5%;
+    margin-left: 5%;
+    /* margin-left: 15%; */
+    /* resize: none; */
 }
 
-.divDpto {
-    margin-right: 5%;
-    margin-left: 15%;
-    resize: none;
+.div-titulo {
+    margin-top: 1%;
+    text-align: center;
 }
 
 .cbDpto {
@@ -35,6 +39,7 @@
     margin: auto;
     width: 75%;
     padding: 10px;
+    /* overflow-y: scroll; */
 }
 
 .tituloTabla {

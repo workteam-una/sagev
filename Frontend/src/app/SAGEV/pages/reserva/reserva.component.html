@@ -1,42 +1,48 @@
-<h3 class="tituloBienvenida">Reserva una cita</h3>
-<div class="divAD mt-2">
-  <div class="p-5 divArea">
-    <h5>Área</h5>
-    <!-- (change)="prueba($event)" -->
-    <select #selectArea class="form-select" aria-label="Default select example"
-      (change)="filtrarDepartamentosPorArea(selectArea.value)">
-      <option selected value="">Seleccione el área</option>
-      <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.numArea}} - {{area.nombre}}</option>
-    </select>
-    <hr>
-  </div>
+<!-- <h3 class="tituloBienvenida">Reserva una cita</h3> -->
+<div class="div-titulo">
+  <p class="lead">
+    <strong>Seleccione un área y un departamento para desplegar las citas disponibles</strong>
+  </p>
+</div>
 
-  <div class="p-5 divDpto">
-    <h5>Departamento</h5>
-    <select #selectDepa class="form-select" aria-label="Default select example"
-      (change)="filtrarFuncionariosEncargadosPorDepa(selectDepa.value); filtrarDescripcionesPorDepa(selectDepa.value); 
-      getCitasReservadas(this.funcionarioEncargado.idFuncionario);">
-      <option selected value="">Seleccione el departamento</option>
-      <option *ngFor="let departamento of departamentosPorArea " value="{{departamento.numDepartamento}}">
-        {{departamento.numDepartamento}} - {{departamento.nombre}}
-      </option>
-    </select>
-    <hr>
+<div class="div-area-depto-info">
+  <div class="div-area-depto">
+      <h5>Área</h5>
+      <!-- (change)="prueba($event)" -->
+      <select #selectArea class="form-select" aria-label="Default select example"
+        (change)="filtrarDepartamentosPorArea(selectArea.value)">
+        <option selected value="">Seleccione el área</option>
+        <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.numArea}} - {{area.nombre}}</option>
+      </select>
+      <br>
+      <hr>
+      <h5>Departamento</h5>
+      <select #selectDepa class="form-select" aria-label="Default select example"
+        (change)="filtrarFuncionariosEncargadosPorDepa(selectDepa.value); filtrarDescripcionesPorDepa(selectDepa.value); 
+        getCitasReservadas(this.funcionarioEncargado.idFuncionario);">
+        <option selected value="">Seleccione el departamento</option>
+        <option *ngFor="let departamento of departamentosPorArea " value="{{departamento.numDepartamento}}">
+          {{departamento.numDepartamento}} - {{departamento.nombre}}
+        </option>
+      </select>
+  </div>
+  <div class="div-info">
     <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h6>
     <ul class="list-group">
-      <li *ngFor="let funcionario of funcionariosEncargadosPorDepa" class="liTramites">
+      <li *ngFor="let funcionario of funcionariosEncargadosPorDepa">
         {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}}
-    </ul> <br>
+    </ul> 
+    <br>
     <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Tramite(s) a cargo</h6>
     <ul class="list-group">
       <!-- <li *ngFor="let departamento of descripcionesPorDepa" class="liTramites">{{departamento.descripcion}}</li> -->
-      <li *ngFor="let departamento of descripcionesPorDepa" class="liTramites">
+      <li *ngFor="let departamento of descripcionesPorDepa">
         {{departamento.descripcion}}
       </li>
     </ul>
   </div>
 </div>
-
+  
 <!-- <h5 class="tituloTabla">Citas disponibles</h5> -->
 <div class="tablaCitas">
   <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''"></app-reserva-tabla>

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
 
-
 @Component({
   selector: 'app-citas-funcionario',
   templateUrl: './citas-funcionario.component.html',

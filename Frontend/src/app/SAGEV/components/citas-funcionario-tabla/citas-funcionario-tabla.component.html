@@ -20,13 +20,13 @@
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
       <td>
-        <button type="button" class="btn btn-primary">Reagendar</button>
+        <button type="button" class="btn btn-primary btn-reagendar">Reagendar</button>
       </td>
       <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
       <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
       <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
       <td>
-        <button type="button" class="btn btn-primary" (click)="show(1, cita.id)">Cambiar</button>
+        <button type="button" class="btn btn-primary btn-cambiar" (click)="show(1, cita.id)">Cambiar</button>
       </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
@@ -38,7 +38,7 @@
   <div class="uc-m-content">
       <div class="uc-m-header">
           <span class="material-symbols-outlined" (click)="close()">
-              close
+              cerrar
           </span>
           <h4>Cambiar estado de una cita</h4>
       </div>
@@ -52,7 +52,7 @@
       </div>
       <div class="uc-m-footer">
           <!-- Este botón va a disparar el evento -->
-          <button (click)="actualizarEstado(selectEstado.value)">Guardar Estado</button>
+          <button class="btn-guardar" (click)="actualizarEstado(selectEstado.value)">Guardar Estado</button>
       </div>
   </div>
 </div>
