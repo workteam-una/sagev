@@ -15,4 +15,41 @@
 
 .div-titulo {
   text-align: center;
+  margin-bottom: 4%;
+}
+
+.div-botones {
+  display: flex;
+  margin-top: 4%;
+}
+
+.div-btnAnterior {
+  width: 50%;
+}
+
+.div-btnSiguiente {
+  width: 50%;
+  direction: rtl;
+}
+
+.btn-anterior {
+
+  
+}
+
+.btn-siguiente {
+
+  
+}
+
+.btn-anterior:hover {
+  color:#6ca34f !important;
+  background-color: #fff;
+  border-color:#4cae4c !important;
+}
+
+.btn-siguiente:hover {
+  color:#6ca34f !important;
+  background-color: #fff;
+  border-color:#4cae4c !important;
 }
