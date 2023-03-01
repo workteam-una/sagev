@@ -11,6 +11,7 @@ import { CitasFuncionarioTablaComponent } from './components/citas-funcionario-t
 import { CitasFuncionarioPopupComponent } from './components/citas-funcionario-popup/citas-funcionario-popup.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tabla.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { FormsModule } from '@angular/forms';
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
-    CancelarComponent
+    CancelarComponent,
+    CancelarTablaComponent
   ],
   exports: [
     ReservaComponent,
