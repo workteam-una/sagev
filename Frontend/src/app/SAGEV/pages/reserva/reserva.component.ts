@@ -175,6 +175,8 @@ export class ReservaComponent implements OnInit {
   // Esta función genera las citas de cada funcionario según un horario fijo
   generaCitasDisponibles(): void {
 
+    // this.contadorCitasDisponibles = this.contadorCitasDisponibles + contadorParametros;
+
     // Martes de la semana actual a las 8:00 a.m
     let fechaMartesI = this.obtenerFechaDiaSemana("Martes")
     fechaMartesI.setHours(8, 0, 0)
@@ -191,7 +193,13 @@ export class ReservaComponent implements OnInit {
     let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesF.setHours(16, 0, 0)
     
-    
+    // if (this.contadorCitasDisponibles != 0) {
+    //   fechaMartesI.getDate() + (7 * this.contadorCitasDisponibles)
+    //   fechaMartesF.getDate() + (7 * this.contadorCitasDisponibles)
+    //   fechaJuevesI.getDate() + (7 * this.contadorCitasDisponibles)
+    //   fechaJuevesF.getDate() + (7 * this.contadorCitasDisponibles)
+    // }
+
     // Genera citas disponibles los días martes de la semana actual
     for (let i = fechaMartesI; i < fechaMartesF; i.setMinutes(fechaMartesI.getMinutes() + 30)) {
 
