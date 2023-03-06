@@ -16,7 +16,6 @@ import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tab
 @NgModule({
   declarations: [
     ReservaComponent,
-    CancelarComponent,
     ReservaTablaComponent,
     FormularioComponent,
     LoginComponent,
@@ -28,7 +27,6 @@ import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tab
   ],
   exports: [
     ReservaComponent,
-    CancelarComponent,
     ReservaTablaComponent,
     FormularioComponent,
     LoginComponent,
