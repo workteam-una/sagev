@@ -1,5 +1,5 @@
 import { getLocaleDateFormat } from '@angular/common';
-import { Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
@@ -42,8 +42,8 @@ export class ReservaComponent implements OnInit {
   // Funciona para limitar a un mes (4 semanas) la cantidad de citas que se le pueden desplegar al contribuyente
   contadorSemanas: number = 0;
 
-  constructor(private service: ServiceService, private router: Router) {
-    
+  constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) {
+   
   }
 
   ngOnInit(): void {
@@ -302,6 +302,7 @@ export class ReservaComponent implements OnInit {
   //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
   recibirMostrarBotones(mostrar: number) : void {
     this.mostrarBtns = mostrar;
+    this.cd.detectChanges();
   }
 
   /*
