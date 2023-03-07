@@ -113,7 +113,7 @@ export class ReservaComponent implements OnInit {
       })
       
       // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
-      this.citasSemaActual()
+      this.citasSemanaActual()
     })
   }
 
@@ -251,7 +251,6 @@ export class ReservaComponent implements OnInit {
     {
       for (let j = 0; j < this.citasReservadas.length; j++)
       {
-
         // console.log("Cita disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleString() + " " + this.citasDisponibles[i].hora +
         // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toLocaleString() + " " + this.citasReservadas[j].hora)
 
@@ -300,8 +299,8 @@ export class ReservaComponent implements OnInit {
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
 }
 
-//Recive el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
-  recibirMostrarBotones(mostrar){
+  //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
+  recibirMostrarBotones(mostrar: number) : void {
     this.mostrarBtns = mostrar;
   }
 
@@ -309,9 +308,10 @@ export class ReservaComponent implements OnInit {
     Al presionar el botón "siguiente" debajo de la tabla de citas disponibles se va a incrementar en una semana la fecha 
     de las citas, con un límite (modificable) de cuatro semanas para mostrar las citas disponibles de las próximas semanas. 
   */
-    aumentarSemanasCitasDisponibles(contParam: number): void {
-      // Incrementando en 1 el contador de semanas
+    aumentarSemanasCitasDisponibles(contParam: number) : void {
+      // Incrementando en 1 el contador de semanas (porque siempre le va a llegar un "+1" por parámetro)
       this.contadorSemanas += contParam
+      console.log("Contador en aumentar: " + this.contadorSemanas)
   
       // Cuando el contador de semanas supera el valor de 4 (citas de hasta 1 mes después) entonces lo decrementa en 1 y se sale del método
       if (this.contadorSemanas > 4) {
@@ -319,9 +319,15 @@ export class ReservaComponent implements OnInit {
         return
       }
   
-      // Seteando las fechas de las citas disponibles agregandoles 7 días
+      /*
+        Se multiplica el número 7 que representa una semana, según el valor del contador. Al inicio el contador es 0, pero al entrar a este 
+        método aumenta en 1, entonces se multiplicaría 7 * 1 = 7, es decir, se suma una semana. La próxima vez que se entre a este método, 
+        el contador sería 2, entonces se multiplicaría 7 * 2 = 14, es decir, se suman dos semanas. La última vez que se entre a este método
+        antes de que se bloquee el uso del botón que lo ejecuta el contador sería 3, entonces se multiplicaría 7 * 3 = 21, es decir tres semanas.
+        Las tres semanas son el tope que se está utilizando, pero es modificable, cambiando el contador y sus validaciones.
+      */
       this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() + 7)
+        c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
       })
     }
   
@@ -331,12 +337,16 @@ export class ReservaComponent implements OnInit {
     */  
     disminuirSemanasCitasDisponibles(contParam: number): void {
   
-      // Decrementando en 1 el contador de semanas
+      // Decrementando en 1 el contador de semanas (porque siempre le va a llegar un "-1" por parámetro)
       this.contadorSemanas += contParam
-
-      // Seteando las fechas de las citas disponibles restandoles 7 días 
+      console.log("Contador en disminuir: " + this.contadorSemanas)
+      /*
+        Recordar que este método se va a poder utilizar solo si previamente se ejecutó al menos una vez el método de aumentarSemanasDisponibles.
+        Como las citas disponibles se vacían y se vuelven a generar partiendo SIEMPRE de la semana actual, entonces la manera de "retroceder" semanas
+        es sumando la cantidad de semanas que antes se habían aumentado menos una semana.
+      */
       this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() - 7)
+        c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
       })
     }
 
@@ -345,22 +355,26 @@ export class ReservaComponent implements OnInit {
     metodos anteriores para generar las citas de la semana actual o de las 
     siguientes semanas del mes
     */
-    citasSemaActual(){
-      this.generaCitasDisponibles();
-      this.filtrarCitasDisponibles();
+    citasSemanaActual(): void {
+      this.generaCitasDisponibles()
+      this.filtrarCitasDisponibles()
     }
 
-    citasSemanaSiguiente(){
-      this.generaCitasDisponibles();
-      this.aumentarSemanasCitasDisponibles(1);
-      this.filtrarCitasDisponibles();
-
+    citasSemanaSiguiente(): void {
+      this.citasDisponibles = []
+      this.generaCitasDisponibles()
+      this.aumentarSemanasCitasDisponibles(1)
+      this.filtrarCitasDisponibles()
     }
 
-    citasSemanaAnterior(){
-      this.generaCitasDisponibles();
-      this.disminuirSemanasCitasDisponibles(-1);
-      this.filtrarCitasDisponibles();
+    citasSemanaAnterior(): void {
+      this.citasDisponibles = []
+      this.generaCitasDisponibles()
+      this.disminuirSemanasCitasDisponibles(-1)
+      // this.citasDisponibles.forEach(c => {
+      //   console.log(c)
+      // })
+      this.filtrarCitasDisponibles()
     }
 
 
