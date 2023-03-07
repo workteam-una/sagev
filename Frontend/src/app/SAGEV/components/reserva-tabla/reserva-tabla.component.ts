@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
 import { Cita } from '../../modelo/cita';
 import { Funcionario } from '../../modelo/funcionario';
 import { ServiceService } from 'src/app/Service/service.service';
@@ -30,14 +30,19 @@ export class ReservaTablaComponent implements OnInit {
   seleccionado = false; //Creo que esto esta al revez XD
   status = 'Reserva';
 
-  // Funciona para limitar a un mes (4 semanas) la cantidad de citas que se le pueden desplegar al contribuyente
-  contadorSemanas: number = 0;
-
   botonEstilo = {'background-color': 'blue', 'value': 'seleccionado'};
+
+  //Variable que le avisa al componente reserva que ya puede mostrar los botones de anterior y siguiente
+  @Output()
+  mostrarBotones = new EventEmitter<number>();
 
   ngOnInit(): void {
     // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
+    
+    //Enviando variable al componente padre para avisar que ya se cargo este componente
+    this.mostrarBotones.emit(1);
   }
+ 
 
   botonEstiloCambiaColor(): void {
     this.botonEstilo["background-color"] = 'green'
@@ -70,41 +75,7 @@ export class ReservaTablaComponent implements OnInit {
     return dia
   }
 
-  /*
-    Al presionar el botón "siguiente" debajo de la tabla de citas disponibles se va a incrementar en una semana la fecha 
-    de las citas, con un límite (modificable) de cuatro semanas para mostrar las citas disponibles de las próximas semanas. 
-  */
-    aumentarSemanasCitasDisponibles(contParam: number): void {
-
-      // Incrementando en 1 el contador de semanas
-      this.contadorSemanas += contParam
   
-      // Cuando el contador de semanas supera el valor de 4 (citas de hasta 1 mes después) entonces lo decrementa en 1 y se sale del método
-      if (this.contadorSemanas > 4) {
-        this.contadorSemanas - 1
-        return
-      }
-  
-      // Seteando las fechas de las citas disponibles agregandoles 7 días
-      this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() + 7)
-      })
-    }
-  
-    /* 
-      Al presionar el botón "anterior" debajo de la tabla de citas disponibles se va a decrementar en una semana la fecha 
-      de las citas, con la semana actual como límite.
-    */  
-    disminuirSemanasCitasDisponibles(contParam: number): void {
-  
-      // Decrementando en 1 el contador de semanas
-      this.contadorSemanas += contParam
-
-      // Seteando las fechas de las citas disponibles restandoles 7 días 
-      this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() - 7)
-      })
-    }
 }
 
   // stringToDate(_date,_format,_delimiter)

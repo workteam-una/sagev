@@ -30,16 +30,8 @@
   </tbody>
 </table>
 
-<div class="div-botones">
-  <div class="div-btnAnterior">
-    <!-- Si el valor del contador es 0 quiere decir que me encuentro en la semana actual -->
-    <button *ngIf="contadorSemanas !== 0" class="btn btn-outline-primary btn-rounded waves-effect btn-anterior" type="button" id="anteriorBtn" (click)="disminuirSemanasCitasDisponibles(-1)">← Anterior</button>
-  </div>
-   <!-- Si el valor del contador es mayor que 3 quiere decir que ya avancé en un mes las citas disponibles -->
-  <div class="div-btnSiguiente">
-    <button *ngIf="contadorSemanas < 3" class="btn btn-outline-primary btn-rounded waves-effect btn-siguiente" type="button" id="siguienteBtn" (click)="aumentarSemanasCitasDisponibles(1)">→ Siguiente</button>
-  </div>
-</div>
+
+
 
 
 <!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->

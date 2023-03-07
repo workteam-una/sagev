@@ -36,6 +36,12 @@ export class ReservaComponent implements OnInit {
 
   funcionarioEncargado: Funcionario = new Funcionario
 
+  //Mostrar botones anterior y siguiente
+  mostrarBtns: number = -1;
+
+  // Funciona para limitar a un mes (4 semanas) la cantidad de citas que se le pueden desplegar al contribuyente
+  contadorSemanas: number = 0;
+
   constructor(private service: ServiceService, private router: Router) {
     
   }
@@ -107,7 +113,7 @@ export class ReservaComponent implements OnInit {
       })
       
       // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
-      this.generaCitasDisponibles()
+      this.citasSemaActual()
     })
   }
 
@@ -231,8 +237,6 @@ export class ReservaComponent implements OnInit {
 
       this.citasDisponibles.push(citaAux)
     }
-
-    this.filtrarCitasDisponibles()
   }
 
   /*
@@ -296,6 +300,71 @@ export class ReservaComponent implements OnInit {
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
 }
 
+//Recive el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
+  recibirMostrarBotones(mostrar){
+    this.mostrarBtns = mostrar;
+  }
+
+  /*
+    Al presionar el botón "siguiente" debajo de la tabla de citas disponibles se va a incrementar en una semana la fecha 
+    de las citas, con un límite (modificable) de cuatro semanas para mostrar las citas disponibles de las próximas semanas. 
+  */
+    aumentarSemanasCitasDisponibles(contParam: number): void {
+      // Incrementando en 1 el contador de semanas
+      this.contadorSemanas += contParam
+  
+      // Cuando el contador de semanas supera el valor de 4 (citas de hasta 1 mes después) entonces lo decrementa en 1 y se sale del método
+      if (this.contadorSemanas > 4) {
+        this.contadorSemanas - 1
+        return
+      }
+  
+      // Seteando las fechas de las citas disponibles agregandoles 7 días
+      this.citasDisponibles.forEach(c => {
+        c.fecha.setDate(c.fecha.getDate() + 7)
+      })
+    }
+  
+    /* 
+      Al presionar el botón "anterior" debajo de la tabla de citas disponibles se va a decrementar en una semana la fecha 
+      de las citas, con la semana actual como límite.
+    */  
+    disminuirSemanasCitasDisponibles(contParam: number): void {
+  
+      // Decrementando en 1 el contador de semanas
+      this.contadorSemanas += contParam
+
+      // Seteando las fechas de las citas disponibles restandoles 7 días 
+      this.citasDisponibles.forEach(c => {
+        c.fecha.setDate(c.fecha.getDate() - 7)
+      })
+    }
+
+
+    /*Estos son los 'metodos finales', los cuales se apoyan de todos los
+    metodos anteriores para generar las citas de la semana actual o de las 
+    siguientes semanas del mes
+    */
+    citasSemaActual(){
+      this.generaCitasDisponibles();
+      this.filtrarCitasDisponibles();
+    }
+
+    citasSemanaSiguiente(){
+      this.generaCitasDisponibles();
+      this.aumentarSemanasCitasDisponibles(1);
+      this.filtrarCitasDisponibles();
+
+    }
+
+    citasSemanaAnterior(){
+      this.generaCitasDisponibles();
+      this.disminuirSemanasCitasDisponibles(-1);
+      this.filtrarCitasDisponibles();
+    }
+
+
+    //-----------------------------------------------------------------
   // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
   // convertDate(date: Date) {
   //   let yyyy = date.getFullYear().toString();

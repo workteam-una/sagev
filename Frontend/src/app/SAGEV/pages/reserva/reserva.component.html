@@ -46,6 +46,16 @@
 <!-- <h5 class="tituloTabla">Citas disponibles</h5> -->
 
 <div class="tablaCitas">
-  <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''"></app-reserva-tabla>
+  <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''" (mostrarBotones)="recibirMostrarBotones($event)"></app-reserva-tabla>
 </div>
 
+<div class="div-botones" *ngIf="mostrarBtns === 1">
+  <div class="div-btnAnterior">
+    <!-- Si el valor del contador es 0 quiere decir que me encuentro en la semana actual -->
+    <button *ngIf="contadorSemanas !== 0" class="btn btn-outline-primary btn-rounded waves-effect btn-anterior" type="button" id="anteriorBtn" (click)=" citasSemanaAnterior()">← Anterior</button>
+  </div>
+    <!-- Si el valor del contador es mayor que 3 quiere decir que ya avancé en un mes las citas disponibles -->
+  <div class="div-btnSiguiente">
+    <button *ngIf="contadorSemanas < 3" class="btn btn-outline-primary btn-rounded waves-effect btn-siguiente" type="button" id="siguienteBtn" (click)="citasSemanaSiguiente()">→ Siguiente</button>
+  </div>
+</div>
