@@ -36,13 +36,20 @@ export class ReservaTablaComponent implements OnInit {
   @Output()
   mostrarBotones = new EventEmitter<number>();
 
+  showModal: number = 2
+
   ngOnInit(): void {
     // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
     
     //Enviando variable al componente padre para avisar que ya se cargo este componente
     this.mostrarBotones.emit(1);
   }
- 
+
+  refrescarShowModal(): void{
+    console.log("Antes de refresh: " + this.showModal)
+    this.showModal = 0;
+    console.log("Despues de refresh: " + this.showModal)
+  }
 
   botonEstiloCambiaColor(): void {
     this.botonEstilo["background-color"] = 'green'

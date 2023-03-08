@@ -33,7 +33,24 @@ export class FormularioComponent implements OnInit {
       telefono: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
     });
+
+    console.log("ShowModal en el init: " + this.showModal)
   }
+
+  //Mostrar el pop up
+  @Input()
+  showModal: number;
+
+  //AUN NO LO ESTOY USANDO
+  show(index: number) : void {
+    this.showModal = index;
+    //Aqui setea el id de la cita, convenientemente
+  }
+
+  close() : void {
+    this.showModal = -1;
+    console.log("ShowModal en el init: " + this.showModal)
+  }//Fin pop up
 
 
   //Ejecuta las validaciones
@@ -52,7 +69,7 @@ export class FormularioComponent implements OnInit {
 }
 
   //Limpia el formulario
-  resetForm() {
+  resetForm() : void {
   this.enviar = false;
   this.clientForm.reset();
 }
@@ -61,7 +78,7 @@ export class FormularioComponent implements OnInit {
   get f() { return this.clientForm.controls; }
 
 
-  guardarCita(cita: Cita){
+  guardarCita(cita: Cita) : void {
     //Las validaciones estan mal
     if(!this.validaciones()){
       return

@@ -23,7 +23,7 @@
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}} {{funcionarioEncargado.apellido2}}</td>
       <td>
-        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario()"><span></span></button>
+        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario(); refrescarShowModal();"><span></span></button>
       </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
@@ -36,4 +36,4 @@
 
 <!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->
 <app-formulario *ngIf="fechaCitaString !== ''" [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
-[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario"></app-formulario>
+[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario" [showModal]="showModal"></app-formulario>

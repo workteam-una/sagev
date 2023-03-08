@@ -1,3 +1,11 @@
+<div class="uc-modal" *ngIf="showModal === 1 || showModal === 0">
+    <div class="uc-m-content">
+        <div class="uc-m-header">
+            <span class="material-symbols-outlined" (click)="close()">
+                X
+            </span>
+        </div>
+
 <form  [formGroup]="clientForm" class="row g-3 divFormulario">
     <div class="col-md-4">
         <label for="validationDefault01" class="form-label">Fecha</label>
@@ -66,3 +74,6 @@
     </div>
 
 </form>
+
+    </div>
+</div>

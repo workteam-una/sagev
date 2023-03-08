@@ -36,17 +36,17 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   //Este metodo además de setear el valor de showModal para mostrar el popup
   //tambien va a setear el id de la cita seleccionada para poder cambiar su estado
-  show(index: number, id: number){
+  show(index: number, id: number) : void{
     this.showModal = index;
     //Aqui setea el id de la cita, convenientemente
     this.idCitaSeleccionada = id;
   }
 
-  close(){
+  close() : void {
     this.showModal = -1;
   }//Fin pop up
 
-  getCitasFuncionario(id: number){
+  getCitasFuncionario(id: number) :void {
     this.service.getCitasFuncionario(id)
     .subscribe(data => {
       this.citasFuncionario = data
@@ -62,7 +62,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     })
   }
 
-  actualizarEstado(estado: String){
+  actualizarEstado(estado: String) : void {
     if (estado === "completada"){
       this.service.actualizarEstadoCompletada(this.idCitaSeleccionada)
       .subscribe(data => {
