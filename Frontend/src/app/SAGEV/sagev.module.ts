@@ -12,6 +12,7 @@ import { CitasFuncionarioPopupComponent } from './components/citas-funcionario-p
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tabla.component';
+import { AdministradorComponent } from './pages/administrador/administrador.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tab
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
     CancelarComponent,
-    CancelarTablaComponent
+    CancelarTablaComponent,
+    AdministradorComponent
   ],
   exports: [
     ReservaComponent,
@@ -33,7 +35,8 @@ import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tab
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
-    CancelarComponent
+    CancelarComponent,
+    AdministradorComponent
   ],
   imports: [
     CommonModule,
