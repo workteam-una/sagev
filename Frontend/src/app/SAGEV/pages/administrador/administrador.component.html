@@ -1,0 +1,105 @@
+<div>
+
+    <div class="divBotones">
+        <button class="btn btn-primary btnOpciones" (click)="showArea(1)">Agregar nueva área</button>
+        <button class="btn btn-primary btnOpciones" (click)="showDpto(1)">Agregar nuevo departamento</button>
+        <button class="btn btn-primary btnOpciones" (click)="showAgrFunc(1)">Agregar nuevo funcionario</button>
+        <button class="btn btn-primary btnOpciones" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
+        <button class="btn btn-primary btnOpciones" (click)="showPswrdFunc(1)">Cambiar contraseña a funcionario</button>
+    </div>
+
+</div>
+
+
+
+
+
+<!-- Pop up para agregar una nueva area-->
+
+<div class="uc-modal" *ngIf="showModalArea === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()">
+        <h4>Agregar una nueva area</h4>
+      </div>
+      <div class="uc-m-body">
+        <label>¿Está seguro de que desea cancelar la cita?</label><br>
+      </div>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeArea()">Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pop up para agregar un nuevo departamento -->
+
+<div class="uc-modal" *ngIf="showModalDpto === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeDpto()">
+        <h4>Agregar nuevo departamento</h4>
+      </div>
+      <div class="uc-m-body">
+        <label>Contenido aqui</label><br>
+      </div>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeDpto()">Salir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pop up para agregar un nuevo funcionario-->
+
+<div class="uc-modal" *ngIf="showModalAgrFunc === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()">
+        <h4>Agregar un nuevo funcionario</h4>
+      </div>
+      <div class="uc-m-body">
+        <label>Contenido aqui</label><br>
+      </div>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeAgrFunc()">Salir</button>
+      </div>
+    </div>
+  </div>
+
+    <!-- Pop up para modificar el funcionario a cargo-->
+
+<div class="uc-modal" *ngIf="showModalModFunc === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeModFunc()">
+        <h4>Modificar funcionario a cargo</h4>
+      </div>
+      <div class="uc-m-body">
+        <label>Contenido aqui</label><br>
+      </div>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeModFunc()">Salir</button>
+      </div>
+    </div>
+  </div>
+
+      <!-- Pop up para cambiar contrasena a funcionario-->
+
+<div class="uc-modal" *ngIf="showModalPswrdFunc === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closePswrdFunc()">
+        <h4>Cambiar contraseña a un funcionario</h4>
+      </div>
+      <div class="uc-m-body">
+        <label>Contenido aqui</label><br>
+      </div>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closePswrdFunc()">Salir</button>
+      </div>
+    </div>
+  </div>
