@@ -13,6 +13,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tabla.component';
 import { AdministradorComponent } from './pages/administrador/administrador.component';
+import { AdministradorTablaComponent } from './components/administrador-tabla/administrador-tabla.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { AdministradorComponent } from './pages/administrador/administrador.comp
     CitasFuncionarioPopupComponent,
     CancelarComponent,
     CancelarTablaComponent,
-    AdministradorComponent
+    AdministradorComponent,
+    AdministradorTablaComponent
   ],
   exports: [
     ReservaComponent,

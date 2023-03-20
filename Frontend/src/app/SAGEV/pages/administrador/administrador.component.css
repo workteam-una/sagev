@@ -63,3 +63,23 @@
     margin-left: 20px;
     margin-right: 0;
 }
+
+.inputInfo{
+    width: 30%;
+}
+
+.selectInfo{
+    width: 30%;
+}
+.titulo{
+    margin: 0 auto;
+    padding: 2%;
+    margin-left: 39%;
+}
+
+.tablaHistorial{
+    margin: auto;
+    width: 85%;
+    padding: 10px;
+    overflow: auto;
+}
