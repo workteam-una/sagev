@@ -219,12 +219,12 @@ export class ReservaComponent implements OnInit {
       // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
       // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
 
-      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 12 m.d y 4 p.m.
-      if (citaAux.fecha.toLocaleTimeString() !== '12:00:00' && citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
+      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 12 m.d
+      if (citaAux.fecha.toLocaleTimeString() !== '12:00:00') {
         this.citasDisponibles.push(citaAux)
       }
       else {
-        console.log("Cita ignorada: " + citaAux)
+        console.log("Cita ignorada: " + citaAux.fecha)
       }
     }
 
@@ -241,7 +241,13 @@ export class ReservaComponent implements OnInit {
       // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
       // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
 
-      this.citasDisponibles.push(citaAux)
+      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 4 p.m     
+      if(citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
+        this.citasDisponibles.push(citaAux)
+      }
+      else {
+        console.log("Cita ignorada: " + citaAux.fecha)
+      }
     }
   }
 
@@ -384,6 +390,26 @@ export class ReservaComponent implements OnInit {
       this.filtrarCitasDisponibles()
     }
 
+    /* 
+      El método se activa al cambiar de area o departamento para que al seleccionar 
+      el nuevo funcionario las citas se encuentren partiendo de la semana actual
+    */
+    resetearContadorSemanas(): void {
+      this.contadorSemanas = 0
+    }
+
+    /* 
+      Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
+      componente reserva-tabla, al deseleccionar un area o departamento seguían apareciendo los 
+      botones, con este método, al deseleccionar un area o departamento se establece el valor 
+      en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
+    */ 
+    mostrarBotonesAnteriorSiguiente(valorComboBox: string): void {
+      // Si el valor del area o departamento es vacío entonces oculte los botones
+      if (valorComboBox === '') {
+        this.mostrarBtns = -1;
+      }
+    }
 
     //-----------------------------------------------------------------
   // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
