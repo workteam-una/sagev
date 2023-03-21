@@ -38,7 +38,7 @@
 
 .uc-m-content {
     background-color: #fff;
-    width: 50%;
+    width: 70%;
     margin: 3% auto;
     border-radius: 6px;
 }
@@ -97,4 +97,9 @@
     margin-top: 5%;
     border-radius: 6px;
     font-size: 120%;
+}
+
+.ta-motivo {
+    width: 100%;
+    height: 5px;
 }

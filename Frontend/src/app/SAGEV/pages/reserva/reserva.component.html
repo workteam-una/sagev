@@ -50,6 +50,8 @@
   <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''" (mostrarBotones)="recibirMostrarBotones($event)"></app-reserva-tabla>
 </div>
 
+<!-- Botones "anterior" y "siguiente"-->
+
 <div class="div-botones" *ngIf="mostrarBtns === 1">
   <div class="div-btnAnterior">
     <!-- Si el valor del contador es 0 quiere decir que me encuentro en la semana actual -->

@@ -22,7 +22,7 @@
       <td>{{devuelveDiaSemana(cita.fecha)}}</td>
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}} {{funcionarioEncargado.apellido2}}</td>
-      <!--  -->
+      <!-- Validaciones extra: en caso de que las "citas fantasma" se añadan, no se pueden reservar -->
       <td *ngIf="cita.fecha.toLocaleTimeString() !== '12:00:00' && cita.fecha.toLocaleTimeString() !== '16:00:00'">
         <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario(); refrescarShowModal();"><span></span></button>
       </td>
@@ -30,10 +30,6 @@
     </tr>
   </tbody>
 </table>
-
-
-
-
 
 <!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->
 <app-formulario *ngIf="fechaCitaString !== ''" [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
