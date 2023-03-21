@@ -30,11 +30,11 @@ export class ServiceService {
     return this.http.get<Funcionario[]>(this.url + "funcionarios");
   }
 
-  getFuncionarioId(id: number) {
+  getFuncionarioId(id: String) {
     return this.http.get<Funcionario>(this.url + "funcionarios" + "/" + id);
   }
 
-  getCitasFuncionario(idFuncionario: number) {
+  getCitasFuncionario(idFuncionario: String) {
     return this.http.get<Cita[]>(this.url + "citas" + "/funcionario/" + idFuncionario)
   }
 

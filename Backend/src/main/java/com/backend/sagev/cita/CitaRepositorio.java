@@ -6,7 +6,7 @@ public interface CitaRepositorio extends Repository<Cita, Integer>{
 
     List<Cita>findAll();
     // Retorna las citas de un funcionario en específico y las ordena por fecha de forma ascendente
-    List<Cita>findByidFuncionarioOrderByFecha(int idFuncionario);
+    List<Cita>findByidFuncionarioOrderByFecha(String idFuncionario);
     Cita findByid(int id);
     Cita save(Cita c);
     Cita delete(Cita c);

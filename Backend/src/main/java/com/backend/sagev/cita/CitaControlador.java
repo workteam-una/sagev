@@ -27,7 +27,7 @@ public class CitaControlador {
 
     //Devuelve las citas reservadas con un funcionario
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
-    public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") int idFuncionario){
+    public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
 

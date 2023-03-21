@@ -1,5 +1,5 @@
 export class Funcionario{
-    idFuncionario?: number;
+    idFuncionario?: String;
     numDepartamento?: number;
     correo?: String;
     nombre?: String;

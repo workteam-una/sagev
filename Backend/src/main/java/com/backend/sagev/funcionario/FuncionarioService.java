@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface FuncionarioService {
     List<Funcionario>listar();
-    Funcionario listarIdFuncionario(int idFuncionario);
+    Funcionario listarIdFuncionario(String idFuncionario);
     Funcionario add(Funcionario f);
     Funcionario edit(Funcionario f);
     Funcionario delete(int idFuncionario);

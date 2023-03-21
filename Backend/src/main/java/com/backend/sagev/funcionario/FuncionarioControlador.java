@@ -25,7 +25,7 @@ public class FuncionarioControlador {
     }
 
     @GetMapping(path = {"/{id}"})
-    public Funcionario getById(@PathVariable("id") int id){
+    public Funcionario getById(@PathVariable("id") String id){
         return service.listarIdFuncionario(id);
     }
 

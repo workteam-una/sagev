@@ -30,10 +30,10 @@ public class Cita {
     private int id;
     
     @Column(name = "IdFuncionario")
-    private int idFuncionario;
+    private String idFuncionario;
 
     @Column(name = "IdContribuyente")
-    private int idContribuyente;
+    private String idContribuyente;
 
     @Column(name = "NombreContribuyente")
     private String nombreContribuyente;
@@ -80,19 +80,19 @@ public class Cita {
         this.id = id;
     }
 
-    public int getIdFuncionario() {
+    public String getIdFuncionario() {
         return idFuncionario;
     }
 
-    public void setIdFuncionario(int idFuncionario) {
+    public void setIdFuncionario(String idFuncionario) {
         this.idFuncionario = idFuncionario;
     }
 
-    public int getIdContribuyente() {
+    public String getIdContribuyente() {
         return idContribuyente;
     }
 
-    public void setIdContribuyente(int idContribuyente) {
+    public void setIdContribuyente(String idContribuyente) {
         this.idContribuyente = idContribuyente;
     }
 
@@ -167,8 +167,4 @@ public class Cita {
     public void setRazonReagenda(String razonReagenda) {
         this.razonReagenda = razonReagenda;
     }
-
-    
-
-    
 }

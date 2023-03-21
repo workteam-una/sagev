@@ -46,7 +46,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.showModal = -1;
   }//Fin pop up
 
-  getCitasFuncionario(id: number) :void {
+  getCitasFuncionario(id: String) :void {
     this.service.getCitasFuncionario(id)
     .subscribe(data => {
       this.citasFuncionario = data

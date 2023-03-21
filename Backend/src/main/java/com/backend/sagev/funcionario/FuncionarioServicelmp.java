@@ -18,7 +18,7 @@ public class FuncionarioServicelmp implements FuncionarioService{
     }
 
     @Override
-    public Funcionario listarIdFuncionario(int idFuncionario) {
+    public Funcionario listarIdFuncionario(String idFuncionario) {
         return repositorio.findByidFuncionario(idFuncionario);
     }
 

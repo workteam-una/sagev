@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface CitaService {
     List<Cita> listar();
-    List<Cita> listarIdFuncionario(int idFuncionario);
+    List<Cita> listarIdFuncionario(String idFuncionario);
     Cita listarId(int id);
     Cita save(Cita c);
     Cita edit(Cita c);

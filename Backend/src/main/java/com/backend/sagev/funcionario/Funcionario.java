@@ -16,8 +16,7 @@ public class Funcionario {
 
     @Id
     @Column(name = "IdFuncionario")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idFuncionario;
+    private String idFuncionario;
 
     @Column(name = "NumDepartamento")
     private int numDepartamento;
@@ -51,11 +50,11 @@ public class Funcionario {
     //     this.administrador = administrador;
     // }
 
-    public int getIdFuncionario() {
+    public String getIdFuncionario() {
         return idFuncionario;
     }
 
-    public void setIdFuncionario(int idFuncionario) {
+    public void setIdFuncionario(String idFuncionario) {
         this.idFuncionario = idFuncionario;
     }
 

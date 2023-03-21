@@ -1,7 +1,7 @@
 export class Cita {
     id?: number
-    idFuncionario?: number
-    idContribuyente?: number
+    idFuncionario?: String
+    idContribuyente?: String
     nombreContribuyente?: String
     apellido1Contribuyente?: String
     apellido2Contribuyente?: String

@@ -94,7 +94,7 @@ export class ReservaComponent implements OnInit {
   }
 
   // Citas reservadas y las citas de un funcionario son sinónimos
-  getCitasReservadas(id: number): void {
+  getCitasReservadas(id: String): void {
     // Las citas se tienen que limpiar porque si no se van acumulando cada vez que cambio de departamento (se activa este método)
     this.citasReservadas = []
     this.citasDisponibles = []
@@ -219,7 +219,13 @@ export class ReservaComponent implements OnInit {
       // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
       // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
 
-      this.citasDisponibles.push(citaAux)
+      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 12 m.d y 4 p.m.
+      if (citaAux.fecha.toLocaleTimeString() !== '12:00:00' && citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
+        this.citasDisponibles.push(citaAux)
+      }
+      else {
+        console.log("Cita ignorada: " + citaAux)
+      }
     }
 
     //Genera citas disponibles los dias jueves de la semana actual

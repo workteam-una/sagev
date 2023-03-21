@@ -14,7 +14,7 @@ public interface FuncionarioRepositorio extends Repository<Funcionario, Integer>
     List<Funcionario>findAll(); //Saca todos los funcionarios
     //findBy(variable) luego del "By" se coloca el nombre de la variable
     //por la que se va a ir a ubicar el objeto. (por esto el error de 4h ;-;)
-    Funcionario findByidFuncionario(int idFuncionario); //Encuentra un funcionario por id
+    Funcionario findByidFuncionario(String idFuncionario); //Encuentra un funcionario por id
     Funcionario save(Funcionario a); //Guarda un funcionario en la BD
     void delete(Funcionario a); // Elimina un funcionario de la BD
 }
