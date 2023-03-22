@@ -13,4 +13,5 @@ public interface FuncionarioService {
     Funcionario add(Funcionario f);
     Funcionario edit(Funcionario f);
     Funcionario delete(int idFuncionario);
+    Funcionario save(Funcionario f);
 }

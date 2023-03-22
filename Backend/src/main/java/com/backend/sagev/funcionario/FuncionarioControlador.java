@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +30,28 @@ public class FuncionarioControlador {
     @GetMapping(path = {"/{id}"})
     public Funcionario getById(@PathVariable("id") String id){
         return service.listarIdFuncionario(id);
+    }
+
+    //Guarda el funcionario en la BD
+    @PostMapping
+    public Funcionario agregar(@RequestBody Funcionario f){
+        return service.save(f);
+    }
+
+    // Cambia el estado de encargado de "N" a "S"
+    @PutMapping(path = {"/encargado/si/{id}"})
+    public Funcionario encargadoSi(@PathVariable("id") String id) {
+        Funcionario funcionario = service.listarIdFuncionario(id);
+        funcionario.setEncargado("S");
+        return service.edit(funcionario);
+    }
+
+    // Cambia el estado de encargado de "S" a "N"
+    @PutMapping(path = {"/encargado/no/{id}"})
+    public Funcionario encargadoNo(@PathVariable("id") String id) {
+        Funcionario funcionario = service.listarIdFuncionario(id);
+        funcionario.setEncargado("N");
+        return service.edit(funcionario);
     }
 
 }

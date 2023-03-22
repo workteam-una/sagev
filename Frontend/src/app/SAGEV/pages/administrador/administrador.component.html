@@ -3,21 +3,19 @@
     <button class="btn btn-primary btnOpciones" (click)="showArea(1)">Agregar nueva área</button>
     <button class="btn btn-primary btnOpciones" (click)="showDpto(1)">Agregar nuevo departamento</button>
     <button class="btn btn-primary btnOpciones" (click)="showAgrFunc(1)">Agregar nuevo funcionario</button>
-    <button class="btn btn-primary btnOpciones" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
     <button class="btn btn-primary btnOpciones" (click)="showPswrdFunc(1)">Cambiar contraseña a funcionario</button>
   </div>
 </div>
-
-
-
-
 
 <!-- Pop up para agregar una nueva area-->
 
 <div class="uc-modal" *ngIf="showModalArea === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()">
+      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()"> -->
+      <span class="material-symbols-outlined" (click)="closeArea()">
+        X
+      </span>
       <h4>Agregar una nueva area</h4>
     </div>
     <div class="uc-m-body">
@@ -47,7 +45,10 @@
 <div class="uc-modal" *ngIf="showModalDpto === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeDpto()">
+      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeDpto()"> -->
+      <span class="material-symbols-outlined" (click)="closeDpto()">
+        X
+      </span>
       <h4>Agregar nuevo departamento</h4>
     </div>
     <div class="uc-m-body">
@@ -60,7 +61,8 @@
       </div>
       <label>Digite el numero del departamento a crear</label><br>
       <div>
-        <input name="departamentonueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="departamentonueva" type="text" class="form-control inputInfo" id="validationDefault01" value=""
+          required>
       </div>
       <label>Digite el nombre del departamento a crear</label><br>
       <div>
@@ -83,83 +85,73 @@
 <div class="uc-modal" *ngIf="showModalAgrFunc === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()">
+      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()"> -->
+      <span class="material-symbols-outlined" (click)="closeAgrFunc()">
+        X
+      </span>
       <h4>Agregar un nuevo funcionario</h4>
     </div>
     <div class="uc-m-body">
       <label>Seleccione el departamento al a cual pertenece el nuevo funcionario</label><br>
       <div>
-        <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
-          <option value="empty">------</option>
-          <option value="direccion">Direccion</option>
+        <select #selectDepa name="dept" id="dept" class="form-select" class="form-select selectInfo"
+          (change)="setDepaFuncionario(selectDepa.value)">
+          <option selected value=''>Seleccione el departamento</option>
+          <option *ngFor="let departamento of departamentos" value="{{departamento.numDepartamento}}">
+            {{departamento.numDepartamento}} - {{departamento.nombre}}
+          </option>
         </select>
       </div>
       <label>Digite la cedula del funcionario</label><br>
       <div>
-        <input name="funcionarionombre" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="funcionarionombre" type="text" class="form-control inputInfo" id="validationDefault01" value=""
+          required [(ngModel)]="nuevoFuncionario.idFuncionario">
       </div>
       <label>Digite el correo del funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+          [(ngModel)]="nuevoFuncionario.correo">
       </div>
       <label>Digite el nombre del funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+          [(ngModel)]="nuevoFuncionario.nombre">
       </div>
       <label>Digite el primer apellido del funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+          [(ngModel)]="nuevoFuncionario.apellido1">
       </div>
       <label>Digite el segundo apellido del funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+          [(ngModel)]="nuevoFuncionario.apellido2">
       </div>
       <label>Digite la contraseña del funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+          [(ngModel)]="nuevoFuncionario.contrasenna">
+      </div>
+      <!-- <label>Seleccione si el funcionario va a ser encargado</label><br>
+      <div>
+        <select name="areas" id="areas" class="form-select selectInfo" [(ngModel)]="nuevoFuncionario.suplente">
+          <option value="">Seleccionar el rol del funcionario</option>
+          <option value="S">Encargado</option>
+          <option value="N">Suplente</option>
+        </select>
+      </div> -->
+      <label>Seleccione si el funcionario va a ser suplente</label><br>
+      <div>
+        <select name="areas" id="areas" class="form-select selectInfo" [(ngModel)]="nuevoFuncionario.suplente">
+          <!-- <option value="">Seleccionar el rol del funcionario</option> -->
+          <option value="S">Si</option>
+          <option value="N">No</option>
+        </select>
       </div>
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary">Confirmar</button>
+      <button class="btn btn-primary" (click)="guardarFuncionario(nuevoFuncionario)">Confirmar</button>
       <button class="btn btn-danger" (click)="closeAgrFunc()">Salir</button>
-    </div>
-  </div>
-</div>
-
-<!-- Pop up para modificar el funcionario a cargo-->
-
-<div class="uc-modal" *ngIf="showModalModFunc === 1">
-  <div class="uc-m-content">
-    <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeModFunc()">
-      <h4>Modificar funcionario a cargo</h4>
-    </div>
-    <div class="uc-m-body">
-      <label>Seleccione el area en la que se encuentra el departamento</label><br>
-      <div>
-        <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
-          <option value="empty">------</option>
-          <option value="area">Direccion de SOT</option>
-        </select>
-      </div>
-      <label>Seleccione el departamento al cual se va a realizar el cambio de funcionario</label><br>
-      <div>
-        <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
-          <option value="empty">------</option>
-          <option value="direccion">Bienes inmuebles</option>
-        </select>
-      </div>
-      <label>Seleccione el funcionario a asignar a cargo</label><br>
-      <div>
-        <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
-          <option value="empty">------</option>
-          <option value="nombre">Guillermo Ibarra Baez</option>
-        </select>
-      </div>
-    </div>
-    <div class="uc-m-footer">
-      <button class="btn btn-primary">Confirmar</button>
-      <button class="btn btn-danger" (click)="closeModFunc()">Salir</button>
     </div>
   </div>
 </div>
@@ -169,14 +161,18 @@
 <div class="uc-modal" *ngIf="showModalPswrdFunc === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closePswrdFunc()">
+      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closePswrdFunc()"> -->
+      <span class="material-symbols-outlined" (click)="closePswrdFunc()">
+        X
+      </span>
       <h4>Cambiar contraseña a un funcionario</h4>
     </div>
     <div class="uc-m-body">
       <label>Digite la cedula del funcionario a modificar</label><br>
       <div>
         <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
-        <label>Guillermo Ibarra Baez</label> <!-- La idea es que al digitar la cedula se cargue el numero de la cedula -->
+        <label>Guillermo Ibarra Baez</label>
+        <!-- La idea es que al digitar la cedula se cargue el numero de la cedula -->
       </div>
       <label>Ingrese la nueva contraseña</label><br>
       <div>

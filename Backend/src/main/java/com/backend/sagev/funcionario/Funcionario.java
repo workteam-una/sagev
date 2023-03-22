@@ -39,6 +39,12 @@ public class Funcionario {
     @Column(name = "Encargado")
     private String encargado;
 
+    @Column(name = "Suplente")
+    private String suplente;
+
+    @Column(name = "Administrador")
+    private String administrador;
+
     // @Column( name = "Administrador")
     // private Boolean administrador;
 
@@ -113,4 +119,22 @@ public class Funcionario {
     public void setEncargado(String encargado) {
         this.encargado = encargado;
     }
+
+    public String getSuplente() {
+        return suplente;
+    }
+
+    public void setSuplente(String suplente) {
+        this.suplente = suplente;
+    }
+
+    public String getAdministrador() {
+        return administrador;
+    }
+
+    public void setAdministrador(String administrador) {
+        this.administrador = administrador;
+    }
+
+
 }

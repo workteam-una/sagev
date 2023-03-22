@@ -411,6 +411,14 @@ export class ReservaComponent implements OnInit {
       }
     }
 
+    mostrarTextoSuplente(suplente: String) {
+      if(suplente === "S") {
+        return " (funcionario suplente)"
+      }
+      else {
+        return ""
+      }
+    }
     //-----------------------------------------------------------------
   // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
   // convertDate(date: Date) {

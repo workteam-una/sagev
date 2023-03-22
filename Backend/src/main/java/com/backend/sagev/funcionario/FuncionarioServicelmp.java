@@ -3,7 +3,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//Que hace esta clase?: En esta clase nada mas se desarrolla los metodos de la interfas
+//Que hace esta clase?: En esta clase nada mas se desarrolla los metodos de la interfaz
 // FuncionarioService
 
 @Service
@@ -29,7 +29,7 @@ public class FuncionarioServicelmp implements FuncionarioService{
 
     @Override
     public Funcionario edit(Funcionario f) {
-        throw new UnsupportedOperationException("Para sagev: aun no implementamos esto.");
+        return repositorio.save(f);
     }
 
     @Override
@@ -37,4 +37,8 @@ public class FuncionarioServicelmp implements FuncionarioService{
         throw new UnsupportedOperationException("Para sagev: aun no implementamos esto.");
     }
     
+    @Override
+    public Funcionario save(Funcionario f) {
+        return repositorio.save(f);
+    }
 }

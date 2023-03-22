@@ -13,8 +13,54 @@
     <div>
         ¡Inicio de sesión exitoso! Bienvenid@ {{modeloFuncionario.nombre}} {{modeloFuncionario.apellido1}} 
     </div>
+    <div class="btnModFun">
+      <!-- Esta verificación se hace para que el boton de modificar el funcionario a cargo no se le muestre al funcionario suplente -->
+        <button *ngIf="modeloFuncionario.suplente === 'N'" class="btn btn-primary btnOpciones" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
+    </div>  
   </div>
 
 <div class="div-tablaCitasFunc">
     <app-citas-funcionario-tabla [modeloFuncionario]="modeloFuncionario"></app-citas-funcionario-tabla>
 </div>
+
+<!-- Pop up para modificar el funcionario a cargo-->
+
+<div class="uc-modal" *ngIf="showModalModFunc === 1">
+    <div class="uc-m-content">
+      <div class="uc-m-header">
+        <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeModFunc()"> -->
+        <span class="material-symbols-outlined" (click)="closeModFunc()">
+            X
+        </span>
+        <h4>Modificar funcionario a cargo</h4>
+      </div>
+      <div class="uc-m-body">
+        <!-- <label>Seleccione el area en la que se encuentra el departamento</label><br>
+        <div>
+          <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
+            <option value="empty">------</option>
+            <option value="area">Direccion de SOT</option>
+          </select>
+        </div>
+        <label>Seleccione el departamento al cual se va a realizar el cambio de funcionario</label><br>
+        <div>
+          <select name="dept" id="dept" class="form-select" class="form-select selectInfo">
+            <option value="empty">------</option>
+            <option value="direccion">Bienes inmuebles</option>
+          </select>
+        </div> -->
+        <div>
+          <select #selectFunc name="dept" id="dept" class="form-select" class="form-select selectInfo">
+            <option value="">Seleccione el funcionario a asignar o desasignar como encargado</option>
+            <option *ngFor="let funcionario of funcionariosEncargadosPorDepa" value="{{funcionario.idFuncionario}}">
+              {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="uc-m-footer">
+        <button (click)="asignarSuplenteEncargado(selectFunc.value)" class="btn btn-primary">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeModFunc()">Salir</button>
+      </div>
+    </div>
+  </div>

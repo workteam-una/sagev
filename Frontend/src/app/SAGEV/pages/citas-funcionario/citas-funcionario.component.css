@@ -22,3 +22,63 @@
     margin-top: 2%; 
     margin-left: 5%;
 }
+
+/*Inicio del CSS de los pop up*/
+.uc-modal {
+    position: fixed;
+    background: #000000bf;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.uc-m-content{
+    background: #fff;
+    width: 50%;
+    margin: 3% auto;
+    border-radius: 10px;
+}
+
+.uc-m-header{
+    padding: 20px;
+    background: #3f70ca;
+    color: #fff;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    position: relative;
+}
+
+.uc-m-header h4{
+    margin: 0;
+}
+
+.uc-m-header .material-icons{
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.uc-m-body{
+    padding: 20px;
+    min-height: 100px;
+}
+
+.uc-m-footer{
+    padding: 20px;
+    border-top: 1px solid #ccc;
+    text-align: right;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.uc-m-footer button{
+    margin-left: 20px;
+    margin-right: 0;
+}
+/*Fin del CSS de los pop up*/
+
+.btnModFun{
+    margin-left: 38%;
+}

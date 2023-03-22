@@ -14,8 +14,6 @@
 --drop sequence sec_Id_cita;
 --drop sequence sec_Id_Horario;
 
-
-
 --Creación de las tablas
 
 go
@@ -49,7 +47,9 @@ create table Funcionario
   Apellido1 varchar(50) not null,
   Apellido2 varchar(50) not null,
   Contrasenna varchar(50) not null,
-  Encargado char(1) not null
+  Encargado char(1) not null,
+  Suplente char(1) not null,
+  Administrador char(1) null
 );
 
 create table Horario
@@ -124,6 +124,14 @@ foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 alter table Funcionario add constraint funcionario_ck_Encargado check
 (Encargado in ('S','N'));
 
+--funcionario_ck_Suplente
+alter table Funcionario add constraint funcionario_ck_Suplente check
+(Encargado in ('S','N'));
+
+--funcionario_ck_Administrador
+alter table Funcionario add constraint funcionario_ck_Administrador check
+(Encargado in ('S','N'));
+
 --cita_ck_Estado
 alter table Cita add constraint cita_ck_Estado check
 (Estado in ('Pendiente', 'Completada', 'Ausente'));
@@ -196,27 +204,28 @@ go
 
 --Procedimiento de insertar en tabla Funcionario
 create or alter procedure usp_insertar_funcionario @PIdFuncionario varchar(30), @PNumDepartamento int, 
-@PCorreo varchar(100), @PNombre varchar(50), @PApellido1 varchar(50), 
-@PApellido2 varchar(50), @PContrasenna varchar(50), @PEncargado char(1)
+@PCorreo varchar(100), @PNombre varchar(50), @PApellido1 varchar(50), @PApellido2 varchar(50), 
+@PContrasenna varchar(50), @PEncargado char(1), @PSuplente char(1), @PAdministrador char(1)
 as
 begin 
 	insert into Funcionario (IdFuncionario, NumDepartamento, Correo, Nombre, 
-	Apellido1, Apellido2, Contrasenna, Encargado) 
+	Apellido1, Apellido2, Contrasenna, Encargado, Suplente, Administrador)
 	values (@PIdFuncionario, @PNumDepartamento, @PCorreo, @PNombre, 
-	@PApellido1, @PApellido2, @PContrasenna, @PEncargado);
+	@PApellido1, @PApellido2, @PContrasenna, @PEncargado, @PSuplente, @PAdministrador);
 end;
 go
 
 --Procedimiento de actualizar en tabla Funcionario
 create or alter procedure usp_actualizar_funcionario @PIdFuncionario varchar(30), @PNumDepartamento int, 
 @PCorreo varchar(100), @PNombre varchar(50), @PApellido1 varchar(50), 
-@PApellido2 varchar(50), @PContrasenna varchar(50), @PEncargado char(1)
+@PApellido2 varchar(50), @PContrasenna varchar(50), @PEncargado char(1), @PSuplente char(1), @PAdministrador char(1)
 as
 begin
     update Funcionario 
         set NumDepartamento = @PNumDepartamento,
         Correo = @PCorreo, Nombre = @PNombre, Apellido1 = @PApellido1,
-        Apellido2 = @PApellido2, Contrasenna = @PContrasenna, Encargado = @PEncargado
+        Apellido2 = @PApellido2, Contrasenna = @PContrasenna, Encargado = @PEncargado,
+		Suplente = @PSuplente, Administrador = @PAdministrador 
     where @PIdFuncionario = IdFuncionario;
 end; 
 go
