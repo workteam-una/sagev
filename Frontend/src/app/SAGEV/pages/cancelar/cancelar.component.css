@@ -1,0 +1,41 @@
+#tituloCancelar{
+    margin: 0 auto;
+    padding: 2%;
+    margin-left: 35%;
+}
+
+#instrucciones{
+    margin: 0 auto;
+    padding: 2%;
+    margin-left: 11%;
+    width: 75%;
+    text-align: center;
+    margin-top: -2%
+}
+
+.liInstrucciones{
+    padding-bottom: 2%;
+}
+
+.divCedula{
+    margin-left: 36%;
+}
+
+.inputCedula{
+    width: 50%;
+    margin-left: 10%;
+}
+
+.tablaCitasCancel{
+    margin: auto;
+    width: 85%;
+    padding: 10px;
+}
+
+.divBusqueda{
+    display: flex;
+}
+
+.btnBuscar{
+    margin-left: 2%;
+}

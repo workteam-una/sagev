@@ -12,29 +12,34 @@ import { CitasFuncionarioPopupComponent } from './components/citas-funcionario-p
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CancelarTablaComponent } from './components/cancelar-tabla/cancelar-tabla.component';
+import { AdministradorComponent } from './pages/administrador/administrador.component';
+import { AdministradorTablaComponent } from './components/administrador-tabla/administrador-tabla.component';
 
 @NgModule({
   declarations: [
     ReservaComponent,
-    CancelarComponent,
     ReservaTablaComponent,
     FormularioComponent,
     LoginComponent,
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
-    CancelarComponent
+    CancelarComponent,
+    CancelarTablaComponent,
+    AdministradorComponent,
+    AdministradorTablaComponent
   ],
   exports: [
     ReservaComponent,
-    CancelarComponent,
     ReservaTablaComponent,
     FormularioComponent,
     LoginComponent,
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
-    CancelarComponent
+    CancelarComponent,
+    AdministradorComponent
   ],
   imports: [
     ReactiveFormsModule,

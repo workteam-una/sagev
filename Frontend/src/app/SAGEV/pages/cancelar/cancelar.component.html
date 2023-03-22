@@ -1,1 +1,29 @@
-<p>cancelar works!</p>
+<div id="tituloCancelar">
+    <h3>Cancelar sus citas reservadas</h3>
+</div>
+
+<div id="instrucciones">
+    <h5>
+        <li class="liInstrucciones">
+            Para cancelar sus citas reservadas solamente introduzca su número de cédula
+            en el buscador para que se muestren las citas que ha reservado
+        </li>
+        <li class="liInstrucciones">
+            Luego de ingresar su cédula, seleccione la cita que quiere cancelar para
+            desplegar la confirmación
+        </li>
+    </h5>
+</div>
+
+<div class="col-md-4 divCedula">
+    <p>Ingrese su número de cédula con el formato 0-0000-0000</p>
+    <div class="divBusqueda">
+        <input name="cedulaContribuyente" type="text" class="form-control  inputCedula" id="validationDefault01"
+            value="" required>
+        <button class="btn btn-primary btnBuscar">Buscar</button>
+    </div>
+</div>
+
+<div class="tablaCitasCancel">
+    <app-cancelar-tabla></app-cancelar-tabla>
+</div>
