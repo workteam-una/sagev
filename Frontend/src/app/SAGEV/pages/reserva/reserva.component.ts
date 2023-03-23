@@ -419,6 +419,15 @@ export class ReservaComponent implements OnInit {
         return ""
       }
     }
+
+    mostrarAvisoSuplente(suplente: String){
+      if(suplente === "S") {
+        return true
+      }
+      else {
+        return false
+      }
+    }
     //-----------------------------------------------------------------
   // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
   // convertDate(date: Date) {

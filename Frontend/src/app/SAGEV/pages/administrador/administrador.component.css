@@ -1,12 +1,14 @@
 .divBotones{
     display: flex;
     margin: 0 auto;
-    padding: 3%;
+    margin-top: 2%;
+    padding: 1%;
+    width: 90%;
+    border-radius: 30px;
 }
 
 .btnOpciones{
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 4%;
 }
 
 /*Inicio del CSS de los pop up*/
@@ -55,8 +57,7 @@
     padding: 20px;
     border-top: 1px solid #ccc;
     text-align: right;
-    border-top-left-radius: 6px;
-    border-top-right-radius: 6px;
+
 }
 
 .uc-m-footer button{
@@ -69,7 +70,8 @@
 }
 
 .selectInfo{
-    width: 30%;
+    width: 77.5%;
+    margin-bottom: 2%;
 }
 .titulo{
     margin: 0 auto;

@@ -29,6 +29,10 @@ export class ServiceService {
     return this.http.get<Funcionario[]>(this.url + "funcionarios");
   }
 
+  getCitasReservadas(){
+    return this.http.get<Cita[]>(this.url + "citas");
+  }
+
   getFuncionarioId(id: String) {
     return this.http.get<Funcionario>(this.url + "funcionarios" + "/" + id);
   }

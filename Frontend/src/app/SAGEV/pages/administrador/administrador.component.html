@@ -13,9 +13,7 @@
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()"> -->
-      <span class="material-symbols-outlined" (click)="closeArea()">
-        X
-      </span>
+     
       <h4>Agregar una nueva area</h4>
     </div>
     <div class="uc-m-body">
@@ -31,7 +29,6 @@
       <div>
         <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
       </div>
-
     </div>
     <div class="uc-m-footer">
       <button class="btn btn-primary">Confirmar</button>
@@ -46,9 +43,7 @@
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeDpto()"> -->
-      <span class="material-symbols-outlined" (click)="closeDpto()">
-        X
-      </span>
+      
       <h4>Agregar nuevo departamento</h4>
     </div>
     <div class="uc-m-body">
@@ -86,51 +81,107 @@
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()"> -->
-      <span class="material-symbols-outlined" (click)="closeAgrFunc()">
-        X
-      </span>
+      
       <h4>Agregar un nuevo funcionario</h4>
+      
     </div>
     <div class="uc-m-body">
-      <label>Seleccione el departamento al a cual pertenece el nuevo funcionario</label><br>
+      <label>Seleccione el departamento al cual pertenece el nuevo funcionario</label><br>
       <div>
         <select #selectDepa name="dept" id="dept" class="form-select" class="form-select selectInfo"
           (change)="setDepaFuncionario(selectDepa.value)">
-          <option selected value=''>Seleccione el departamento</option>
+          <option selected value=''></option>
           <option *ngFor="let departamento of departamentos" value="{{departamento.numDepartamento}}">
             {{departamento.numDepartamento}} - {{departamento.nombre}}
           </option>
         </select>
       </div>
-      <label>Digite la cedula del funcionario</label><br>
-      <div>
-        <input name="funcionarionombre" type="text" class="form-control inputInfo" id="validationDefault01" value=""
-          required [(ngModel)]="nuevoFuncionario.idFuncionario">
-      </div>
-      <label>Digite el correo del funcionario</label><br>
-      <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-          [(ngModel)]="nuevoFuncionario.correo">
-      </div>
-      <label>Digite el nombre del funcionario</label><br>
-      <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-          [(ngModel)]="nuevoFuncionario.nombre">
-      </div>
-      <label>Digite el primer apellido del funcionario</label><br>
-      <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-          [(ngModel)]="nuevoFuncionario.apellido1">
-      </div>
-      <label>Digite el segundo apellido del funcionario</label><br>
-      <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-          [(ngModel)]="nuevoFuncionario.apellido2">
-      </div>
-      <label>Digite la contraseña del funcionario</label><br>
-      <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-          [(ngModel)]="nuevoFuncionario.contrasenna">
+
+
+      <div style="display:flex;">
+     
+
+
+        <form [formGroup]="funcionarioForm">
+
+          <div style="display: flex;">
+            <div>
+              <div>
+                <label>Cedula del funcionario</label><br>
+                <div>
+                  <input formControlName="cedula" type="text" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"
+                    [(ngModel)]="nuevoFuncionario.idFuncionario">
+                  <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
+                    <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label>Correo del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="email" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['email'].errors }" [(ngModel)]="nuevoFuncionario.correo">
+                  <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label>Nombre del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="nombre" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }" [(ngModel)]="nuevoFuncionario.nombre">
+                  <div *ngIf="enviar && f['nombre'].errors" class="invalid-feedback">
+                    <div *ngIf="f['nombre'].errors?.['required']">Nombre en blanco</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div style="margin-right: -4%; padding-left: 4%;">
+              <div>
+                <label>Primer apellido del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="apellidouno" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }"
+                    [(ngModel)]="nuevoFuncionario.apellido1">
+                  <div *ngIf="enviar && f['apellidouno'].errors" class="invalid-feedback">
+                    <div *ngIf="f['apellidouno'].errors?.['required']">Primer apellido en blanco</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label>Segundo apellido del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="apellidodos" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }"
+                    [(ngModel)]="nuevoFuncionario.apellido2">
+                  <div *ngIf="enviar && f['apellidodos'].errors" class="invalid-feedback">
+                    <div *ngIf="f['apellidodos'].errors?.['required']">Segundo apellido en blanco</div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label>Contraseña del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="clave" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['clave'].errors }"
+                    [(ngModel)]="nuevoFuncionario.contrasenna">
+                  <div *ngIf="enviar && f['clave'].errors" class="invalid-feedback">
+                    <div *ngIf="f['clave'].errors?.['required']">Contraseña en blanco o inválido</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        
+
       </div>
       <!-- <label>Seleccione si el funcionario va a ser encargado</label><br>
       <div>
@@ -148,10 +199,10 @@
           <option value="N">No</option>
         </select>
       </div>
-    </div>
-    <div class="uc-m-footer">
-      <button class="btn btn-primary" (click)="guardarFuncionario(nuevoFuncionario)">Confirmar</button>
-      <button class="btn btn-danger" (click)="closeAgrFunc()">Salir</button>
+      <div class="uc-m-footer">
+        <button class="btn btn-primary" (click)="guardarFuncionario(nuevoFuncionario)">Confirmar</button>
+        <button class="btn btn-danger" (click)="closeAgrFunc()">Salir</button>
+      </div>
     </div>
   </div>
 </div>
@@ -162,9 +213,7 @@
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closePswrdFunc()"> -->
-      <span class="material-symbols-outlined" (click)="closePswrdFunc()">
-        X
-      </span>
+      
       <h4>Cambiar contraseña a un funcionario</h4>
     </div>
     <div class="uc-m-body">

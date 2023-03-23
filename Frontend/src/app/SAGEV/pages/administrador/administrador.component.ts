@@ -3,6 +3,7 @@ import { ServiceService } from 'src/app/Service/service.service';
 import { Router } from '@angular/router';
 import { Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-administrador',
@@ -16,19 +17,57 @@ export class AdministradorComponent implements OnInit {
   formModalAgrFunc: any
   formModalPswrdFunc: any
 
+  funcionarioForm!: FormGroup
+  enviar = false;
+
   departamentos: Departamento[] = []
   nuevoFuncionario: Funcionario = new Funcionario
 
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder,private service: ServiceService, private router: Router) { }
 
   ngOnInit(): void {
-
     this.service.getDepartamentos()
     .subscribe(dataDep => {
       this.departamentos = dataDep
     })
 
+    //Validaciones del formulario
+    this.funcionarioForm = this.formBuilder.group({
+      nombre: ['', Validators.required],
+      apellidouno: ['', Validators.required],
+      apellidodos: ['', Validators.required],
+      cedula: ['', [Validators.required, Validators.minLength(9)]],
+      telefono: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      clave: ['', Validators.required]
+    });
+
   }
+
+  //Ejecuta las validaciones
+  validaciones(): boolean {
+    this.enviar = true;
+    // El formulario es invalido
+    if (this.funcionarioForm.invalid) {
+      console.log("mal")
+        return false;
+    }
+    else{
+      console.log("bien")
+      // El formulario esta bien
+    console.log('SIS!! :-)\n\n' + JSON.stringify(this.funcionarioForm.value, null, 7));
+      return true;
+    } 
+}
+
+  //Limpia el formulario
+  resetForm() : void {
+    this.enviar = false;
+    this.funcionarioForm.reset();
+  }
+
+  // un get del formulario
+  get f() { return this.funcionarioForm.controls; }
 
   //Pop up agregar nueva area
 
@@ -91,17 +130,23 @@ export class AdministradorComponent implements OnInit {
   }
 
   closePswrdFunc(){
+    this.resetForm()
     this.showModalPswrdFunc = -1;
   }
 
   guardarFuncionario(func: Funcionario): void{
+     //Las validaciones estan mal
+     if(!this.validaciones()){
+      return
+    }
     this.service.guardarFuncionario(func)
     .subscribe(data =>{
       alert("Se agregó el funcionario con éxito")
       // Se debe actualizar la página para evitar sacar dos citas iguales
-      window.location.reload()
+      //window.location.reload()
       //this.router.navigate(["listar"]);
     })
+    this.resetForm()
   }
 
   setDepaFuncionario(numDepa: string){

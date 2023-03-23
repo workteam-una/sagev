@@ -26,11 +26,13 @@
         </option>
       </select>
   </div>
+
+  <div *ngFor="let funcionario of funcionariosEncargadosPorDepa" style="display: flex;">
   <!-- Si el área o el departamento no tienen valor seleccionado entonces no muestre la información del funcionario encargado -->
   <div class="div-info" *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
     <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h6>
     <ul class="list-group">
-      <li *ngFor="let funcionario of funcionariosEncargadosPorDepa">
+      <li>
         {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}} <p style="color: red">{{mostrarTextoSuplente(funcionario.suplente)}}</p>
       </li>
     </ul>
@@ -42,6 +44,11 @@
       </li>
     </ul>
   </div>
+  <div *ngIf="mostrarAvisoSuplente(funcionario.suplente)" class="avisodeSuplente">
+    <p>El funcionario encargado de este departamento no estara disponible para esta cita, con gusto le atendera este funcionario suplemente</p>
+  </div>
+</div>
+
 </div>
   
 <!-- <h5 class="tituloTabla">Citas disponibles</h5> -->

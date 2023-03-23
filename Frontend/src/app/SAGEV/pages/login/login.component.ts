@@ -55,11 +55,16 @@ export class LoginComponent implements OnInit {
       alert("La cédula o contraseña son incorrectas")
       return;
     }
-    // Usar el Local storage es algo provisional, en realidad 
-    // lo correcto es enviar el objeto de un módulo a otro
-    this.guardarLocalStorage(this.modeloFuncionarioCargado);
-    // Forward a la vista del funcionario
-    this.router.navigate(["citasFunc"])
+
+    if(this.modeloFuncionarioCargado.administrador === 'S'){
+      this.guardarLocalStorage(this.modeloFuncionarioCargado);
+      // Forward a la vista del funcionario
+      this.router.navigate(["administrador"])
+  }else{
+      this.guardarLocalStorage(this.modeloFuncionarioCargado);
+      // Forward a la vista del funcionario
+      this.router.navigate(["citasFunc"])
+  }
   }
 
   // Guardar el objeto funcionario en el local storage del navegador
