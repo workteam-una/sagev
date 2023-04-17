@@ -24,6 +24,7 @@ export class CitasFuncionarioComponent implements OnInit {
     this.cargarFuncionariosDepa()
   }
 
+
   //Utilizar el LocalStorage es algo provicional, hay que pasar los objetos
   //de un modulo a otro
   cargarFuncionario(): void {

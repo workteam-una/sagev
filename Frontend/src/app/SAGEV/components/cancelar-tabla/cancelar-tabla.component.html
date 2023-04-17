@@ -3,17 +3,19 @@
     <tr>
       <th scope="col">Fecha</th>
       <th scope="col">Hora</th>
+      <th scope="col">Funcionario</th>
       <th scope="col">Descripción</th>
       <th scope="col">Cancelar cita</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <th>22/2/2023</th>
-      <td>5:00pm</td>
-      <td>Revision de planos</td>
+    <tr *ngFor="let cita of citasContribuyente">
+      <th>{{cita.fecha.toLocaleDateString()}}</th>
+      <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
+      <td>{{cita.idFuncionario}}</td>
+      <td>{{cita.detalle}}</td>
       <td>
-        <button type="button" class="btn btn-primary" (click)="show(1)">Cancelar</button>
+        <button type="button" class="btn btn-primary" (click)="show(1, cita.id)">Cancelar</button>
       </td>
     </tr>
   </tbody>
@@ -32,7 +34,7 @@
       <label>¿Está seguro de que desea cancelar la cita?</label><br>
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary">Cancelar cita</button>
+      <button class="btn btn-primary" (click)=" marcarAusente()">Cancelar cita</button>
       <button class="btn btn-danger" (click)="close()">Salir</button>
     </div>
   </div>

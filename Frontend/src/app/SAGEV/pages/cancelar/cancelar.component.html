@@ -18,12 +18,11 @@
 <div class="col-md-4 divCedula">
     <p>Ingrese su número de cédula con el formato 0-0000-0000</p>
     <div class="divBusqueda">
-        <input name="cedulaContribuyente" type="text" class="form-control  inputCedula" id="validationDefault01"
-            value="" required>
-        <button class="btn btn-primary btnBuscar">Buscar</button>
+        <input #botonBuscar name="cedulaContribuyente" type="text" class="form-control inputCedula" id="validationDefault01">
+        <button class="btn btn-primary btnBuscar" (click)="getCitasReservadasContribuyente(botonBuscar.value)">Buscar</button>
     </div>
 </div>
 
 <div class="tablaCitasCancel">
-    <app-cancelar-tabla></app-cancelar-tabla>
+    <app-cancelar-tabla [citasContribuyente]="citasContribuyente"></app-cancelar-tabla>
 </div>

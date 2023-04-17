@@ -39,6 +39,7 @@ import { AdministradorTablaComponent } from './components/administrador-tabla/ad
     CitasFuncionarioTablaComponent,
     CitasFuncionarioPopupComponent,
     CancelarComponent,
+    CancelarTablaComponent,
     AdministradorComponent
   ],
   imports: [
