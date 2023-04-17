@@ -1,4 +1,19 @@
-<table class="table table-striped">
+<div class="div-filtro">
+  <div class="div-fecha-inicio">
+    <label for="selectorFechaInicio">Fecha inicial</label>
+    <input class="input-selectores-fechas" type="date" id="selectorFechaInicio" [(ngModel)]="fechaInicio">
+  </div>
+  <div class="div-fecha-final">
+    <label for="selectorFechaFinal">Fecha final</label>
+    <input class="input-selectores-fechas" type="date" id="selectorFechaFinal" [(ngModel)]="fechaFinal">
+  </div>
+  <div class="div-boton-busqueda">
+    <button class="btn btn-primary col-7" (click)="filtrarFechas()">Buscar</button>
+  </div>
+</div>
+
+<div class="scroll">
+<table class="table table-striped" >
     <thead>
       <tr>
         <th scope="col">Fecha</th>
@@ -10,7 +25,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let cita of citasReservadas">
+      <tr *ngFor="let cita of citasReservadasFiltradas">
         <th>{{cita.fecha.toLocaleDateString()}}</th>
         <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
         <td>{{cita.idFuncionario}}</td>
@@ -20,3 +35,4 @@
       </tr>
     </tbody>
   </table>
+</div> 

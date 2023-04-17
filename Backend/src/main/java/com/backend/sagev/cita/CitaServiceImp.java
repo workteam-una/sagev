@@ -1,5 +1,6 @@
 package com.backend.sagev.cita;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,15 @@ public class CitaServiceImp implements CitaService {
     public List<Cita> listarIdFuncionario(String idFuncionario) {
         return repositorio.findByidFuncionarioOrderByFecha(idFuncionario);
     }
+
+    @Override
+    public List<Cita> listarIdContribuyente(String idContribuyente) {
+        return repositorio.findByidContribuyenteOrderByFecha(idContribuyente);
+    }
+    // @Override
+    // public List<Cita> listarRangoFechas(String fechaInicial, String fechaFinal) {
+    //     return repositorio.findByFechaBetween(fechaInicial, fechaFinal);
+    // }
 
     @Override
     public Cita listarId(int id) {

@@ -33,4 +33,4 @@
 
 <!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->
 <app-formulario *ngIf="fechaCitaString !== ''" [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
-[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario" [showModal]="showModal"></app-formulario>
+[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario" [showModal]="showModal" (shModal)="recibirshModal($event)"></app-formulario>

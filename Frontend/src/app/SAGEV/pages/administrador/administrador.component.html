@@ -47,7 +47,7 @@
       <h4>Agregar nuevo departamento</h4>
     </div>
     <div class="uc-m-body">
-      <label>Seleccione el area al a cual pertenece el nuevo departamento</label><br>
+      <label>Seleccione el area a la cual pertenece el nuevo departamento</label><br>
       <div>
         <select name="areas" id="areas" class="form-select selectInfo">
           <option value="empty">------</option>
@@ -97,17 +97,14 @@
         </select>
       </div>
 
-
       <div style="display:flex;">
-     
-
 
         <form [formGroup]="funcionarioForm">
 
           <div style="display: flex;">
             <div>
               <div>
-                <label>Cedula del funcionario</label><br>
+                <label>Cédula del funcionario</label><br>
                 <div>
                   <input formControlName="cedula" type="text" class="form-control"
                     [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"
@@ -242,9 +239,20 @@
 <!-- Tabla de historial -->
 
 <div class="titulo">
-  <h2> Historial de citas</h2>
+  <p class="lead" style="color: rgb(104, 101, 101)">
+    <strong>Seleccione una fecha inicial y final para filtrar las citas dentro de ese rango</strong>
+</p>
 </div>
 
-<div class="tablaHistorial" style="height: 400px; margin-bottom: 5%;">
-  <app-administrador-tabla></app-administrador-tabla>
+
+
+<!-- <div class="div-indicaciones-filtro">
+  <p class="lead">
+    <strong>Filtrar citas por rango de fechas</strong>
+  </p>
+</div> -->
+
+<div class="tablaHistorial">
+  <app-administrador-tabla [fechaInicio]="fechaInicio" [fechaFinal]="fechaFinal"></app-administrador-tabla>
 </div>
+

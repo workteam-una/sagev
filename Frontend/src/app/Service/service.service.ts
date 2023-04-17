@@ -9,7 +9,6 @@ import { Cita } from '../SAGEV/modelo/cita';
   providedIn: 'root'
 })
 
-
 export class ServiceService {
   constructor(private http: HttpClient) { }
 
@@ -40,6 +39,13 @@ export class ServiceService {
   getCitasFuncionario(idFuncionario: String) {
     return this.http.get<Cita[]>(this.url + "citas" + "/funcionario/" + idFuncionario)
   }
+
+  getCitasContribuyente(idContribuyente: String) {
+    return this.http.get<Cita[]>(this.url + "citas" + "/contribuyente/" + idContribuyente)
+  }
+  // getCitasRangoFechas(fechaInicial: String, fechaFinal: String) {
+  //   return this.http.get<Cita[]>(this.url + "citas" + "/filtradas/" + fechaInicial + "/" + fechaFinal)
+  // }
 
   guardarCita(cita: Cita) {
     return this.http.post<Cita>(this.url + "citas", cita);

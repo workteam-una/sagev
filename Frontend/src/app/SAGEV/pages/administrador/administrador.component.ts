@@ -1,7 +1,7 @@
 import { Departamento } from '../../modelo/departamento';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Router } from '@angular/router';
-import { Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ContentChild, ContentChildren, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -22,6 +22,10 @@ export class AdministradorComponent implements OnInit {
 
   departamentos: Departamento[] = []
   nuevoFuncionario: Funcionario = new Funcionario
+
+  @Input() fechaInicio: Date 
+  @Input() fechaFinal: Date
+  // @Input() confirmarBusqueda: boolean = false;
 
   constructor(private formBuilder: FormBuilder,private service: ServiceService, private router: Router) { }
 
@@ -135,10 +139,10 @@ export class AdministradorComponent implements OnInit {
   }
 
   guardarFuncionario(func: Funcionario): void{
-     //Las validaciones estan mal
-     if(!this.validaciones()){
-      return
-    }
+    // Las validaciones estan mal
+    //if(!this.validaciones()){
+    //  return
+    //}
     this.service.guardarFuncionario(func)
     .subscribe(data =>{
       alert("Se agregó el funcionario con éxito")
@@ -163,4 +167,8 @@ export class AdministradorComponent implements OnInit {
     console.log(this.nuevoFuncionario.numDepartamento)
   }
 
+  // // Cambia el estado del botón a True
+  // confirmarBusquedaFiltros() : void {
+  //   this.confirmarBusqueda = true;
+  // }
 }

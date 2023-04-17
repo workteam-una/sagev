@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnInit, EventEmitter, Output, ChangeDetectorRef } from '@angular/core';
 import { Cita } from '../../modelo/cita';
 import { Funcionario } from '../../modelo/funcionario';
 import { ServiceService } from 'src/app/Service/service.service';
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class ReservaTablaComponent implements OnInit {
 
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) { }
 
   @Input() funcionarioEncargado: Funcionario
   @Input() citasDisponibles: Cita[] = []
@@ -36,7 +36,14 @@ export class ReservaTablaComponent implements OnInit {
   @Output()
   mostrarBotones = new EventEmitter<number>();
 
-  showModal: number = 2
+  showModal: number
+
+  //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
+  recibirshModal(shModal: number) : void {
+    this.showModal = shModal;
+    this.cd.detectChanges();
+    console.log("recibi el valor: "+ this.showModal)
+  }
 
   ngOnInit(): void {
     // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
@@ -46,9 +53,7 @@ export class ReservaTablaComponent implements OnInit {
   }
 
   refrescarShowModal(): void{
-    console.log("Antes de refresh: " + this.showModal)
-    this.showModal = 0;
-    console.log("Despues de refresh: " + this.showModal)
+    this.showModal=1
   }
 
   botonEstiloCambiaColor(): void {
@@ -81,22 +86,4 @@ export class ReservaTablaComponent implements OnInit {
     let dia = diaSemana[d.getDay()]
     return dia
   }
-
-  
 }
-
-  // stringToDate(_date,_format,_delimiter)
-  // {
-  //   let formatLowerCase = _format.toLowerCase();
-  //   let formatItems = formatLowerCase.split(_delimiter);
-  //   let dateItems = _date.split(_delimiter);
-  //   let monthIndex = formatItems.indexOf("mm");
-  //   let dayIndex = formatItems.indexOf("dd");
-  //   let yearIndex = formatItems.indexOf("yyyy");
-  //   let month = parseInt(dateItems[monthIndex]);
-  //   month -= 1;
-  //   let formatedDate = new Date(dateItems[yearIndex],month,dateItems[dayIndex]);
-  //   return formatedDate;
-  // }
-
-  // this.convertDate(this.citasDisponibles[i].fecha) === this.citasReservadas[j].fecha.toString() && this.citasDisponibles[i].hora === this.citasReservadas[j].hora

@@ -23,7 +23,9 @@
 <div class="uc-modal" *ngIf="showModal === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="close()">
+      <span class="material-symbols-outlined" (click)="close()">
+          X
+      </span>
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
@@ -31,7 +33,7 @@
     </div>
     <div class="uc-m-footer">
       <button class="btn btn-primary">Cancelar cita</button>
-      <button class="btn btn-danger">Salir</button>
+      <button class="btn btn-danger" (click)="close()">Salir</button>
     </div>
   </div>
 </div>

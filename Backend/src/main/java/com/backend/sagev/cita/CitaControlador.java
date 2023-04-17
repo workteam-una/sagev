@@ -1,8 +1,12 @@
 package com.backend.sagev.cita;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +34,19 @@ public class CitaControlador {
     public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
+
+    //Devuelve las citas reservadas con un contribuyente
+    @GetMapping(path = {"/contribuyente/{idContribuyente}"})
+    public List<Cita>listarIdContribuyente(@PathVariable("idContribuyente") String idContribuyente){
+        return service.listarIdContribuyente(idContribuyente);
+    }
+
+    // @GetMapping(path = {"/filtradas/{fechaInicial}/{fechaFinal}"})
+    // public List<Cita>listarRangoFechas(@PathVariable("fechaInicial") String fechaInicial, @PathVariable("fechaFinal") String fechaFinal) {
+    //     //parsea la fecha de string a fecha
+
+    //     return service.listarRangoFechas(fechaInicial, fechaFinal);
+    // }
 
     //Guarda la cita en la BD
     @PostMapping

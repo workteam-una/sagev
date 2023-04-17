@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
@@ -39,9 +39,17 @@ export class FormularioComponent implements OnInit {
 
   //Mostrar el pop up
   @Input()
-  showModal: number;
+  showModal: number = -1;
 
-  //AUN NO LO ESTOY USANDO
+  //Variable que le avisa al componente reserva-tabla que cambio el valor de showmodal
+  @Output()
+  shModal = new EventEmitter<number>();
+
+  ngOnChanges(changes: SimpleChanges) : void {
+     console.log(changes['showModal'])
+   }
+
+  //AUN NO LO ESTOY USANDO porque es el padre el que me envia la instruccion de abrir
   show(index: number) : void {
     this.showModal = index;
     //Aqui setea el id de la cita, convenientemente
@@ -49,7 +57,8 @@ export class FormularioComponent implements OnInit {
 
   close() : void {
     this.showModal = -1;
-    console.log("ShowModal en el init: " + this.showModal)
+    this.shModal.emit(this.showModal);
+    console.log("ShowModal en el close: " + this.showModal)
   }//Fin pop up
 
 
