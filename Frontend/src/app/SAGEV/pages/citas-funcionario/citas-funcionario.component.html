@@ -15,7 +15,7 @@
     </div>
     <div class="btnModFun">
       <!-- Esta verificación se hace para que el boton de modificar el funcionario a cargo no se le muestre al funcionario suplente -->
-        <button *ngIf="modeloFuncionario.suplente === 'N'" class="btn btn-primary btnOpciones" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
+        <button *ngIf="modeloFuncionario.suplente === 'N'" class="btn btn-primary btnOpciones btn-hover" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
     </div>  
   </div>
 
@@ -59,7 +59,7 @@
         </div>
       </div>
       <div class="uc-m-footer">
-        <button (click)="asignarSuplenteEncargado(selectFunc.value)" class="btn btn-primary">Confirmar</button>
+        <button (click)="asignarSuplenteEncargado(selectFunc.value)" class="btn btn-primary btn-hover">Confirmar</button>
         <button class="btn btn-danger" (click)="closeModFunc()">Salir</button>
       </div>
     </div>

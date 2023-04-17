@@ -11,28 +11,38 @@ export class CancelarComponent implements OnInit {
 
   constructor(private service: ServiceService) { }
 
-  idContribuyente: String
+  idContribuyente: String = ""
 
   citasContribuyente: Cita[] = []
+
+  // True cuando no existe la cédula
+  noExisteCedula: boolean = false
 
   ngOnInit(): void {
   }
 
-  getCitasReservadasContribuyente(idContribuyente: String) {
-    this.service.getCitasContribuyente(idContribuyente)
+  verificarCitasContribuyente(id: String) : void {
+    if (id === "") {
+      return
+    }
+    this.service.getCitasContribuyente(id)
     .subscribe(data => {
       this.citasContribuyente = data
+
+      if (this.citasContribuyente.length === 0) {
+      this.noExisteCedula = true
       
-      // Parseando la fecha de las citas a un formato que TS entiende
-      this.citasContribuyente.forEach(c => {
-        c.fecha = this.sqlToJsDate(c.fecha)
-      })
-    
-      this.citasContribuyente.forEach(c => {
-        console.log(c)
-      })
+      // Se setea a vacío para poder cerrar el componente citas-funcionario-tabla en el HTML, ya que este está condicionado al valor de esta variable
+      this.idContribuyente = ""
+      }
+      else {
+        this.noExisteCedula = false
+        this.idContribuyente = id //Seteando el id del contribuyente para enviarselo a la tabla
+      }
     })
   }
+
+
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
   sqlToJsDate(sqlDate: any) : Date {
 

@@ -1,21 +1,32 @@
-<table class="table table-striped">
-  <thead>
+<div class="div-titulo-tabla">
+  <p class="lead">
+    <strong>Seleccione la cita reservada que desea cancelar</strong>
+  </p>
+</div>
+
+<table class="table">
+  <thead class="table-primary">
     <tr>
       <th scope="col">Fecha</th>
       <th scope="col">Hora</th>
       <th scope="col">Funcionario</th>
       <th scope="col">Descripción</th>
-      <th scope="col">Cancelar cita</th>
+      <th scope="col">Estado</th>
+      <th scope="col" class="text-center">Cancelar cita</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let cita of citasContribuyente">
-      <th>{{cita.fecha.toLocaleDateString()}}</th>
+      <td>{{cita.fecha.toLocaleDateString()}}</td>
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{cita.idFuncionario}}</td>
       <td>{{cita.detalle}}</td>
-      <td>
-        <button type="button" class="btn btn-primary" (click)="show(1, cita.id)">Cancelar</button>
+      <td>{{cita.estado}}</td>
+      <td *ngIf="cita.estado !== 'Ausente'" class="text-center">
+        <button type="button" class="btn btn-primary" (click)="show(1, cita.id);">Cancelar</button>
+      </td>
+      <td *ngIf="cita.estado === 'Ausente'" class="text-center">
+        <button type="button" class="btn btn-danger" disabled>Cancelada</button>
       </td>
     </tr>
   </tbody>

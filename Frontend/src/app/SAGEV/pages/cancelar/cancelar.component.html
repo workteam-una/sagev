@@ -1,12 +1,12 @@
 <div id="tituloCancelar">
-    <h3>Cancelar sus citas reservadas</h3>
+    <h4>Cancelar sus citas reservadas</h4>
 </div>
 
 <div id="instrucciones">
     <h5>
         <li class="liInstrucciones">
-            Para cancelar sus citas reservadas solamente introduzca su número de cédula
-            en el buscador para que se muestren las citas que ha reservado
+            Para cancelar sus citas reservadas introduzca su número de cédula
+            en el buscador para que se muestren las citas reservadas
         </li>
         <li class="liInstrucciones">
             Luego de ingresar su cédula, seleccione la cita que quiere cancelar para
@@ -15,14 +15,19 @@
     </h5>
 </div>
 
-<div class="col-md-4 divCedula">
-    <p>Ingrese su número de cédula con el formato 0-0000-0000</p>
+<div class="divCedula">
+    <p>Ingrese su número de cédula con 9 dígitos y sin dejar espacios</p>
     <div class="divBusqueda">
         <input #botonBuscar name="cedulaContribuyente" type="text" class="form-control inputCedula" id="validationDefault01">
-        <button class="btn btn-primary btnBuscar" (click)="getCitasReservadasContribuyente(botonBuscar.value)">Buscar</button>
+        <button class="btn btn-primary btnBuscar" (click)="verificarCitasContribuyente(botonBuscar.value)">Buscar</button>
     </div>
 </div>
 
-<div class="tablaCitasCancel">
-    <app-cancelar-tabla [citasContribuyente]="citasContribuyente"></app-cancelar-tabla>
+<div *ngIf="noExisteCedula === true">
+    <p style="color: red">No se han encontrado citas reservadas con el número de cédula ingresado</p>
 </div>
+
+<div *ngIf="idContribuyente !== ''" class="tablaCitasCancel">
+    <app-cancelar-tabla [idContribuyente]="idContribuyente"></app-cancelar-tabla>
+</div>
+

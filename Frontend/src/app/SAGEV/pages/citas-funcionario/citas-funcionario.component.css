@@ -6,7 +6,7 @@
 
 .div-tablaCitasFunc{
     margin: auto;
-    width: 95%;
+    width: 91%;
     padding: 10px;
     /* overflow-y: scroll; */
     /* overflow-x: scroll; */
@@ -81,4 +81,10 @@
 
 .btnModFun{
     margin-left: 38%;
+}
+
+.btn-hover:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#4cae4c !important;
 }

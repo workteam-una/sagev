@@ -1,14 +1,13 @@
 #tituloCancelar{
     margin: 0 auto;
     padding: 2%;
-    margin-left: 35%;
+    text-align: center;
 }
 
 #instrucciones{
     margin: 0 auto;
-    padding: 2%;
-    margin-left: 11%;
-    width: 75%;
+    padding: 1%;
+    width: 80%;
     text-align: center;
     margin-top: -2%
 }
@@ -18,12 +17,13 @@
 }
 
 .divCedula{
-    margin-left: 36%;
+    text-align: center;
+    margin-bottom: 1%;
+    margin-top: -1%
 }
 
 .inputCedula{
-    width: 50%;
-    margin-left: 10%;
+    width: 28%;
 }
 
 .tablaCitasCancel{
@@ -34,8 +34,19 @@
 
 .divBusqueda{
     display: flex;
+    justify-content: center;
 }
 
 .btnBuscar{
     margin-left: 2%;
+}
+
+p {
+    text-align: center;
+}
+
+button:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#38c738 !important;
 }

@@ -79,3 +79,9 @@
     margin-right: 1%;
     margin-top: 1.4%;
 }
+
+.btn-hover:hover {
+    color:#fff;
+    background-color:#6ca34f !important;
+    border-color:#4cae4c !important;
+}

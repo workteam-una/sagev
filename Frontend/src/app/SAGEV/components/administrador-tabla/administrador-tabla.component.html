@@ -8,13 +8,13 @@
     <input class="input-selectores-fechas" type="date" id="selectorFechaFinal" [(ngModel)]="fechaFinal">
   </div>
   <div class="div-boton-busqueda">
-    <button class="btn btn-primary col-7" (click)="filtrarFechas()">Buscar</button>
+    <button class="btn btn-primary col-7 btn-hover" (click)="filtrarFechas()">Buscar</button>
   </div>
 </div>
 
 <div class="scroll">
-<table class="table table-striped" >
-    <thead>
+<table class="table" >
+    <thead class="table-primary">
       <tr>
         <th scope="col">Fecha</th>
         <th scope="col">Hora</th>
@@ -26,7 +26,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let cita of citasReservadasFiltradas">
-        <th>{{cita.fecha.toLocaleDateString()}}</th>
+        <td>{{cita.fecha.toLocaleDateString()}}</td>
         <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
         <td>{{cita.idFuncionario}}</td>
         <td>{{cita.nombreContribuyente}}</td>
@@ -35,4 +35,4 @@
       </tr>
     </tbody>
   </table>
-</div> 
+</div>
