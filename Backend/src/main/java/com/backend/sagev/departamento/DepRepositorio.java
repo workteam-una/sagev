@@ -14,5 +14,6 @@ public interface DepRepositorio extends Repository<Departamento, Integer>{
     //Departamento add(Departamento d);
     Departamento save(Departamento d);
     Departamento delete(Departamento d);
+    // Departamento add(Departamento d);
 
 }

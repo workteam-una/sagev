@@ -35,5 +35,9 @@ public class HorarioServiceImp implements HorarioService{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    // @Override
+    // public Horario add(Horario h) {
+    //     return repositorio.add(h);
+    // }
 
 }

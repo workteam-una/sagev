@@ -20,10 +20,10 @@ public class AreaServiceImp implements AreaService{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public Area add(Area a) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // @Override
+    // public Area add(Area a) {
+    //     return repositorio.add(a);
+    // }
 
     @Override
     public Area delete(int numArea) {
@@ -33,5 +33,10 @@ public class AreaServiceImp implements AreaService{
     @Override
     public Area edit(Area a) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Area save(Area a) {
+        return repositorio.save(a);
     }
 }

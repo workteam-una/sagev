@@ -70,4 +70,12 @@ export class ServiceService {
   actualizarEncargadoNo(id: String) {
     return this.http.put<String>(this.url + "funcionarios" + "/encargado/no/" + id, id);
   }
+
+  guardarArea(area: Area) {
+    return this.http.post<Area>(this.url + "areas", area)
+  }
+
+  guardarDepartamentos(departamento: Departamento) {
+    return this.http.post<Departamento>(this.url + "departamentos", departamento)
+  }
 }

@@ -39,7 +39,7 @@ export class ReservaComponent implements OnInit {
   //Mostrar botones anterior y siguiente
   mostrarBtns: number = -1;
 
-  // Funciona para limitar a un mes (4 semanas) la cantidad de citas que se le pueden desplegar al contribuyente
+  // Funciona para limitar la cantidad de citas que se le pueden desplegar al contribuyente
   contadorSemanas: number = 0;
 
   constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) {
@@ -303,7 +303,7 @@ export class ReservaComponent implements OnInit {
       console.log("Contador en aumentar: " + this.contadorSemanas)
   
       // Cuando el contador de semanas supera el valor de 4 (citas de hasta 1 mes después) entonces lo decrementa en 1 y se sale del método
-      if (this.contadorSemanas > 4) {
+      if (this.contadorSemanas > 1) {
         this.contadorSemanas - 1
         return
       }

@@ -23,10 +23,10 @@
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
       <td *ngIf="cita.estado !== 'Ausente'" class="text-center">
-        <button type="button" class="btn btn-primary" (click)="show(1, cita.id);">Cancelar</button>
+        <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id);">Cancelar</button>
       </td>
       <td *ngIf="cita.estado === 'Ausente'" class="text-center">
-        <button type="button" class="btn btn-danger" disabled>Cancelada</button>
+        <button type="button" class="btn btn-danger col-7" disabled>Cancelada</button>
       </td>
     </tr>
   </tbody>

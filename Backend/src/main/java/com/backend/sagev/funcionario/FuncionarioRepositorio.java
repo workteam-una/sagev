@@ -17,6 +17,7 @@ public interface FuncionarioRepositorio extends Repository<Funcionario, Integer>
     Funcionario findByidFuncionario(String idFuncionario); //Encuentra un funcionario por id
     Funcionario save(Funcionario a); //Guarda un funcionario en la BD
     void delete(Funcionario a); // Elimina un funcionario de la BD
+    // Funcionario add(Funcionario d);
 }
 
 

@@ -13,4 +13,5 @@ public interface CitaService {
     Cita save(Cita c);
     Cita edit(Cita c);
     Cita delete(int id);
+    // Cita add(Cita c);
 }

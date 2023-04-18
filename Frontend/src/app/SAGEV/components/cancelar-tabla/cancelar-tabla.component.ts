@@ -77,12 +77,6 @@ export class CancelarTablaComponent implements OnInit {
     this.showModal = -1;
   }
 
-  estadoDesactivaBoton(estado: string) {
-    if(estado === "Ausente") {
-      this.estadoCita = true
-    }
-  }
-
     // Convierte un objeto DateTime de SQL a un objeto Date de TS
     sqlToJsDate(sqlDate: any) : Date {
 

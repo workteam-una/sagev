@@ -22,10 +22,10 @@ public class FuncionarioServicelmp implements FuncionarioService{
         return repositorio.findByidFuncionario(idFuncionario);
     }
 
-    @Override
-    public Funcionario add(Funcionario f) {
-        throw new UnsupportedOperationException("Para sagev: aun no implementamos esto.");
-    }
+    // @Override
+    // public Funcionario add(Funcionario f) {
+    //     return repositorio.add(f);
+    // }
 
     @Override
     public Funcionario edit(Funcionario f) {

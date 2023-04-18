@@ -27,7 +27,7 @@ public class Area {
 
     @Id
     @Column(name = "numArea")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int numArea;
 
     @Column(name = "nombre")

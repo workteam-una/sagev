@@ -20,4 +20,5 @@ public interface CitaRepositorio extends Repository<Cita, Integer>{
     Cita findByid(int id);
     Cita save(Cita c);
     Cita delete(Cita c);
+    // Cita add(Cita c);
 }

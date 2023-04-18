@@ -31,6 +31,11 @@ public class CitaServiceImp implements CitaService {
     //     return repositorio.findByFechaBetween(fechaInicial, fechaFinal);
     // }
 
+    // @Override
+    // public Cita add(Cita c) {
+    //     return repositorio.add(c);
+    // }
+
     @Override
     public Cita listarId(int id) {
         return repositorio.findByid(id);

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Component, ContentChild, ContentChildren, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Area } from '../../modelo/area';
 
 @Component({
   selector: 'app-administrador',
@@ -20,20 +21,21 @@ export class AdministradorComponent implements OnInit {
   funcionarioForm!: FormGroup
   enviar = false;
 
+  areas: Area[] = []
   departamentos: Departamento[] = []
   nuevoFuncionario: Funcionario = new Funcionario
+  nuevaArea: Area = new Area
+  nuevoDepa: Departamento = new Departamento
 
   @Input() fechaInicio: Date 
   @Input() fechaFinal: Date
   // @Input() confirmarBusqueda: boolean = false;
 
-  constructor(private formBuilder: FormBuilder,private service: ServiceService, private router: Router) { }
+  constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
   ngOnInit(): void {
-    this.service.getDepartamentos()
-    .subscribe(dataDep => {
-      this.departamentos = dataDep
-    })
+    this.getAreas()
+    this.getDepartamentos()
 
     //Validaciones del formulario
     this.funcionarioForm = this.formBuilder.group({
@@ -75,17 +77,77 @@ export class AdministradorComponent implements OnInit {
 
   //Pop up agregar nueva area
 
-  openModalArea() {
+  openModalArea() : void {
     this.formModalArea.showArea();
    }
 
-   showModalArea = -1;
+   getAreas() : void {
+   this.service.getAreas()
+    .subscribe(dataArea => {
+      this.areas = dataArea
+    })
+  }
 
-   showArea(indexArea){
+  guardarAreas(a: Area) : void {
+    if (this.validarNumeroArea(a.numArea)) {
+      alert("El número de área digitado ya está en uso")
+      return
+    }
+    this.service.guardarArea(a)
+    .subscribe(data => {
+      alert("Se agregó el área con éxito")
+    })
+  }
+
+  guardarDepartamento(d: Departamento) : void {
+    if (this.validarNumeroDepartamento(d.numDepartamento)) {
+      alert("El número de departamento digitado ya está en uso")
+      return
+    }
+    this.service. guardarDepartamentos(d)
+    .subscribe(data => {
+      alert("Se agregó el departamento con éxito")
+    })
+  }
+
+  validarNumeroArea(numArea: number) : boolean {
+    console.log(numArea)
+    let numAreaDuplicado = false
+    this.areas.forEach(a => {
+      console.log(a.numArea)
+      // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
+      if(a.numArea === Number(numArea)) {
+        numAreaDuplicado = true
+      }
+    })
+    return numAreaDuplicado
+  }
+
+  getDepartamentos(): void{
+    this.service.getDepartamentos()
+    .subscribe(dataDep => {
+      this.departamentos = dataDep
+    })
+  }
+
+  validarNumeroDepartamento(numDepa: number) : boolean {
+    let numDepaDuplicado = false
+    this.departamentos.forEach(d => {
+            // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
+      if(d.numDepartamento === Number(numDepa)) {
+        numDepaDuplicado = true
+      }
+    })
+    return numDepaDuplicado
+  }
+
+   showModalArea: number = -1;
+
+   showArea(indexArea) : void {
     this.showModalArea = indexArea;
   }
 
-  closeArea(){
+  closeArea() : void {
     this.showModalArea = -1;
   }
 
@@ -155,6 +217,10 @@ export class AdministradorComponent implements OnInit {
 
   setDepaFuncionario(numDepa: string){
     this.nuevoFuncionario.numDepartamento = Number(numDepa)
+  }
+
+  setAreaDepa(numArea: string){
+    this.nuevoDepa.numArea = Number(numArea)
   }
 
   mostrarFuncionario(): void{

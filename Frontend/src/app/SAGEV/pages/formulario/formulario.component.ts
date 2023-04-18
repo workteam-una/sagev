@@ -96,7 +96,7 @@ export class FormularioComponent implements OnInit {
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
     this.service.guardarCita(cita)
-    .subscribe(data =>{
+    .subscribe(data => {
       alert("Se agregó la cita con éxito")
       // Se debe actualizar la página para evitar sacar dos citas iguales
       window.location.reload()

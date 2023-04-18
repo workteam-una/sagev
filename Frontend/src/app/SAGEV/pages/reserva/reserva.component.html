@@ -10,7 +10,7 @@
       <h5>Área</h5>
       <!-- (change)="prueba($event)" -->
       <select #selectArea class="form-select" aria-label="Default select example"
-        (change)="filtrarDepartamentosPorArea(selectArea.value); mostrarBotonesAnteriorSiguiente(selectArea.value)">
+        (change)="filtrarDepartamentosPorArea(selectArea.value); mostrarBotonesAnteriorSiguiente(selectArea.value); resetearContadorSemanas();">
         <option selected value=''>Seleccione el área</option>
         <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.numArea}} - {{area.nombre}}</option>
       </select>

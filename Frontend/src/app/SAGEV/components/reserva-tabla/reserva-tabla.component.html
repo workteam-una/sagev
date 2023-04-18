@@ -14,7 +14,7 @@
       <th scope="col" class="text-center">Seleccionar</th>
       <!-- <th scope="col">{{recibidoDePadre}}</th> -->
     </tr>
-    <ng-template #sinCitas><h3 style="color: red">No hay citas disponibles con el funcionario encargado del departamento</h3></ng-template>
+    <ng-template #sinCitas><h5 style="color: red; text-align: center;">No hay citas disponibles con el funcionario encargado en la semana actual</h5></ng-template>
   </thead>
   <tbody>
     <tr *ngFor="let cita of citasDisponibles">

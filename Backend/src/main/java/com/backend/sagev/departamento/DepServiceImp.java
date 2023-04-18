@@ -21,10 +21,10 @@ public class DepServiceImp implements DepService {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public Departamento add(Departamento d) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+    // @Override
+    // public Departamento add(Departamento d) {
+    //     return repositorio.add(d);
+    // }
 
     @Override
     public Departamento delete(int numDepartamento) {
@@ -35,5 +35,9 @@ public class DepServiceImp implements DepService {
     public Departamento edit(Departamento d) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+    @Override
+    public Departamento save(Departamento d) {
+        return repositorio.save(d);
+    }
 }

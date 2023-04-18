@@ -14,4 +14,5 @@ public interface AreaRepositorio extends Repository<Area, Integer>{
     Area findBynumArea(int numArea);
     Area save(Area a);
     void delete(Area a);
+    // Area add(Area a);
 }

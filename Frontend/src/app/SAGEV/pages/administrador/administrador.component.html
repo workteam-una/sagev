@@ -8,30 +8,29 @@
 </div>
 
 <!-- Pop up para agregar una nueva area-->
-
 <div class="uc-modal" *ngIf="showModalArea === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()"> -->
      
-      <h4>Agregar una nueva area</h4>
+      <h4>Agregar una nueva área</h4>
     </div>
     <div class="uc-m-body">
-      <label>Digite el numero del area a crear</label><br>
+      <label>Digite el número del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.numArea" required>
       </div>
-      <label>Digite el nombre del area a crear</label><br>
+      <label>Digite el nombre del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.nombre" required>
       </div>
-      <label>Digite la descripcion del area a crear</label><br>
+      <label>Digite la descripción del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.descripcion" required>
       </div>
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary btn-hover">Confirmar</button>
+      <button class="btn btn-primary btn-hover" (click)="guardarAreas(nuevaArea)">Confirmar</button>
       <button class="btn btn-danger" (click)="closeArea()">Salir</button>
     </div>
   </div>
@@ -49,27 +48,32 @@
     <div class="uc-m-body">
       <label>Seleccione el area a la cual pertenece el nuevo departamento</label><br>
       <div>
-        <select name="areas" id="areas" class="form-select selectInfo">
-          <option value="empty">------</option>
-          <option value="Catastro">Catastro</option>
+        <select #selectArea name="area" id="area" class="form-select" class="form-select selectInfo"
+          (change)="setAreaDepa(selectArea.value)">
+          <option selected value=''></option>
+          <option *ngFor="let area of areas" value="{{area.numArea}}">
+            {{area.numArea}} - {{area.nombre}}
+          </option>
         </select>
       </div>
       <label>Digite el numero del departamento a crear</label><br>
       <div>
         <input name="departamentonueva" type="text" class="form-control inputInfo" id="validationDefault01" value=""
-          required>
+          required [(ngModel)]="nuevoDepa.numDepartamento">
       </div>
       <label>Digite el nombre del departamento a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+        [(ngModel)]="nuevoDepa.nombre">
       </div>
       <label>Digite la descripcion del departamento a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+        [(ngModel)]="nuevoDepa.descripcion">
       </div>
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary btn-hover">Confirmar</button>
+      <button class="btn btn-primary btn-hover" (click)="guardarDepartamento(nuevoDepa)">Confirmar</button>
       <button class="btn btn-danger" (click)="closeDpto()">Salir</button>
     </div>
   </div>
