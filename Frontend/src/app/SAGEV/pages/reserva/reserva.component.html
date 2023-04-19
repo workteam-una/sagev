@@ -10,7 +10,7 @@
       <h5>Área</h5>
       <!-- (change)="prueba($event)" -->
       <select #selectArea class="form-select" aria-label="Default select example"
-        (change)="filtrarDepartamentosPorArea(selectArea.value); mostrarBotonesAnteriorSiguiente(selectArea.value); resetearContadorSemanas();">
+        (change)="filtrarDepartamentosPorArea(selectArea.value); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteArea();">
         <option selected value=''>Seleccione el área</option>
         <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.numArea}} - {{area.nombre}}</option>
       </select>
@@ -19,7 +19,7 @@
       <h5>Departamento</h5>
       <select #selectDepa class="form-select" aria-label="Default select example"
         (change)="filtrarFuncionariosEncargadosPorDepa(selectDepa.value); filtrarDescripcionesPorDepa(selectDepa.value); 
-        getCitasReservadas(this.funcionarioEncargado.idFuncionario); resetearContadorSemanas(); mostrarBotonesAnteriorSiguiente(selectDepa.value)">
+        getCitasReservadas(this.funcionarioEncargado.idFuncionario); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteDepartamento(selectDepa.value)">
         <option selected value=''>Seleccione el departamento</option>
         <option *ngFor="let departamento of departamentosPorArea " value="{{departamento.numDepartamento}}">
           {{departamento.numDepartamento}} - {{departamento.nombre}}
@@ -62,10 +62,10 @@
 <div class="div-botones" *ngIf="mostrarBtns === 1">
   <div class="div-btnAnterior">
     <!-- Si el valor del contador es 0 quiere decir que me encuentro en la semana actual -->
-    <button *ngIf="contadorSemanas !== 0" class="btn btn-outline-primary btn-rounded waves-effect btn-anterior" type="button" id="anteriorBtn" (click)=" citasSemanaAnterior()">← Anterior</button>
+    <button *ngIf="contadorSemanas !== 0" class="btn btn-outline-primary btn-rounded waves-effect btn-anterior" type="button" id="anteriorBtn" (click)=" citasSemanaAnterior()">← Ver citas disponibles de la semana actual</button>
   </div>
     <!-- Si el valor del contador es mayor que 1 quiere decir que avanzó en una semana las citas disponibles -->
   <div class="div-btnSiguiente">
-    <button *ngIf="contadorSemanas < 1" class="btn btn-outline-primary btn-rounded waves-effect btn-siguiente" type="button" id="siguienteBtn" (click)="citasSemanaSiguiente()">→ Siguiente</button>
+    <button *ngIf="contadorSemanas < 1" class="btn btn-outline-primary btn-rounded waves-effect btn-siguiente" type="button" id="siguienteBtn" (click)="citasSemanaSiguiente()">→ Ver citas disponibles de la próxima semana</button>
   </div>
 </div>

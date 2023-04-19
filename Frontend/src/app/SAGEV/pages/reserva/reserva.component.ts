@@ -42,6 +42,9 @@ export class ReservaComponent implements OnInit {
   // Funciona para limitar la cantidad de citas que se le pueden desplegar al contribuyente
   contadorSemanas: number = 0;
 
+  // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
+  fechaHoy: Date = new Date(Date.now())
+
   constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) {
    
   }
@@ -278,6 +281,13 @@ export class ReservaComponent implements OnInit {
         }
       }
     }
+    /* 
+      Filtrando las citas una última vez para eliminar las que tienen fechas anteriores al día actual dentro de la misma semana
+      ej. Si hoy es martes a las 7:00 p.m y habian citas en la mañana, no me las va a mostrar
+      ej 2. Si hoy es jueves no me va a mostrar las citas del martes de esta semana
+      ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible.
+    */
+    this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
   }
 
   devuelveDiaSemana(d: Date): String {
@@ -376,14 +386,24 @@ export class ReservaComponent implements OnInit {
 
     /* 
       Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
-      componente reserva-tabla, al deseleccionar un area o departamento seguían apareciendo los 
-      botones, con este método, al deseleccionar un area o departamento se establece el valor 
+      componente reserva-tabla, al deseleccionar o cambiar un area seguían apareciendo los 
+      botones, con este método, al deseleccionar o cambiar un area se establece el valor 
       en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
     */ 
-    mostrarBotonesAnteriorSiguiente(valorComboBox: string): void {
+    mostrarBotonesAnteriorSiguienteArea(): void {
+        this.mostrarBtns = -1
+    }
+
+    /* 
+      Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
+      componente reserva-tabla, al deseleccionar o cambiar un departamento seguían apareciendo los 
+      botones, con este método, al deseleccionar o cambiar un departamento se establece el valor 
+      en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
+    */
+    mostrarBotonesAnteriorSiguienteDepartamento(valorComboBox: string) : void {
       // Si el valor del area o departamento es vacío entonces oculte los botones
       if (valorComboBox === '') {
-        this.mostrarBtns = -1;
+      this.mostrarBtns = -1
       }
     }
 
