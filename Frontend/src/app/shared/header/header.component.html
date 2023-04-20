@@ -113,32 +113,20 @@
 
 <div>
   <div>
-    <img class="collage" src="assets\images\dimensiones2.png" alt="">
+    <img class="collage" src="assets\images\header_sagev_opcion_uno.png" alt="">
   </div>
 </div>
 
-
-<div class="container divMenu">
-  <nav class="navbar-expand-lg navbar-dark bg-primay">
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-      <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-        <li routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-item opciones"
-          style="margin: 0vw 10vw 0vw 0vw;">
-          <a class="nav-link active" aria-current="page">RESERVAR UNA CITA</a>
-        </li>
-        <li routerLink="cancelar" routerLinkActive="active" class="nav-item opciones"
-          style="margin: 0vw 10vw 0vw 10vw;">
-          <a class="nav-link active" aria-current="page">CANCELAR UNA CITA</a>
-        </li>
-        <li routerLink="login" routerLinkActive="active" class="nav-item opciones" style="margin: 0vw 0vw 0vw 10vw;">
-          <a class="nav-link active" aria-current="page">INICIO DE FUNCIONARIOS </a>
-        </li>
-
-        <!-- <li routerLink="administrador" routerLinkActive="active" class="nav-item opciones" style="margin: 0vw 0vw 0vw 10vw;">
-          <a class="nav-link active" aria-current="page">Admin </a>
-        </li> -->
-
-      </ul>
-    </div>
-  </nav>
+<div class="newNavbar">
+  <ul>
+    <li routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" style="--clr:#00ade1">
+      <a data-text="&nbsp;Reservar">&nbsp;Reservar&nbsp;</a>
+    </li>
+    <li routerLink="cancelar" routerLinkActive="active" style="--clr:#00ade1">
+      <a data-text="&nbsp;Cancelar">&nbsp;Cancelar&nbsp;</a>
+    </li>
+    <li routerLink="login" routerLinkActive="active" style="--clr:#00ade1 ">
+      <a data-text="&nbsp;Login">&nbsp;Login&nbsp;</a>
+    </li>
+  </ul>
 </div>

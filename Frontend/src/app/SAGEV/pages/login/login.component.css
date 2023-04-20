@@ -116,7 +116,9 @@
 .form-horizontal .btn:focus{
     color: #fff;
     background-color: #6ca34f;
-    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    box-shadow: 0 0 1px rgba(0,0,0,0.5);
+    box-shadow: 0 0 1px #6ca34f, 
+    0 0 25px #6ca34f, 0 0 20px #6ca34f;
 }
 .form-horizontal .forgot-pass{
     font-size: 12px;
@@ -142,3 +144,15 @@
         margin: 0;
     }
 }
+
+
+
+/* .buttonGlow {
+    box-shadow: 0 0 5px cyan, 0 0 25px cyan;
+}
+
+.buttonGlow:hover {
+    box-shadow: 0 0 5px cyan, 
+    0 0 25px cyan, 0 0 50px cyan, 
+    0 0 100px cyan, 0 0 200px cyan;
+} */

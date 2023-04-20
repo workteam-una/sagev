@@ -287,7 +287,8 @@ export class ReservaComponent implements OnInit {
       ej 2. Si hoy es jueves no me va a mostrar las citas del martes de esta semana
       ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible.
     */
-    this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
+    console.log(this.fechaHoy)
+    // this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
   }
 
   devuelveDiaSemana(d: Date): String {

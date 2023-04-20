@@ -27,9 +27,9 @@
       </select>
   </div>
 
-  <div *ngFor="let funcionario of funcionariosEncargadosPorDepa" style="display: flex;">
+  <div *ngFor="let funcionario of funcionariosEncargadosPorDepa" class="div-info">
   <!-- Si el área o el departamento no tienen valor seleccionado entonces no muestre la información del funcionario encargado -->
-  <div class="div-info" *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
+  <div *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
     <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h6>
     <ul class="list-group">
       <li>
