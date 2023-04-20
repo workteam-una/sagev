@@ -5,51 +5,51 @@
 --
 
 --Ejecución del procedimiento de insertar en tabla area
-execute usp_insertar_area @PnumArea = 1, @Pnombre = 'Direccion financiera', 
-@Pdescripcion = 'Direccion financiera';
+execute usp_insertar_area @PnumArea = 1, @Pnombre = 'Dirección financiera', 
+@Pdescripcion = 'Dirección financiera';
 
-execute usp_insertar_area @PnumArea = 2, @Pnombre = 'Direccion de SOT', 
-@Pdescripcion = 'Direccion de SOT';
+execute usp_insertar_area @PnumArea = 2, @Pnombre = 'Dirección de DSOT', 
+@Pdescripcion = 'Dirección de DSOT';
 
-execute usp_insertar_area @PnumArea = 3, @Pnombre = 'Direccion del acueducto', 
-@Pdescripcion = 'Direccion del acueducto';
+execute usp_insertar_area @PnumArea = 3, @Pnombre = 'Dirección del acueducto', 
+@Pdescripcion = 'Dirección del acueducto';
 
-execute usp_insertar_area @PnumArea = 4, @Pnombre = 'Direccion de unidad tecnica', 
-@Pdescripcion = 'Direccion de unidad tecnica';
+execute usp_insertar_area @PnumArea = 4, @Pnombre = 'Dirección de unidad tecnica', 
+@Pdescripcion = 'Dirección de unidad tecnica';
 
 --Ejecución del procedimiento de insertar en tabla departamento
 execute usp_insertar_departamento @PnumDepartamento = 900, @PnumArea = 1 , @Pdescripcion = 'Tramites de Cobros, Arreglos de Pago, Junta del Cementerio', 
-@PnombreDepa = 'Direccion';
+@PnombreDepa = 'Dirección financiera (Lic. Miguel Varela)';
 
 execute usp_insertar_departamento @PnumDepartamento = 100, @PnumArea = 1 , @Pdescripcion = 'Declaración de Patentes, Cesiones o Traslados, Cobros y Consultas generales', 
-@PnombreDepa = 'Patentes';
+@PnombreDepa = 'Patentes (Lic. Marco Vega)';
 
 execute usp_insertar_departamento @PnumDepartamento = 1000, @PnumArea = 2 , @Pdescripcion = 'Proyectos y Desarrollos Inmobiliarios, Permisos de Construcción y Consultas Generales', 
-@PnombreDepa = 'Direccion';
+@PnombreDepa = 'Dirección DSOT (Ing. Randall Madrigal)';
 
 execute usp_insertar_departamento @PnumDepartamento = 200, @PnumArea = 2 , @Pdescripcion = 'Usos de suelo, Visados y Consultas generales', 
-@PnombreDepa = 'Catastro';
+@PnombreDepa = 'Catastro (Ing. Carlos Valerio)';
 
 execute usp_insertar_departamento @PnumDepartamento = 500, @PnumArea = 2 , @Pdescripcion = 'Declaraciones, Exoneraciones, Valoraciones de propiedades y Consultas generales', 
-@PnombreDepa = 'Bienes inmuebles';
+@PnombreDepa = 'Bienes inmuebles (Ing. Guillermo Ibarra)';
 
 execute usp_insertar_departamento @PnumDepartamento = 600, @PnumArea = 2 , @Pdescripcion = 'Gestion ambiental y Consultas generales', 
-@PnombreDepa = 'Gestion ambiental';
+@PnombreDepa = 'Gestion ambiental (Gog. Luis Rubi)';
 
 execute usp_insertar_departamento @PnumDepartamento = 700, @PnumArea = 2 , @Pdescripcion = 'Permisos de construccion, Obras de mantenimiento y Consultas generales', 
-@PnombreDepa = 'Control urbano';
+@PnombreDepa = 'Control urbano (Ing. Patricia Guzmán)';
 
 execute usp_insertar_departamento @PnumDepartamento = 800, @PnumArea = 2 , @Pdescripcion = 'Limpieza, Mantenimiento de Vías, Recolección de residuos solidos y Consultas Generales', 
-@PnombreDepa = 'Obras y servicios';
+@PnombreDepa = 'Obras y servicios (Ing. Douglas Sancho)';
 
 execute usp_insertar_departamento @PnumDepartamento = 1100, @PnumArea = 3 , @Pdescripcion = 'Disponibilidad de agua, Paja de agua, Exoneraciones y Consultas generales', 
-@PnombreDepa = 'Direccion';
+@PnombreDepa = 'Dirección de acueducto (Ing. Jorge Sancho)';
 
 execute usp_insertar_departamento @PnumDepartamento = 300, @PnumArea = 3 , @Pdescripcion = 'Disponibilidad de agua, Paja de agua y Consultas generales', 
-@PnombreDepa = 'Ingenieria de Acueducto';
+@PnombreDepa = 'Ingenieria de Acueducto (Ing. José Castillo)';
 
 execute usp_insertar_departamento @PnumDepartamento = 400, @PnumArea = 4 , @Pdescripcion = 'Consultas generales y Denuncias', 
-@PnombreDepa = 'Unidad Tecnica';
+@PnombreDepa = 'Unidad Tecnica (Ing. Jessica Cano)';
 
 --Ejecución del procedimiento de insertar en tabla de funcionarios
 
