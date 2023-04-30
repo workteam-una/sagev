@@ -63,6 +63,10 @@ export class ServiceService {
     return this.http.put<number>(this.url + "citas" + "/ausente/" + id, id);
   }
 
+  actualizarEstadoCancelada(id: number){
+    return this.http.put<number>(this.url + "citas" + "/cancelada/" + id, id)
+  }
+
   actualizarEncargadoSi(id: String) {
     return this.http.put<String>(this.url + "funcionarios" + "/encargado/si/" + id, id);
   }

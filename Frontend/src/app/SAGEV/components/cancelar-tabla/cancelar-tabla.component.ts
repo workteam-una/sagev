@@ -51,11 +51,10 @@ export class CancelarTablaComponent implements OnInit {
     console.log(changes)
   }
 
-  marcarAusente() : void {
-
-    this.service.actualizarEstadoAusente(this.idCitaSeleccionada)
+  marcarEstadoCancelada() : void {
+    this.service.actualizarEstadoCancelada(this.idCitaSeleccionada)
     .subscribe(data => {
-      alert("Estado de cita actualizado a ausente con exito!")
+      alert("Estado de cita actualizado a cancelada con exito!")
       this.ngOnInit();
     })
     // this.ngOnInit();

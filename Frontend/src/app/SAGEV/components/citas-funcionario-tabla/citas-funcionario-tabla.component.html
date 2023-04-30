@@ -20,24 +20,24 @@
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
       <td class="text-center">
-        <button type="button" class="btn btn-primary btn-reagendar">Reagendar</button>
+        <button type="button" class="btn btn-primary btn-reagendar" (click)="showReagenda(1, cita.id); cargarCitaReagendada(cita)">Reagendar</button>
       </td>
       <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
       <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
       <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
       <td class="text-center">
-        <button type="button" class="btn btn-primary btn-cambiar" (click)="show(1, cita.id)">Cambiar</button>
+        <button type="button" class="btn btn-primary btn-cambiar" (click)="showEstado(1, cita.id)">Cambiar</button>
       </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
 
-<!-- Popup -->
-<div class="uc-modal" *ngIf="showModal === 1">
+<!-- Pop-up cambiar estado de la cita -->
+<div class="uc-modal" *ngIf="showModalEstado === 1">
   <div class="uc-m-content">
       <div class="uc-m-header">
-          <span class="material-symbols-outlined" (click)="close()">
+          <span class="material-symbols-outlined" (click)="closeEstado()">
               X
           </span>
           <h4>Cambiar estado de una cita</h4>
@@ -54,5 +54,73 @@
           <!-- Este botón va a disparar el evento -->
           <button class="btn-guardar" (click)="actualizarEstado(selectEstado.value)">Guardar Estado</button>
       </div>
+  </div>
+</div>
+
+<!-- Pop-up reagendar cita -->
+<div class="uc-modal-reagenda" *ngIf="showModalReagenda === 1">
+  <div class="uc-m-content-reagenda">
+    <div class="uc-m-header-reagenda">
+        <span class="material-symbols-outlined" (click)="closeReagenda()">
+            X
+        </span>
+        <h4>Seleccione la fecha y hora para reagendar la cita del contribuyente</h4>
+    </div>
+    <form [formGroup]="" class="row g-3 divFormulario">
+      <div class="col-md-4">
+          <label for="cd-fecha" class="form-label">Fecha</label>
+            <select #selectFecha id="cb-fecha" class="form-select" aria-label="Default select example"
+            (change)="filtrarHorasDisponibles(selectFecha.value);">
+              <option selected value=''>Seleccione una fecha</option>
+              <option *ngFor="let cita of citasDisponibles" value="{{cita.fecha}}">{{cita.fecha}}</option>
+            </select>
+      </div>
+      <div class="col-md-4">
+          <label for="cb-hora" class="form-label">Hora</label>
+          <select #selectFecha id="cb-hora" class="form-select" aria-label="Default select example">
+            <option selected value=''>Seleccione una hora</option>
+            <option *ngFor="let hora of horasDisponibles" value="{{hora}}">{{hora}}</option>
+          </select>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault03"class="form-label">Funcionario</label>
+          <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{modeloFuncionario.nombre + ' ' + modeloFuncionario.apellido1}}" required disabled>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault04" class="form-label">Nombre del contribuyente</label>
+          <input type="text" class="form-control" value="{{citaReagendada.nombreContribuyente}}" disabled/>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault05" class="form-label">Primer Apellido</label>
+          <input type="text" class="form-control" value="{{citaReagendada.apellido1Contribuyente}}" disabled/>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault06" class="form-label">Segundo Apellido</label>
+          <input type="text" class="form-control" value="{{citaReagendada.apellido2Contribuyente}}" disabled/>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault07" class="form-label">Cédula</label>
+          <input type="text" class="form-control" value="{{citaReagendada.idContribuyente}}" disabled/>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault08" class="form-label">Teléfono</label>
+          <input type="text" class="form-control" value="{{citaReagendada.telefonoContribuyente}}" disabled/>
+      </div>
+      <div class="col-md-4">
+          <label for="validationDefault09" class="form-label">Correo Electrónico</label>
+          <input type="text" class="form-control" value="{{citaReagendada.correoContribuyente}}" disabled/>
+      </div>
+
+      <div for="validationDefault10" class="col-md-4 divDescr">
+          <label class="form-label">Motivo de la reagenda</label>
+          <!-- Sobreescribe el detalle que había -->
+          <textarea [(ngModel)]="citaReagendada.detalle" name="descripcion" class="form-control ta-motivo" id="validationDefault10"></textarea>
+      </div>
+      <div class="col-12 divEnviar text-center">
+          <button class="btn btn-primary btnEnviar" (click)="guardarCita(citaReagendada)">Reagendar cita</button>
+      </div>
+
+    </form>
+
   </div>
 </div>

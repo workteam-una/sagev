@@ -76,4 +76,12 @@ public class CitaControlador {
         return service.edit(cita);
     }
 
+    //Marca la cita como cancelada
+    @PutMapping(path = {"/cancelada/{id}"})
+    public Cita cancelada(@PathVariable("id") int id){
+        Cita cita = service.listarId(id);
+        cita.setEstado("Cancelada");
+        return service.edit(cita);
+    }
+
 }
