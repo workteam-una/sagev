@@ -22,11 +22,14 @@
       <td>{{cita.idFuncionario}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
-      <td *ngIf="cita.estado !== 'Cancelada'" class="text-center">
+      <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada'" class="text-center">
         <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id);">Cancelar</button>
       </td>
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-danger col-7" disabled>Cancelada</button>
+      </td>
+      <td *ngIf="cita.estado === 'Reagendada'" class="text-center">
+        <button type="button" class="btn btn-warning col-7" disabled>Reagendada</button>
       </td>
     </tr>
   </tbody>

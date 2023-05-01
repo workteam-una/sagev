@@ -55,7 +55,8 @@ export class CancelarTablaComponent implements OnInit {
     this.service.actualizarEstadoCancelada(this.idCitaSeleccionada)
     .subscribe(data => {
       alert("Estado de cita actualizado a cancelada con exito!")
-      this.ngOnInit();
+      this.ngOnInit()
+      this.close()
     })
     // this.ngOnInit();
   }
