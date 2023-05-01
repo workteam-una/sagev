@@ -78,7 +78,7 @@ export class CitasFuncionarioComponent implements OnInit {
     })    
   }
 
-    /* 
+  /* 
     Si devuelve true es porque el suplente que se recibe por parámetro no está como 
     encargado pero sí hay un funcionario suplente distinto que está como encargado.
     Si devuelve false es porque la primera condición que verifica si el suplente

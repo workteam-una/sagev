@@ -84,4 +84,12 @@ public class CitaControlador {
         return service.edit(cita);
     }
 
+    //Marca la cita como reagendada
+    @PutMapping(path = {"/reagendada/{id}"})
+    public Cita reagendada(@PathVariable("id") int id){
+        Cita cita = service.listarId(id);
+        cita.setEstado("Reagendada");
+        return service.edit(cita);
+    }
+
 }

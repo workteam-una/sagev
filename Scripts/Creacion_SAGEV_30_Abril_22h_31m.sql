@@ -126,7 +126,7 @@ alter table Funcionario add constraint funcionario_ck_Administrador check
 
 --cita_ck_Estado
 alter table Cita add constraint cita_ck_Estado check
-(Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada'));
+(Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada', 'Reagendada'));
 go
 
 --Procedimientos básicos

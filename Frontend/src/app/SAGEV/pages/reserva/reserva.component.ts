@@ -426,7 +426,7 @@ export class ReservaComponent implements OnInit {
       }
     }
 
-      // Convierte un objeto DateTime de SQL a un objeto Date de TS
+  // Convierte un objeto DateTime de SQL a un objeto Date de TS
   sqlToJsDate(sqlDate: any) : Date {
 
     //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")

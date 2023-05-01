@@ -16,11 +16,9 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   @Input() modeloFuncionario: Funcionario
   citasFuncionario: Cita[] = []
   idCitaSeleccionada: number
-  //Esto fue una idea anterior, pero se desecho
-  //citaSeleccionada: Cita = new Cita();
 
   citasDisponibles: Cita[] = []
-  horasDisponibles: string[] = []
+  citasDisponiblesReagenda: Cita[] = []
   citaReagendada: Cita
   // fechaCitaString: string = ''
   // horaCitaFormateada: string = ''
@@ -30,11 +28,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    //console.log(this.modeloFuncionario)
     this.getCitasFuncionario(this.modeloFuncionario.idFuncionario)
-    // this.formModal = new window.bootstrap.Modal(
-    //   document.getElementById("exampleModal")
-    // );
   }
 
   //Mostrar el pop up
@@ -74,18 +68,22 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }//Fin pop up
 
   getCitasFuncionario(id: String) : void {
+    // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda
+    this.citasDisponibles = []
+    this.citasDisponiblesReagenda = []
+
     this.service.getCitasFuncionario(id)
     .subscribe(data => {
       this.citasFuncionario = data
-      
-      // Parseando la fecha de las citas a un formato que TS entiende
+
+      // Se están parseando las fechas aquí para solo tener que hacerlo una vez
       this.citasFuncionario.forEach(c => {
         c.fecha = this.sqlToJsDate(c.fecha)
       })
-    })
-
-    this.citasFuncionario.forEach(c => {
-      console.log(c)
+      
+      // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
+      this.citasSemanaActual()
+      this.citasSemanaSiguiente()
     })
   }
 
@@ -106,20 +104,36 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       this.ngOnInit();
     })
     }
+    if (estado === "reagendada") {
+      this.service.actualizarEstadoReagendada(this.idCitaSeleccionada)
+    .subscribe(data => {
+      // alert("Estado de cita actualizado a ausente con exito!")
+      this.ngOnInit();
+    })
+    }
   }
 
   cargarCitaReagendada(cita: Cita) {
     this.citaReagendada = cita
-    this.citaReagendada.detalle = ''
+    // this.citaReagendada.detalle = ''
   }
 
   // Este metodo recibe la fecha en el combobox y filtra las horas disponibles
-  filtrarHorasDisponibles(fecha: string) {
-    // este metodo esta recibiendo un string, pero siento que debería ser un Date más bien, de momento no tengo más opción
+  // filtrarHorasDisponibles(fecha: string) {
+  //   console.log("Línea 116: " + fecha)
+  //   this.citasDisponibles.forEach((c) => {
+  //     if(c.fecha.toString() === fecha)
+  //       this.horasDisponibles.push
+  //       (c.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'}))
+  //   })
 
-  }
+  //   console.log(this.horasDisponibles)
+  // }
 
   guardarCita(cita: Cita) : void {
+
+    // Aqui se tiene que setear el estado de la cita en "reagendada"
+
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
     this.service.guardarCita(cita)
@@ -131,6 +145,189 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     })
 
     // this.resetForm()
+  }
+
+  // ---------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------
+  // ---------------------------------------------------------------------------------------------------------------
+
+
+  devolverLunesSemanaActual() : Date {
+    let fechaLunes = new Date() //Fecha del lunes de la semana actual
+    let hoy = new Date().getDay() //Dia de la semana actual
+
+    if( hoy === 2 ){ fechaLunes.setDate(fechaLunes.getDate() - 1); return fechaLunes }
+    if( hoy === 3 ){ fechaLunes.setDate(fechaLunes.getDate() - 2); return fechaLunes }
+    if( hoy === 4 ){ fechaLunes.setDate(fechaLunes.getDate() - 3); return fechaLunes }
+    if( hoy === 5 ){ fechaLunes.setDate(fechaLunes.getDate() - 4); return fechaLunes }
+    if( hoy === 6 ){ fechaLunes.setDate(fechaLunes.getDate() - 5); return fechaLunes }
+    if( hoy === 0 ){ fechaLunes.setDate(fechaLunes.getDate() + 1); return fechaLunes }
+
+    //Hoy es Lunes
+    return fechaLunes
+  }
+
+  /* 
+    Este metodo devuelve la fecha exacta en la cual se va a realizar la cita disponible
+    El primer parametro es el atributo de tipo Date que retorna el metodo devolverLunesSemanaActual()
+    Al tener el lunes, lo comparo con el atributo "dia" proveniente de Horario, para encontrar la fecha
+    del dia de la cita comienzo a sumar dias partiendo desde el dia lunes
+  */
+  obtenerFechaDiaSemana(diaCita: String): Date {
+
+    let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
+
+    //Martes
+    if( diaCita === "Martes" ){
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 1);
+      return lunesSemanaActual
+    }
+    //Miercoles
+    if( diaCita === "Miercoles" ){
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 2);
+      return lunesSemanaActual;
+    }
+    //Jueves
+    if( diaCita === "Jueves" ){
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 3)
+      return lunesSemanaActual
+    }
+    //Viernes
+    if( diaCita === "Viernes" )
+    {
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 4)
+      return lunesSemanaActual
+    }
+    //Sabado
+    if( diaCita === "Sabado" ){
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 5)
+      return lunesSemanaActual
+    }
+    //Domingo
+    if( diaCita === "Domingo" ){
+      lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 6)
+      return lunesSemanaActual
+    }
+
+    //Hoy es Lunes
+    return lunesSemanaActual
+  }
+
+  // Esta función genera las citas de cada funcionario según un horario fijo
+  generaCitasDisponibles(): void {
+
+    // this.contadorCitasDisponibles = this.contadorCitasDisponibles + contadorParametros;
+
+    // Martes de la semana actual a las 8:00 a.m
+    let fechaMartesI = this.obtenerFechaDiaSemana("Martes")
+    fechaMartesI.setHours(8, 0, 0)
+
+    // Martes de la semana actual a las 12:00 m.d
+    let fechaMartesF = this.obtenerFechaDiaSemana("Martes")
+    fechaMartesF.setHours(12, 0, 0)
+
+    // Jueves de la semana actual a la 1:00 p.m
+    let fechaJuevesI = this.obtenerFechaDiaSemana("Jueves")
+    fechaJuevesI.setHours(13, 0, 0)
+
+    // Jueves de la semana actual a las 4:00 p.m
+    let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
+    fechaJuevesF.setHours(16, 0, 0)
+
+    // Genera citas disponibles los días martes de la semana actual
+    for (let i = fechaMartesI; i < fechaMartesF; i.setMinutes(fechaMartesI.getMinutes() + 30)) {
+
+      // Generando el objeto cita auxiliar
+      let citaAux = new Cita()
+      
+      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, fecha, hora y del dia martes
+      citaAux.idFuncionario = this.modeloFuncionario.idFuncionario
+      citaAux.fecha = new Date(fechaMartesI)
+
+      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 12 m.d
+      if (citaAux.fecha.toLocaleTimeString() !== '12:00:00') {
+        this.citasDisponibles.push(citaAux)
+      }
+      else {
+        console.log("Cita ignorada: " + citaAux.fecha)
+      }
+    }
+
+    //Genera citas disponibles los dias jueves de la semana actual
+    for (let i = fechaJuevesI; i < fechaJuevesF; i.setMinutes(fechaJuevesI.getMinutes() + 30)) {
+      
+      // Generando el objeto cita auxiliar
+      let citaAux: Cita = new Cita()
+
+      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día jueves
+      citaAux.idFuncionario = this.modeloFuncionario.idFuncionario
+      citaAux.fecha = new Date(fechaJuevesI)
+      
+      // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
+      // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
+
+      // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 4 p.m     
+      if(citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
+        this.citasDisponibles.push(citaAux)
+      }
+      else {
+        console.log("Cita ignorada: " + citaAux.fecha)
+      }
+    }
+  }
+
+  /*
+    Filtra las citas disponibles para que muestre solo las que no han sido reservadas.
+    Itera las citas disponibles y comparando su fecha una a una con las fechas de todas las citas rerservadas,
+    en caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array
+  */
+  filtrarCitasDisponibles(): void {
+
+    // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
+    for (let i = 0; i < this.citasDisponibles.length; i++)
+    {
+      for (let j = 0; j < this.citasFuncionario.length; j++)
+      {
+        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal
+        if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasFuncionario[j].fecha.toLocaleString()) {
+          // Cuando un elemento del array de citasDispobles coincide con un elemento del array de citasReservadas
+          // se elimina la posición del array donde se encontró la coincidencia con la hora y la fecha 
+          this.citasDisponibles.splice(i, 1)
+        }
+      }
+    }
+
+    // Agregando las citas disponibles primero de la semana actual (citasSemanaActual) y luego agregando las citas de la semana siguiente (citasSemanaSiguiente)
+    this.citasDisponibles.forEach((c) => {
+      this.citasDisponiblesReagenda.push(c) 
+    })
+  }
+
+  aumentarSemanasCitasDisponibles() : void {
+    this.citasDisponibles.forEach(c => {
+      c.fecha.setDate(c.fecha.getDate() + 7)
+    })
+  }
+
+  devuelveDiaSemana(d: Date): String {
+    // Array que funciona como "traductor" para poder imprimir el nombre del día
+    const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
+    let dia = diaSemana[d.getDay()]
+    return dia
+  }
+
+  // Generar las citas disponibles de la semana actual
+  citasSemanaActual(): void {
+    this.generaCitasDisponibles()
+    this.filtrarCitasDisponibles()
+  }
+
+  // Generar las citas disponibles de la semana siguiente
+  citasSemanaSiguiente(): void {
+    this.citasDisponibles = []
+    this.generaCitasDisponibles()
+    this.aumentarSemanasCitasDisponibles()
+    this.filtrarCitasDisponibles()
   }
 
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
