@@ -28,10 +28,6 @@
 <div class="uc-modal" *ngIf="showModalModFunc === 1">
     <div class="uc-m-content">
       <div class="uc-m-header">
-        <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeModFunc()"> -->
-        <span class="material-symbols-outlined" (click)="closeModFunc()">
-            X
-        </span>
         <h4>Modificar funcionario a cargo</h4>
       </div>
       <div class="uc-m-body">
@@ -53,13 +49,13 @@
           <select #selectFunc name="dept" id="dept" class="form-select" class="form-select selectInfo">
             <option value="">Seleccione el funcionario a asignar o desasignar como encargado</option>
             <option *ngFor="let funcionario of funcionariosEncargadosPorDepa" value="{{funcionario.idFuncionario}}">
-              {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}}
+              {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}} {{mostrarEncargado(funcionario.encargado)}}
             </option>
           </select>
         </div>
       </div>
       <div class="uc-m-footer">
-        <button (click)="asignarSuplenteEncargado(selectFunc.value)" class="btn btn-primary btn-hover">Confirmar</button>
+        <button (click)="modificarFuncionarioEncargado(selectFunc.value)" class="btn btn-primary btn-hover">Confirmar</button>
         <button class="btn btn-danger" (click)="closeModFunc()">Salir</button>
       </div>
     </div>

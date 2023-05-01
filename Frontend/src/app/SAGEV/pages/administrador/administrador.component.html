@@ -101,35 +101,14 @@
         </select>
       </div>
 
-      <div style="display:flex;">
-
+      <!-- div que almacena todo el formulario -->
+      <div style="margin-bottom: 2%;">
         <form [formGroup]="funcionarioForm">
-
+          <!-- div que almacena todos textfields -->
           <div style="display: flex;">
+            <!-- div que almacena los textfields de la izquierda-->
             <div>
-              <div>
-                <label>Cédula del funcionario</label><br>
-                <div>
-                  <input formControlName="cedula" type="text" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"
-                    [(ngModel)]="nuevoFuncionario.idFuncionario">
-                  <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
-                    <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <label>Correo del funcionario</label><br>
-                <div>
-                  <input type="text" formControlName="email" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['email'].errors }" [(ngModel)]="nuevoFuncionario.correo">
-                  <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
-                    <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
-                  </div>
-                </div>
-              </div>
-
+              <!-- div que almacena el nombre del funcionario -->
               <div>
                 <label>Nombre del funcionario</label><br>
                 <div>
@@ -140,8 +119,7 @@
                   </div>
                 </div>
               </div>
-            </div>
-            <div style="margin-right: -4%; padding-left: 4%;">
+              <!-- div que almacena el primer apellido del funcionario -->
               <div>
                 <label>Primer apellido del funcionario</label><br>
                 <div>
@@ -153,7 +131,7 @@
                   </div>
                 </div>
               </div>
-
+              <!-- div que almacena el segundo apellido del funcionario -->
               <div>
                 <label>Segundo apellido del funcionario</label><br>
                 <div>
@@ -165,7 +143,33 @@
                   </div>
                 </div>
               </div>
-
+            </div>
+            <!-- div que almacena los textfields de la derecha -->
+            <div style="margin-right: -4%; padding-left: 4%;">
+              <!-- div que almacena la cédula del funcionario -->
+              <div>
+                <label>Cédula del funcionario</label><br>
+                <div>
+                  <input formControlName="cedula" type="text" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"
+                    [(ngModel)]="nuevoFuncionario.idFuncionario">
+                  <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
+                    <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
+                  </div>
+                </div>
+              </div>
+              <!-- div que almacena el correo del funcionario -->
+              <div>
+                <label>Correo del funcionario</label><br>
+                <div>
+                  <input type="text" formControlName="email" class="form-control"
+                    [ngClass]="{ 'is-invalid': enviar && f['email'].errors }" [(ngModel)]="nuevoFuncionario.correo">
+                  <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
+                  </div>
+                </div>
+              </div>
+              <!-- div que almacena la contraseña del funcionario -->
               <div>
                 <label>Contraseña del funcionario</label><br>
                 <div>
@@ -180,9 +184,6 @@
             </div>
           </div>
         </form>
-
-        
-
       </div>
       <!-- <label>Seleccione si el funcionario va a ser encargado</label><br>
       <div>

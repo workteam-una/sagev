@@ -1,4 +1,4 @@
-<table *ngIf="citasFuncionario.length !== 0" class="table">
+<table *ngIf="citasFuncionario.length !== 0 else sinCitas" class="table">
   <thead class="table-light">
     <tr>
       <th scope="col">Fecha</th>
@@ -19,19 +19,32 @@
       <td>{{cita.idContribuyente}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
-      <td class="text-center">
-        <button type="button" class="btn btn-primary btn-reagendar" (click)="showReagenda(1, cita.id); cargarCitaReagendada(cita)">Reagendar</button>
+      <td *ngIf="cita.estado !== 'Cancelada'" class="text-center">
+        <button type="button" class="btn btn-primary btn-reagendar col-9" (click)="showReagenda(1, cita.id); cargarCitaReagendada(cita)">Reagendar</button>
+      </td>
+      <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
+        <button type="button" class="btn btn-danger col-9" disabled>Reagendar</button>
       </td>
       <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
       <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
       <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
-      <td class="text-center">
-        <button type="button" class="btn btn-primary btn-cambiar" (click)="showEstado(1, cita.id)">Cambiar</button>
+      <td *ngIf="cita.estado !== 'Cancelada'" class="text-center">
+        <button type="button" class="btn btn-primary btn-cambiar col-9" (click)="showEstado(1, cita.id)">Cambiar</button>
+      </td>
+      <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
+        <button type="button" class="btn btn-danger col-9" disabled>Cambiar</button>
       </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
+
+<ng-template #sinCitas>
+  <h5 style="color: red; text-align: center;">Actualmente no cuenta con citas pendientes</h5>
+  <div style="text-align: center; margin-top: 3%">
+    <img style="width: 15%; opacity: 0.5;" src="assets\images\calendario.png">
+  </div>
+</ng-template>
 
 <!-- Pop-up cambiar estado de la cita -->
 <div class="uc-modal" *ngIf="showModalEstado === 1">

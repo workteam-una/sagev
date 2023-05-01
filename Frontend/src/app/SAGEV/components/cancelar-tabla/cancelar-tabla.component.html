@@ -22,10 +22,10 @@
       <td>{{cita.idFuncionario}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
-      <td *ngIf="cita.estado !== 'Ausente'" class="text-center">
+      <td *ngIf="cita.estado !== 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id);">Cancelar</button>
       </td>
-      <td *ngIf="cita.estado === 'Ausente'" class="text-center">
+      <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-danger col-7" disabled>Cancelada</button>
       </td>
     </tr>
@@ -36,9 +36,6 @@
 <div class="uc-modal" *ngIf="showModal === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <span class="material-symbols-outlined" (click)="close()">
-          X
-      </span>
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
