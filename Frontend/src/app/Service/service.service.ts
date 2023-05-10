@@ -4,6 +4,7 @@ import { Area } from '../SAGEV/modelo/area';
 import { Departamento } from '../SAGEV/modelo/departamento';
 import { Funcionario } from '../SAGEV/modelo/funcionario';
 import { Cita } from '../SAGEV/modelo/cita';
+import { Correo } from '../SAGEV/modelo/correo';
 
 @Injectable({
   providedIn: 'root'
@@ -85,5 +86,13 @@ export class ServiceService {
 
   guardarDepartamentos(departamento: Departamento) {
     return this.http.post<Departamento>(this.url + "departamentos", departamento)
+  }
+
+  cambiarContraFunc(funcionariomodelo: Funcionario) {
+    return this.http.put<Funcionario>(this.url + "funcionarios" + "/newcontra", funcionariomodelo)
+  }
+
+  enviaCorreo (correo:Correo){
+    return this.http.post<Correo>(this.url + "mail" + "/sendemail", correo)
   }
 }

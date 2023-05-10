@@ -54,4 +54,14 @@ public class FuncionarioControlador {
         return service.edit(funcionario);
     }
 
+    //Cambia la constraseña del funcionario
+    @PutMapping(path= {"/newcontra"})
+    public Funcionario cambiaContra(@RequestBody Funcionario f){
+        //f es un objeto que trae el id y nueva constrasena del funcionario
+        // System.out.println("----------------ID de funcionario obtenida:" + f.idFuncionario);
+        Funcionario funcionario = service.listarIdFuncionario(f.idFuncionario);
+        funcionario.setContrasenna(f.getContrasenna());
+        return service.edit(funcionario);
+    }
+
 }

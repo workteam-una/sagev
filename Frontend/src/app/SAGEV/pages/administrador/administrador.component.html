@@ -219,23 +219,29 @@
       <h4>Cambiar contraseña a un funcionario</h4>
     </div>
     <div class="uc-m-body">
-      <label>Digite la cedula del funcionario a modificar</label><br>
+      <label>Seleccione el funcionario</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
-        <label>Guillermo Ibarra Baez</label>
-        <!-- La idea es que al digitar la cedula se cargue el numero de la cedula -->
+        <select #selectFunc name="func" id="func" class="form-select" class="form-select selectInfo"
+        (change)="setIdFunc(selectFunc.value);">
+        <option selected value=''></option>
+        <option *ngFor="let funcionario of funcionarios" value="{{funcionario.idFuncionario}}">
+          {{funcionario.nombre}} ({{funcionario.idFuncionario}})
+        </option>
+      </select>
       </div>
       <label>Ingrese la nueva contraseña</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+        [(ngModel)]="contra1">
       </div>
       <label>Confirmar la contraseña</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required>
+        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
+        [(ngModel)]="contra2">
       </div>
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary btn-hover">Confirmar</button>
+      <button class="btn btn-primary btn-hover" (click)="cambiarContra()">Confirmar</button>
       <button class="btn btn-danger" (click)="closePswrdFunc()">Salir</button>
     </div>
   </div>

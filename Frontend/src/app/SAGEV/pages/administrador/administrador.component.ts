@@ -21,6 +21,13 @@ export class AdministradorComponent implements OnInit {
   funcionarioForm!: FormGroup
   enviar = false;
 
+  idfunc: string
+  contra1: string
+  contra2: string //Esto es de inteligencia cuestionable
+  funcionariopojo: Funcionario = new Funcionario() //Este es un modelo que me sirve para poder hacer put si problemas
+
+  funcionarios: Funcionario[] = []
+
   areas: Area[] = []
   departamentos: Departamento[] = []
   nuevoFuncionario: Funcionario = new Funcionario
@@ -34,6 +41,7 @@ export class AdministradorComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
   ngOnInit(): void {
+    this.getFuncionarios()
     this.getAreas()
     this.getDepartamentos()
 
@@ -104,7 +112,7 @@ export class AdministradorComponent implements OnInit {
       alert("El número de departamento digitado ya está en uso")
       return
     }
-    this.service. guardarDepartamentos(d)
+    this.service.guardarDepartamentos(d)
     .subscribe(data => {
       alert("Se agregó el departamento con éxito")
     })
@@ -127,6 +135,13 @@ export class AdministradorComponent implements OnInit {
     this.service.getDepartamentos()
     .subscribe(dataDep => {
       this.departamentos = dataDep
+    })
+  }
+
+  getFuncionarios(): void{
+    this.service.getFuncionarios()
+    .subscribe(dataFunc => {
+      this.funcionarios = dataFunc
     })
   }
 
@@ -215,12 +230,39 @@ export class AdministradorComponent implements OnInit {
     this.resetForm()
   }
 
-  setDepaFuncionario(numDepa: string){
+  setDepaFuncionario(numDepa: string) : void {
     this.nuevoFuncionario.numDepartamento = Number(numDepa)
   }
 
-  setAreaDepa(numArea: string){
+  setAreaDepa(numArea: string) : void {
     this.nuevoDepa.numArea = Number(numArea)
+  }
+
+  setIdFunc(id: string): void{
+    this.idfunc = id
+  }
+
+
+  cambiarContra(): void{
+    if(this.contra1 === null || this.contra2 === null){
+      alert("Hay constraseñas en blanco")
+      return
+    }
+    if(this.contra1 != this.contra2){
+      alert("Las contraseñas son diferentes")
+      return
+    }
+    else{
+      //Empaquetanod el funcionario modelo para enviarlo por put
+      this.funcionariopojo.idFuncionario = this.idfunc
+      this.funcionariopojo.contrasenna = this.contra1
+      this.service.cambiarContraFunc(this.funcionariopojo)
+      .subscribe(data => {
+        alert("Se cambio la contraseña con exito!")
+      })
+      this.closePswrdFunc()
+    }
+
   }
 
   mostrarFuncionario(): void{

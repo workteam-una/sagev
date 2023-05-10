@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
+import { Correo } from '../../modelo/correo';
 
 @Component({
   selector: 'app-formulario',
@@ -89,9 +90,9 @@ export class FormularioComponent implements OnInit {
 
   guardarCita(cita: Cita) : void {
     //Si las validaciones estan mal...
-    // if(!this.validaciones()){
-    //   return
-    // }
+    if(!this.validaciones()){
+      return
+    }
     // console.log(cita)
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
@@ -99,6 +100,7 @@ export class FormularioComponent implements OnInit {
     .subscribe(data => {
       alert("Se agregó la cita con éxito")
       // Se debe actualizar la página para evitar sacar dos citas iguales
+      // this.enviarCorreo(cita)
       window.location.reload()
       //this.router.navigate(["listar"]);
     })
@@ -106,4 +108,43 @@ export class FormularioComponent implements OnInit {
     this.resetForm()
   }
 
+  enviarCorreo(cita: Cita){
+    let correo: Correo = new Correo
+
+    cita.fecha.setHours(cita.fecha.getHours() + 6)
+    // cita.fecha.getDate().
+    correo.to = cita.correoContribuyente
+    correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
+    correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " " 
+    + cita.fecha.getDay() + " de " + this.devuelveMes(cita.fecha) + " a las " + 
+    cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'}) 
+    + " ha sido reservada con éxito "
+
+
+    console.log(correo.message)
+
+
+    this.service.enviaCorreo(correo)
+    .subscribe(data => {
+      alert("Se envió el correo con exito")
+    })
+
+  }
+
+  // <td>{{devuelveDiaSemana(cita.fecha)}}</td>
+  // <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
+
+  devuelveDiaSemana(d: Date): String {
+    // Array que funciona como "traductor" para poder imprimir el nombre del día
+    const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
+    let dia = diaSemana[d.getDay()]
+    return dia
+  }
+
+  devuelveMes(d: Date): String {
+    // Array que funciona como "traductor" para poder imprimir el nombre del día
+    const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    let mes = meses[d.getMonth()]
+    return mes
+  }
 }

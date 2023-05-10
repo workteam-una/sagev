@@ -15,8 +15,7 @@ import javax.persistence.*;
 public class Funcionario {
 
     @Id
-    @Column(name = "IdFuncionario")
-    private String idFuncionario;
+    @Column(name = "IdFuncionario") String idFuncionario;
 
     @Column(name = "NumDepartamento")
     private int numDepartamento;
