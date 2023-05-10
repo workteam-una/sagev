@@ -100,29 +100,27 @@ export class FormularioComponent implements OnInit {
     .subscribe(data => {
       alert("Se agregó la cita con éxito")
       // Se debe actualizar la página para evitar sacar dos citas iguales
-      // this.enviarCorreo(cita)
       window.location.reload()
       //this.router.navigate(["listar"]);
     })
-
+    this.enviarCorreo(cita)
     this.resetForm()
   }
 
   enviarCorreo(cita: Cita){
     let correo: Correo = new Correo
 
+    // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
     cita.fecha.setHours(cita.fecha.getHours() + 6)
-    // cita.fecha.getDate().
+
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " " 
-    + cita.fecha.getDay() + " de " + this.devuelveMes(cita.fecha) + " a las " + 
+    + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " + 
     cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'}) 
     + " ha sido reservada con éxito "
 
-
     console.log(correo.message)
-
 
     this.service.enviaCorreo(correo)
     .subscribe(data => {
