@@ -141,7 +141,7 @@
       <div for="validationDefault10" class="col-md-4 divDescr">
           <label class="form-label">Razón de la reagenda</label>
           <!-- Sobreescribe el detalle que había -->
-          <textarea #razonReagenda name="razonReagenda" class="form-control ta-motivo" id="validationDefault10"></textarea>
+          <textarea #razonReagenda name="razonReagenda" class="form-control ta-motivo" id="validationDefault10" placeholder="La razón será visible para el contribuyente en el correo"></textarea>
       </div>
       <div class="col-12 divEnviar text-center">
           <button class="btn btn-primary btnEnviar" (click)="modificarCitaReagendada(selectFecha.value, razonReagenda.value); guardarCita(); actualizarEstado('reagendada')">Reagendar cita</button>

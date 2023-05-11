@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output} from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class FormularioComponent implements OnInit {
   @Input() horaCitaFormateada: String
   @Input() nombreFuncionario: String
 
-  constructor(private formBuilder: FormBuilder,private service: ServiceService, private router: Router) {}
+  constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
   //Variables necesarias para hacer las validaciones
   clientForm!: FormGroup
@@ -46,17 +46,17 @@ export class FormularioComponent implements OnInit {
   @Output()
   shModal = new EventEmitter<number>();
 
-  ngOnChanges(changes: SimpleChanges) : void {
-     console.log(changes['showModal'])
-   }
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes['showModal'])
+  }
 
   //AUN NO LO ESTOY USANDO porque es el padre el que me envia la instruccion de abrir
-  show(index: number) : void {
+  show(index: number): void {
     this.showModal = index;
     //Aqui setea el id de la cita, convenientemente
   }
 
-  close() : void {
+  close(): void {
     this.showModal = -1;
     this.shModal.emit(this.showModal);
     console.log("ShowModal en el close: " + this.showModal)
@@ -68,46 +68,46 @@ export class FormularioComponent implements OnInit {
     this.enviar = true;
     // El formulario es invalido
     if (this.clientForm.invalid) {
-        return false;
+      return false;
     }
-    else{
+    else {
       // El formulario esta bien
-    console.log('SIS!! :-)\n\n' + JSON.stringify(this.clientForm.value, null, 6));
+      console.log('SIS!! :-)\n\n' + JSON.stringify(this.clientForm.value, null, 6));
       return true;
     }
-    
-}
+
+  }
 
   //Limpia el formulario
-  resetForm() : void {
-  this.enviar = false;
-  this.clientForm.reset();
-}
+  resetForm(): void {
+    this.enviar = false;
+    this.clientForm.reset();
+  }
 
   // un get del formulario
   get f() { return this.clientForm.controls; }
 
 
-  guardarCita(cita: Cita) : void {
+  guardarCita(cita: Cita): void {
     //Si las validaciones estan mal...
-    if(!this.validaciones()){
+    if (!this.validaciones()) {
       return
     }
     // console.log(cita)
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
     this.service.guardarCita(cita)
-    .subscribe(data => {
-      alert("Se agregó la cita con éxito")
-      // Se debe actualizar la página para evitar sacar dos citas iguales
-      window.location.reload()
-      //this.router.navigate(["listar"]);
-    })
+      .subscribe(data => {
+        alert("Se agregó la cita con éxito")
+        // Se debe actualizar la página para evitar sacar dos citas iguales
+        window.location.reload()
+        //this.router.navigate(["listar"]);
+      })
     this.enviarCorreo(cita)
     this.resetForm()
   }
 
-  enviarCorreo(cita: Cita){
+  enviarCorreo(cita: Cita) {
     let correo: Correo = new Correo
 
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
@@ -115,17 +115,17 @@ export class FormularioComponent implements OnInit {
 
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
-    correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " " 
-    + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " + 
-    cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'}) 
-    + " ha sido reservada con éxito "
+    correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Le informamos que su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " "
+      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
+      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })
+      + " ha sido reservada con éxito." + "\n\n" + "Este correo es generado de forma automática, favor no responder."
 
     console.log(correo.message)
 
     this.service.enviaCorreo(correo)
-    .subscribe(data => {
-      alert("Se envió el correo con exito")
-    })
+      .subscribe(data => {
+        alert("Se envió el correo con exito")
+      })
 
   }
 
@@ -134,14 +134,14 @@ export class FormularioComponent implements OnInit {
 
   devuelveDiaSemana(d: Date): String {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
-    const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
+    const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
     let dia = diaSemana[d.getDay()]
     return dia
   }
 
   devuelveMes(d: Date): String {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
-    const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     let mes = meses[d.getMonth()]
     return mes
   }

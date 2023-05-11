@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
 import { Funcionario } from '../../modelo/funcionario';
+import { Correo } from '../../modelo/correo';
 
 @Component({
   selector: 'app-citas-funcionario-tabla',
@@ -24,7 +25,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   // horaCitaFormateada: string = ''
 
   constructor(private service: ServiceService, private router: Router) {
-    
+
   }
 
   ngOnInit(): void {
@@ -37,23 +38,23 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   //Este metodo además de setear el valor de showModal para mostrar el popup
   //tambien va a setear el id de la cita seleccionada para poder cambiar su estado
-  showEstado(index: number, id: number) : void{
+  showEstado(index: number, id: number): void {
     this.showModalEstado = index;
     //Aqui setea el id de la cita, convenientemente
     this.idCitaSeleccionada = id;
   }
 
-  closeEstado() : void {
+  closeEstado(): void {
     this.showModalEstado = -1;
   }//Fin pop up
 
-  showReagenda(index: number, id: number) : void{
+  showReagenda(index: number, id: number): void {
     this.showModalReagenda = index;
     //Aqui setea el id de la cita, convenientemente
     this.idCitaSeleccionada = id;
   }
 
-  closeReagenda() : void {
+  closeReagenda(): void {
     this.showModalReagenda = -1;
     /* 
       Este init se tiene que poner porque como estoy usando ngModel en el textArea y este al inicio 
@@ -67,51 +68,51 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // this.ngOnInit();
   }//Fin pop up
 
-  getCitasFuncionario(id: String) : void {
+  getCitasFuncionario(id: String): void {
     // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda
     this.citasDisponibles = []
     this.citasDisponiblesReagenda = []
     // this.citasFuncionario = []
 
     this.service.getCitasFuncionario(id)
-    .subscribe(data => {
-      this.citasFuncionario = data
+      .subscribe(data => {
+        this.citasFuncionario = data
 
-      // Se están parseando las fechas aquí para solo tener que hacerlo una vez
-      this.citasFuncionario.forEach(c => {
-        c.fecha = this.sqlToJsDate(c.fecha)
+        // Se están parseando las fechas aquí para solo tener que hacerlo una vez
+        this.citasFuncionario.forEach(c => {
+          c.fecha = this.sqlToJsDate(c.fecha)
+        })
+
+        // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
+        // this.citasSemanaActual()
+        this.generaCitasDisponiblesReagenda()
       })
-      
-      // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
-      // this.citasSemanaActual()
-      this.generaCitasDisponiblesReagenda()
-    })
   }
 
-  actualizarEstado(estado: String) : void {
-    if (estado === "completada"){
+  actualizarEstado(estado: String): void {
+    if (estado === "completada") {
       this.service.actualizarEstadoCompletada(this.idCitaSeleccionada)
-      .subscribe(data => {
-      alert("Estado de cita actualizado a completado con exito!")
-      // Se vuelven a cargar todas las citas para que se actualice su estado en la tabla de citas,
-      // del funcionario, lo malo de esto es que si son muchas citas puede llegar a ser mucha carga.
-      this.ngOnInit()
-      this.closeEstado()
-    })
+        .subscribe(data => {
+          alert("Estado de cita actualizado a completado con exito!")
+          // Se vuelven a cargar todas las citas para que se actualice su estado en la tabla de citas,
+          // del funcionario, lo malo de esto es que si son muchas citas puede llegar a ser mucha carga.
+          this.ngOnInit()
+          this.closeEstado()
+        })
     }
     if (estado === "ausente") {
       this.service.actualizarEstadoAusente(this.idCitaSeleccionada)
-    .subscribe(data => {
-      alert("Estado de cita actualizado a ausente con exito!")
-      this.ngOnInit()
-      this.closeEstado()
-    })
+        .subscribe(data => {
+          alert("Estado de cita actualizado a ausente con exito!")
+          this.ngOnInit()
+          this.closeEstado()
+        })
     }
     if (estado === "reagendada") {
       this.service.actualizarEstadoReagendada(this.idCitaSeleccionada)
-    .subscribe(data => {
-      this.ngOnInit()
-    })
+        .subscribe(data => {
+          this.ngOnInit()
+        })
     }
   }
 
@@ -134,35 +135,72 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citaReagendada.fecha.setMilliseconds(this.citaReagendada.fecha.getMilliseconds() + 10)
   }
 
-  guardarCita() : void {
+  guardarCita(): void {
     // console.log( this.citaReagendada.fecha)
     this.service.guardarCita(this.citaReagendada)
-    .subscribe(data => {
-      alert("Se reagendó la cita con éxito")
-      // Se debe actualizar la página para evitar sacar dos citas iguales
-      // window.location.reload()
-      this.closeReagenda()
-      //this.router.navigate(["listar"]);
-    })
-
+      .subscribe(data => {
+        alert("Se reagendó la cita con éxito")
+        // Se debe actualizar la página para evitar sacar dos citas iguales
+        // window.location.reload()
+        this.closeReagenda()
+        //this.router.navigate(["listar"]);
+      })
+    this.enviarCorreo(this.citaReagendada)
     // this.resetForm()
   }
 
+  enviarCorreo(cita: Cita) {
+    let correo: Correo = new Correo
+
+    // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
+    cita.fecha.setHours(cita.fecha.getHours() + 6)
+
+    correo.to = cita.correoContribuyente
+    correo.subject = "Reagenda de su cita en la Municipalidad de Santo Domingo"
+    correo.message = "Estimado/a " + this.citaReagendada.nombreContribuyente + "\n\n" + "Le informamos que el funcionario a cargo de su cita la ha reagendado para el día " + this.devuelveDiaSemana(cita.fecha) + " "
+      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
+      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ". Según el funcionario, la razón de la reagenda es: " + cita.razonReagenda
+      + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, pedimos las disculpas del caso"
+
+    console.log(correo.message)
+
+    this.service.enviaCorreo(correo)
+      .subscribe(data => {
+        alert("Se envió el correo con exito")
+      })
+
+  }
+
+  devuelveDiaSemana(d: Date): String {
+    // Array que funciona como "traductor" para poder imprimir el nombre del día
+    const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
+    let dia = diaSemana[d.getDay()]
+    return dia
+  }
+
+  devuelveMes(d: Date): String {
+    // Array que funciona como "traductor" para poder imprimir el nombre del día
+    const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    let mes = meses[d.getMonth()]
+    return mes
+  }
+
+
   // ---------------------------------------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------
   // ---------------------------------------------------------------------------------------------------------------
 
 
-  devolverLunesSemanaActual() : Date {
+  devolverLunesSemanaActual(): Date {
     let fechaLunes = new Date() //Fecha del lunes de la semana actual
     let hoy = new Date().getDay() //Dia de la semana actual
 
-    if( hoy === 2 ){ fechaLunes.setDate(fechaLunes.getDate() - 1); return fechaLunes }
-    if( hoy === 3 ){ fechaLunes.setDate(fechaLunes.getDate() - 2); return fechaLunes }
-    if( hoy === 4 ){ fechaLunes.setDate(fechaLunes.getDate() - 3); return fechaLunes }
-    if( hoy === 5 ){ fechaLunes.setDate(fechaLunes.getDate() - 4); return fechaLunes }
-    if( hoy === 6 ){ fechaLunes.setDate(fechaLunes.getDate() - 5); return fechaLunes }
-    if( hoy === 0 ){ fechaLunes.setDate(fechaLunes.getDate() + 1); return fechaLunes }
+    if (hoy === 2) { fechaLunes.setDate(fechaLunes.getDate() - 1); return fechaLunes }
+    if (hoy === 3) { fechaLunes.setDate(fechaLunes.getDate() - 2); return fechaLunes }
+    if (hoy === 4) { fechaLunes.setDate(fechaLunes.getDate() - 3); return fechaLunes }
+    if (hoy === 5) { fechaLunes.setDate(fechaLunes.getDate() - 4); return fechaLunes }
+    if (hoy === 6) { fechaLunes.setDate(fechaLunes.getDate() - 5); return fechaLunes }
+    if (hoy === 0) { fechaLunes.setDate(fechaLunes.getDate() + 1); return fechaLunes }
 
     //Hoy es Lunes
     return fechaLunes
@@ -179,33 +217,32 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
 
     //Martes
-    if( diaCita === "Martes" ){
+    if (diaCita === "Martes") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 1);
       return lunesSemanaActual
     }
     //Miercoles
-    if( diaCita === "Miercoles" ){
+    if (diaCita === "Miercoles") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 2);
       return lunesSemanaActual;
     }
     //Jueves
-    if( diaCita === "Jueves" ){
+    if (diaCita === "Jueves") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 3)
       return lunesSemanaActual
     }
     //Viernes
-    if( diaCita === "Viernes" )
-    {
+    if (diaCita === "Viernes") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 4)
       return lunesSemanaActual
     }
     //Sabado
-    if( diaCita === "Sabado" ){
+    if (diaCita === "Sabado") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 5)
       return lunesSemanaActual
     }
     //Domingo
-    if( diaCita === "Domingo" ){
+    if (diaCita === "Domingo") {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 6)
       return lunesSemanaActual
     }
@@ -244,7 +281,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
       // Generando el objeto cita auxiliar
       let citaAux = new Cita()
-      
+
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, fecha, hora y del dia martes
       citaAux.idFuncionario = this.modeloFuncionario.idFuncionario
       citaAux.fecha = new Date(fechaMartesI)
@@ -262,7 +299,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
     //Genera citas disponibles los dias jueves de la semana actual
     for (let i = fechaJuevesI; i < fechaJuevesF; i.setMinutes(fechaJuevesI.getMinutes() + 30)) {
-      
+
       // Generando el objeto cita auxiliar
       let citaAux: Cita = new Cita()
 
@@ -271,7 +308,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       citaAux.fecha = new Date(fechaJuevesI)
 
       // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 4 p.m     
-      if(citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
+      if (citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
         // Aumentando la cantidad de días según el parámetro (0 - ninguno / semana actual | 7 - una semana / semana siguiente)
         citaAux.fecha.setDate(citaAux.fecha.getDate() + aumentoDias)
         this.citasDisponibles.push(citaAux)
@@ -300,10 +337,8 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // })
 
     // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
-    for (let i = 0; i < this.citasDisponibles.length; i++)
-    {
-      for (let j = 0; j < this.citasFuncionario.length; j++)
-      {
+    for (let i = 0; i < this.citasDisponibles.length; i++) {
+      for (let j = 0; j < this.citasFuncionario.length; j++) {
         // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal
         if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasFuncionario[j].fecha.toLocaleString()) {
           // Cuando un elemento del array de citasDispobles coincide con un elemento del array de citasReservadas
@@ -315,7 +350,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
     // Agregando las citas disponibles ya filtradas al array de las citas disponibles que se van a desplegar en la reagenda
     this.citasDisponibles.forEach((c) => {
-      this.citasDisponiblesReagenda.push(c) 
+      this.citasDisponiblesReagenda.push(c)
     })
   }
 
@@ -337,7 +372,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }
 
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
-  sqlToJsDate(sqlDate: any) : Date {
+  sqlToJsDate(sqlDate: any): Date {
 
     //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
     let sqlDateArr1 = sqlDate.split("-")
@@ -360,14 +395,14 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
   }
 
-    convertDate(date: Date) {
+  convertDate(date: Date) {
     let yyyy = date.getFullYear().toString();
     let mm = (date.getMonth() + 1).toString();
-    let dd  = date.getDate().toString();
-  
+    let dd = date.getDate().toString();
+
     let mmChars = mm.split('');
     let ddChars = dd.split('');
-  
-    return yyyy + '-' + (mmChars[1] ? mm: "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
+
+    return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
   }
 }
