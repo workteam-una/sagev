@@ -23,8 +23,15 @@
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}} {{funcionarioEncargado.apellido2}}</td>
       <!-- Validaciones extra: en caso de que las "citas fantasma" se añadan, no se pueden reservar -->
-      <td *ngIf="cita.fecha.toLocaleTimeString() !== '12:00:00' && cita.fecha.toLocaleTimeString() !== '16:00:00'" class="text-center">
-        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario(); refrescarShowModal();"><span></span></button>
+      <td *ngIf="cita.fecha.toLocaleTimeString() !== '12:00:00' && cita.fecha.toLocaleTimeString() !== '16:00:00' && cita.fecha > fechaHoy" class="text-center">
+        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario(); refrescarShowModal();">
+          Reservar
+        </button>
+      </td>
+      <td *ngIf="cita.fecha.toLocaleTimeString() !== '12:00:00' && cita.fecha.toLocaleTimeString() !== '16:00:00' && cita.fecha < fechaHoy" class="text-center">
+        <button type="button" class="btn btn-danger" disabled>
+          Reservar
+        </button>
       </td>
     <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>

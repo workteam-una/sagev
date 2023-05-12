@@ -19,7 +19,7 @@ export class CancelarTablaComponent implements OnInit {
   estadoCita: boolean = false
 
   citasContribuyente: Cita[] = []
-  @Input() idContribuyente: String
+  @Input() idContribuyente: string
 
   constructor(private service: ServiceService, private router: Router) { }
 
@@ -28,7 +28,7 @@ export class CancelarTablaComponent implements OnInit {
     
   }
 
-  getCitasReservadasContribuyente() {
+  getCitasReservadasContribuyente() : void {
     this.service.getCitasContribuyente(this.idContribuyente)
     .subscribe(data => {
       this.citasContribuyente = data
@@ -61,7 +61,7 @@ export class CancelarTablaComponent implements OnInit {
     // this.ngOnInit();
   }
 
-  openModal() {
+  openModal() : void {
     this.formModal.show();
    }
 
@@ -73,7 +73,7 @@ export class CancelarTablaComponent implements OnInit {
     this.idCitaSeleccionada = id;
   }
 
-  close(){
+  close() : void {
     this.showModal = -1;
   }
 

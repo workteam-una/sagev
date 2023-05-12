@@ -11,7 +11,7 @@ export class CancelarComponent implements OnInit {
 
   constructor(private service: ServiceService) { }
 
-  idContribuyente: String = ""
+  idContribuyente: string = ""
 
   citasContribuyente: Cita[] = []
 
@@ -21,7 +21,7 @@ export class CancelarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  verificarCitasContribuyente(id: String) : void {
+  verificarCitasContribuyente(id: string) : void {
     if (id === "") {
       return
     }

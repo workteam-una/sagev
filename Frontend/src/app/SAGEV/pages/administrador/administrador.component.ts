@@ -131,14 +131,14 @@ export class AdministradorComponent implements OnInit {
     return numAreaDuplicado
   }
 
-  getDepartamentos(): void{
+  getDepartamentos(): void {
     this.service.getDepartamentos()
     .subscribe(dataDep => {
       this.departamentos = dataDep
     })
   }
 
-  getFuncionarios(): void{
+  getFuncionarios(): void {
     this.service.getFuncionarios()
     .subscribe(dataFunc => {
       this.funcionarios = dataFunc
@@ -168,54 +168,54 @@ export class AdministradorComponent implements OnInit {
 
   //Pop up agregar nuevo departamento
 
-  openModalDpto() {
+  openModalDpto() : void {
     this.formModalDpto.showDpto();
    }
 
    showModalDpto = -1;
 
-   showDpto(indexDpto){
+   showDpto(indexDpto) : void {
     this.showModalDpto = indexDpto;
   }
 
-  closeDpto(){
+  closeDpto() : void {
     this.showModalDpto = -1;
   }
 
   //Pop up agregar nuevo funcionario
 
-  openModalAgrFunc() {
+  openModalAgrFunc() : void {
     this.formModalAgrFunc.showAgrFunc();
    }
 
    showModalAgrFunc = -1;
 
-   showAgrFunc(indexAgrFunc){
+   showAgrFunc(indexAgrFunc) : void {
     this.showModalAgrFunc = indexAgrFunc;
   }
 
-  closeAgrFunc(){
+  closeAgrFunc() : void {
     this.showModalAgrFunc = -1;
   }
 
   //Pop up cambiar contrasena a funcionario
 
-  openModal() {
+  openModal() : void {
     this.formModalPswrdFunc.showPswrdFunc();
    }
 
    showModalPswrdFunc = -1;
 
-   showPswrdFunc(indexPswrdFunc){
+   showPswrdFunc(indexPswrdFunc) : void {
     this.showModalPswrdFunc = indexPswrdFunc;
   }
 
-  closePswrdFunc(){
+  closePswrdFunc() : void {
     this.resetForm()
     this.showModalPswrdFunc = -1;
   }
 
-  guardarFuncionario(func: Funcionario): void{
+  guardarFuncionario(func: Funcionario): void {
     // Las validaciones estan mal
     //if(!this.validaciones()){
     //  return
@@ -238,7 +238,7 @@ export class AdministradorComponent implements OnInit {
     this.nuevoDepa.numArea = Number(numArea)
   }
 
-  setIdFunc(id: string): void{
+  setIdFunc(id: string): void {
     this.idfunc = id
   }
 

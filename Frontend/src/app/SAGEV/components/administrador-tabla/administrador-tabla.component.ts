@@ -55,12 +55,12 @@ export class AdministradorTablaComponent implements OnInit {
 
   filtrarFechas() : void {
     
-    let fechaInicioString: String = this.fechaInicio.toString()
+    let fechaInicioString: string = this.fechaInicio.toString()
     console.log(fechaInicioString)
     let fechaInicioFormatoTS: Date = this.stringToDateInicio(fechaInicioString, "yyyy-mm-dd", "-")
     console.log(fechaInicioFormatoTS)
 
-    let fechaFinalString: String = this.fechaFinal.toString()
+    let fechaFinalString: string = this.fechaFinal.toString()
     console.log(fechaInicioString)
     let fechaFinalFormatoTS: Date = this.stringToDateFinal(fechaFinalString, "yyyy-mm-dd", "-")
     console.log(fechaFinalFormatoTS)

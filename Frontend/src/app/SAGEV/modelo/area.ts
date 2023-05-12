@@ -1,5 +1,5 @@
 export class Area{
     numArea?: number;
-    nombre?: String;
-    descripcion?: String;
+    nombre?: string;
+    descripcion?: string;
 }

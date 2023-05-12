@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
   */
   obtenerFuncionario(): void {
     // Guardando el id del textfield de login
-    let id: String = this.modeloFuncionario.idFuncionario
+    let id: string = this.modeloFuncionario.idFuncionario
       this.service.getFuncionarioId(id)
       .subscribe(data => {
         this.modeloFuncionarioCargado = data

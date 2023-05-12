@@ -19,18 +19,21 @@ export class ReservaTablaComponent implements OnInit {
   citaPadre: Cita = new Cita()
 
   // Para mostrar la fecha como un string 
-  fechaCitaString: String = ""
+  fechaCitaString: string = ""
 
   // Para Mostrar la hora formateada en el formulario 
-  horaCitaFormateada: String = ""
+  horaCitaFormateada: string = ""
 
   // Para mostrar el nombre del funcionario en el formulario 
-  nombreFuncionario: String = ""
+  nombreFuncionario: string = ""
 
   seleccionado = false; //Creo que esto esta al revez XD
   status = 'Reserva';
 
   botonEstilo = {'background-color': 'blue', 'value': 'seleccionado'};
+
+  // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
+  fechaHoy: Date = new Date(Date.now())
 
   //Variable que le avisa al componente reserva que ya puede mostrar los botones de anterior y siguiente
   @Output()
@@ -80,7 +83,7 @@ export class ReservaTablaComponent implements OnInit {
     this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
   }
 
-  devuelveDiaSemana(d: Date): String {
+  devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
     let dia = diaSemana[d.getDay()]

@@ -14,9 +14,9 @@ import { Correo } from '../../modelo/correo';
 export class FormularioComponent implements OnInit {
 
   @Input() citaPadre: Cita
-  @Input() fechaCitaString: String
-  @Input() horaCitaFormateada: String
-  @Input() nombreFuncionario: String
+  @Input() fechaCitaString: string
+  @Input() horaCitaFormateada: string
+  @Input() nombreFuncionario: string
 
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
@@ -107,7 +107,7 @@ export class FormularioComponent implements OnInit {
     this.resetForm()
   }
 
-  enviarCorreo(cita: Cita) {
+  enviarCorreo(cita: Cita) : void {
     let correo: Correo = new Correo
 
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
@@ -132,14 +132,14 @@ export class FormularioComponent implements OnInit {
   // <td>{{devuelveDiaSemana(cita.fecha)}}</td>
   // <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
 
-  devuelveDiaSemana(d: Date): String {
+  devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
     let dia = diaSemana[d.getDay()]
     return dia
   }
 
-  devuelveMes(d: Date): String {
+  devuelveMes(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     let mes = meses[d.getMonth()]

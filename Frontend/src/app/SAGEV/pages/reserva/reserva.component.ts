@@ -72,13 +72,13 @@ export class ReservaComponent implements OnInit {
   //   console.log($event.target.value)
   // }
 
-  filtrarDepartamentosPorArea(numAreaParam: String) {
+  filtrarDepartamentosPorArea(numAreaParam: string) : void {
     this.departamentosPorArea = this.departamentos.filter(
       (d) => d.numArea === Number(numAreaParam) 
     )
   }
 
-  filtrarFuncionariosEncargadosPorDepa(numDepartamentoParam: String) {
+  filtrarFuncionariosEncargadosPorDepa(numDepartamentoParam: string) : void {
     this.funcionariosEncargadosPorDepa = this.funcionarios.filter( 
       (f) => f.numDepartamento === Number(numDepartamentoParam) && f.encargado === "S" 
     )
@@ -90,14 +90,14 @@ export class ReservaComponent implements OnInit {
     }
   }
 
-  filtrarDescripcionesPorDepa(numDepaParam: String) {
+  filtrarDescripcionesPorDepa(numDepaParam: string) : void {
     this.descripcionesPorDepa = this.departamentos.filter(
       (d) => d.numDepartamento === Number(numDepaParam) 
     )
   }
 
   // Citas reservadas y las citas de un funcionario son sinónimos
-  getCitasReservadas(id: String): void {
+  getCitasReservadas(id: string): void {
     // Las citas se tienen que limpiar porque si no se van acumulando cada vez que cambio de departamento (se activa este método)
     this.citasReservadas = []
     this.citasDisponibles = []
@@ -141,7 +141,7 @@ export class ReservaComponent implements OnInit {
     Al tener el lunes, lo comparo con el atributo "dia" proveniente de Horario, para encontrar la fecha
     del dia de la cita comienzo a sumar dias partiendo desde el dia lunes
   */
-  obtenerFechaDiaSemana(diaCita: String): Date {
+  obtenerFechaDiaSemana(diaCita: string): Date {
 
     let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
 
@@ -288,10 +288,10 @@ export class ReservaComponent implements OnInit {
       ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible.
     */
     console.log(this.fechaHoy)
-    // this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
+    this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
   }
 
-  devuelveDiaSemana(d: Date): String {
+  devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
     let dia = diaSemana[d.getDay()]
@@ -313,7 +313,7 @@ export class ReservaComponent implements OnInit {
       this.contadorSemanas += contParam
       console.log("Contador en aumentar: " + this.contadorSemanas)
   
-      // Cuando el contador de semanas supera el valor de 4 (citas de hasta 1 mes después) entonces lo decrementa en 1 y se sale del método
+      // Cuando el contador de semanas supera el valor de 1 (citas de hasta 1 semana después) entonces lo decrementa en 1 y se sale del método
       if (this.contadorSemanas > 1) {
         this.contadorSemanas - 1
         return
@@ -351,9 +351,9 @@ export class ReservaComponent implements OnInit {
     }
 
 
-    /*Estos son los 'metodos finales', los cuales se apoyan de todos los
-    metodos anteriores para generar las citas de la semana actual o de las 
-    siguientes semanas del mes
+    /*
+      Estos son los "métodos finales", los cuales se apoyan de todos los métodos anteriores
+      para generar las citas de la semana actual o de las siguientes semanas del mes
     */
     citasSemanaActual(): void {
       this.generaCitasDisponibles()
@@ -408,7 +408,7 @@ export class ReservaComponent implements OnInit {
       }
     }
 
-    mostrarTextoSuplente(suplente: String) {
+    mostrarTextoSuplente(suplente: string) : string {
       if(suplente === "S") {
         return " (funcionario suplente)"
       }
@@ -417,7 +417,7 @@ export class ReservaComponent implements OnInit {
       }
     }
 
-    mostrarAvisoSuplente(suplente: String){
+    mostrarAvisoSuplente(suplente: string) : boolean {
       if(suplente === "S") {
         return true
       }

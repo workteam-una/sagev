@@ -1,13 +1,13 @@
 export class Funcionario {
-    idFuncionario?: String
+    idFuncionario?: string
     numDepartamento?: number
-    correo?: String
-    nombre?: String
-    apellido1?: String
-    apellido2?: String
-    contrasenna?: String
+    correo?: string
+    nombre?: string
+    apellido1?: string
+    apellido2?: string
+    contrasenna?: string
     // ¿Por qué es necesario que el valor de encargado sea 'N'?
-    encargado?: String = "N"
-    suplente?: String
-    administrador?: String = "N"
+    encargado?: string = "N"
+    suplente?: string
+    administrador?: string = "N"
 }

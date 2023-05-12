@@ -46,21 +46,21 @@ export class CitasFuncionarioComponent implements OnInit {
 
     //Pop up modificar funcionario a cargo
 
-    openModalModFunc() {
+    openModalModFunc() : void {
       this.formModalModFunc.showModFunc();
      }
   
      showModalModFunc = -1;
   
-     showModFunc(indexModFunc){
+     showModFunc(indexModFunc) : void {
       this.showModalModFunc = indexModFunc;
     }
   
-    closeModFunc(){
+    closeModFunc() : void {
       this.showModalModFunc = -1;
     }
 
-  filtrarFuncionariosEncargadosPorDepa(numDepartamentoParam: number) {
+  filtrarFuncionariosEncargadosPorDepa(numDepartamentoParam: number) : void {
     console.log("Numero de departamento del funcionario" + numDepartamentoParam)
     // Obtenga todos los funcionarios en el departamento seleccionado del funcionario que inició sesión, sin incluirlo a él
     this.funcionariosEncargadosPorDepa = this.funcionarios.filter( 
@@ -85,7 +85,7 @@ export class CitasFuncionarioComponent implements OnInit {
     recibido por parámetro está como encargado retornó false, lo que significa
     que el suplente que se recibe debe ser el único que está como encargado.
   */
-    buscarOtroFuncionarioSuplenteEncargado(idSuplente: String) {
+    buscarOtroFuncionarioSuplenteEncargado(idSuplente: string) : boolean {
       let suplenteEncargado: boolean = false
       let suplenteDiferenteEncargado: boolean = false
       let resultado: boolean = false
@@ -111,7 +111,7 @@ export class CitasFuncionarioComponent implements OnInit {
     }
 
   // Asigna o desasigna como encargado a un funcionario suplente al desasignar o asignar al funcionario en sesión
-  modificarFuncionarioEncargado(idSuplente: String) {
+  modificarFuncionarioEncargado(idSuplente: string) : void {
     /*
       Validación 1: El funcionario en sesión quiere asignar a un suplente como encargado. No necesita una validación más 
       para ver si existe un suplente que no esté a cargo, porque por como funcionan las cosas se da por hecho que el único 
@@ -164,7 +164,7 @@ export class CitasFuncionarioComponent implements OnInit {
     }
   }
 
-  mostrarEncargado(encargado: String) {
+  mostrarEncargado(encargado: string) : string {
     let texto = '';
     if (encargado === 'S') {
       texto = ' (desasignar)'

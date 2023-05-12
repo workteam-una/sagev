@@ -1,6 +1,6 @@
-.btn-primary span::after {
+/* .btn-primary span::after {
   content:"Reservar";
-}
+} */
   
 .btn-primary:hover {
   color:#fff;
@@ -9,9 +9,9 @@
   
 }
   
-.btn-primary:hover span::after {
+/* .btn-primary:hover span::after {
   content:"Reservar";
-}
+} */
 
 .div-titulo {
   text-align: center;

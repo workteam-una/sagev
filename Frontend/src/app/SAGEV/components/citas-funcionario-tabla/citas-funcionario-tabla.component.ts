@@ -24,6 +24,9 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   // fechaCitaString: string = ''
   // horaCitaFormateada: string = ''
 
+  // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
+  fechaHoy: Date = new Date(Date.now())
+
   constructor(private service: ServiceService, private router: Router) {
 
   }
@@ -68,7 +71,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // this.ngOnInit();
   }//Fin pop up
 
-  getCitasFuncionario(id: String): void {
+  getCitasFuncionario(id: string): void {
     // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda
     this.citasDisponibles = []
     this.citasDisponiblesReagenda = []
@@ -89,7 +92,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       })
   }
 
-  actualizarEstado(estado: String): void {
+  actualizarEstado(estado: string): void {
     if (estado === "completada") {
       this.service.actualizarEstadoCompletada(this.idCitaSeleccionada)
         .subscribe(data => {
@@ -116,11 +119,11 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     }
   }
 
-  cargarCitaReagendada(cita: Cita) {
+  cargarCitaReagendada(cita: Cita) : void {
     this.citaReagendada = cita
   }
 
-  modificarCitaReagendada(fecha: string, razon: string) {
+  modificarCitaReagendada(fecha: string, razon: string) : void {
     // Se setea el id en null para que no utilice el mismo id de la cita que se seleccionó para ser reagendada    
     this.citaReagendada.id = null
     // Limpiando la fecha para evitar problemas al reemplazarla más abajo
@@ -149,7 +152,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // this.resetForm()
   }
 
-  enviarCorreo(cita: Cita) {
+  enviarCorreo(cita: Cita) : void {
     let correo: Correo = new Correo
 
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
@@ -171,14 +174,14 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   }
 
-  devuelveDiaSemana(d: Date): String {
+  devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
     let dia = diaSemana[d.getDay()]
     return dia
   }
 
-  devuelveMes(d: Date): String {
+  devuelveMes(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     let mes = meses[d.getMonth()]
@@ -212,7 +215,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     Al tener el lunes, lo comparo con el atributo "dia" proveniente de Horario, para encontrar la fecha
     del dia de la cita comienzo a sumar dias partiendo desde el dia lunes
   */
-  obtenerFechaDiaSemana(diaCita: String): Date {
+  obtenerFechaDiaSemana(diaCita: string): Date {
 
     let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
 
@@ -352,6 +355,9 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citasDisponibles.forEach((c) => {
       this.citasDisponiblesReagenda.push(c)
     })
+
+    // Removiendo las citas de la semana que son anteriores al día actual
+    this.citasDisponiblesReagenda = this.citasDisponiblesReagenda.filter(c => c.fecha > this.fechaHoy)
   }
 
   // aumentarSemanasCitasDisponibles() : void {

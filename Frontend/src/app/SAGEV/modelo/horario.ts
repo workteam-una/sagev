@@ -1,8 +1,8 @@
 export class Horario {
     id?: number;
     idFuncionario?: number;
-    horaInicio?: String;
-    horaFinal?: String;
-    duracion?: String;
-    dia?: String;
+    horaInicio?: string;
+    horaFinal?: string;
+    duracion?: string;
+    dia?: string;
 }
