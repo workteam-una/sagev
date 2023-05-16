@@ -22,42 +22,42 @@
     </div>
     <div class="col-md-4">
         <label for="validationDefault04" class="form-label">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }" [(ngModel)]="citaPadre.nombreContribuyente"/>
+        <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }"/>
         <div *ngIf="enviar && f['nombre'].errors" class="invalid-feedback">
             <div *ngIf="f['nombre'].errors?.['required']">Nombre en blanco</div>
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationDefault05" class="form-label">Primer Apellido</label>
-        <input type="text" formControlName="apellidouno" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }" [(ngModel)]="citaPadre.apellido1Contribuyente"/>
+        <input type="text" formControlName="apellidouno" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }"/>
         <div *ngIf="enviar && f['apellidouno'].errors" class="invalid-feedback">
             <div *ngIf="f['apellidouno'].errors?.['required']">Primer apellido en blanco</div>
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationDefault06" class="form-label">Segundo Apellido</label>
-        <input type="text" formControlName="apellidodos" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }" [(ngModel)]="citaPadre.apellido2Contribuyente"/>
+        <input type="text" formControlName="apellidodos" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }"/>
         <div *ngIf="enviar && f['apellidodos'].errors" class="invalid-feedback">
             <div *ngIf="f['apellidodos'].errors?.['required']">Segundo apellido en blanco</div>
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationDefault07" class="form-label">Cédula</label>
-        <input type="text" formControlName="cedula" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }" [(ngModel)]="citaPadre.idContribuyente"/>
+        <input type="text" formControlName="cedula" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"/>
         <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
             <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationDefault08" class="form-label">Teléfono</label>
-        <input type="text" formControlName="telefono" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['telefono'].errors }" [(ngModel)]="citaPadre.telefonoContribuyente"/>
+        <input type="text" formControlName="telefono" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['telefono'].errors }"/>
         <div *ngIf="enviar && f['telefono'].errors" class="invalid-feedback">
             <div *ngIf="f['telefono'].errors?.['required']">Teléfono en blanco</div>
         </div>
     </div>
     <div class="col-md-4">
         <label for="validationDefault09" class="form-label">Correo Electrónico</label>
-        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['email'].errors }" [(ngModel)]="citaPadre.correoContribuyente"/>
+        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['email'].errors }"/>
         <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
             <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
         </div>

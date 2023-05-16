@@ -21,8 +21,9 @@ export class FormularioComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
   //Variables necesarias para hacer las validaciones
-  clientForm!: FormGroup
+  public clientForm!: FormGroup
   enviar = false;
+  prueba:string;
 
   ngOnInit(): void {
     //Validaciones del formulario
@@ -72,10 +73,28 @@ export class FormularioComponent implements OnInit {
     }
     else {
       // El formulario esta bien
-      console.log('SIS!! :-)\n\n' + JSON.stringify(this.clientForm.value, null, 6));
+      //console.log('SIS!! :-)\n\n' + JSON.stringify(this.clientForm.value, null, 6));
       return true;
     }
 
+  }
+
+  //Cargar cita con lo escrito en el formulario
+  CargarCita():void{
+    this.prueba = this.clientForm.get('nombre')?.value;
+    console.log("VALOR DE PRUEBA: "+this.prueba);
+    //Nombre cliente
+    this.citaPadre.nombreContribuyente = this.clientForm.get('nombre')?.value;
+    //Apellido 1
+    this.citaPadre.apellido1Contribuyente = this.clientForm.get('apellidouno')?.value;
+    //Apellido 2
+    this.citaPadre.apellido2Contribuyente =  this.clientForm.get('apellidodos')?.value;
+    //ID(cedula)
+    this.citaPadre.idContribuyente =  this.clientForm.get('cedula')?.value;
+    //Telefono
+    this.citaPadre.telefonoContribuyente =  this.clientForm.get('telefono')?.value;
+    //Correo
+    this.citaPadre.correoContribuyente = this.clientForm.get('email')?.value;
   }
 
   //Limpia el formulario
@@ -94,6 +113,8 @@ export class FormularioComponent implements OnInit {
       return
     }
     // console.log(cita)
+    //Carga la cita con los valores ingresados en el formulario
+    this.CargarCita()
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
     this.service.guardarCita(cita)
@@ -102,7 +123,7 @@ export class FormularioComponent implements OnInit {
         // Se debe actualizar la página para evitar sacar dos citas iguales
         window.location.reload()
         //this.router.navigate(["listar"]);
-      })
+      }) 
     this.enviarCorreo(cita)
     this.resetForm()
   }
