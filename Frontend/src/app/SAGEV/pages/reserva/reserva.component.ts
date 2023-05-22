@@ -102,7 +102,8 @@ export class ReservaComponent implements OnInit {
     this.citasReservadas = []
     this.citasDisponibles = []
 
-    this.service.getCitasFuncionario(id)
+    // recuperar citas temporales
+    this.service.getCitasTempFuncionario(id)
     .subscribe(data => {
       this.citasReservadas = data
  

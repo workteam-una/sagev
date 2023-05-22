@@ -25,7 +25,7 @@ export class CancelarComponent implements OnInit {
     if (id === "") {
       return
     }
-    this.service.getCitasContribuyente(id)
+    this.service.getCitasTempContribuyente(id)
     .subscribe(data => {
       this.citasContribuyente = data
 

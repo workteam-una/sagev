@@ -22,6 +22,7 @@ export class AdministradorTablaComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // Se carga el histórico de citas
     this.getCitasReservadas()
 
   }

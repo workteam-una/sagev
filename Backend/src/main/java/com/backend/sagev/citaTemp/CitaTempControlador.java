@@ -1,4 +1,4 @@
-package com.backend.sagev.cita;
+package com.backend.sagev.citaTemp;
 
 import java.util.List;
 
@@ -14,26 +14,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
-@RequestMapping({"/citas"})
-public class CitaControlador {
+@RequestMapping({"/citasTemp"})
+public class CitaTempControlador {
     @Autowired
-    CitaService service;
+    CitaTempService service;
 
     //Devuelve todas las citas
     @GetMapping
-    public List<Cita>listar(){
+    public List<CitaTemp>listar(){
         return service.listar();
     }
 
     //Devuelve las citas reservadas con un funcionario
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
-    public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
+    public List<CitaTemp>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
 
     //Devuelve las citas reservadas con un contribuyente
     @GetMapping(path = {"/contribuyente/{idContribuyente}"})
-    public List<Cita>listarIdContribuyente(@PathVariable("idContribuyente") String idContribuyente){
+    public List<CitaTemp>listarIdContribuyente(@PathVariable("idContribuyente") String idContribuyente){
         return service.listarIdContribuyente(idContribuyente);
     }
 
@@ -46,46 +46,45 @@ public class CitaControlador {
 
     //Guarda la cita en la BD
     @PostMapping
-    public Cita agregar(@RequestBody Cita c){
+    public CitaTemp agregar(@RequestBody CitaTemp c){
         return service.save(c);
     }
 
     //Es un busca retorna por el id
     @GetMapping(path = {"/{id}"})
-    public Cita getById(@PathVariable("id") int id){
+    public CitaTemp getById(@PathVariable("id") int id){
         return service.listarId(id);
     }
 
     //Marca la cita como completada
     @PutMapping(path = {"/completada/{id}"})
-    public Cita completada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
+    public CitaTemp completada(@PathVariable("id") int id){
+        CitaTemp cita = service.listarId(id);
         cita.setEstado("Completada");
         return service.edit(cita);
     }
 
     //Marca la cita como ausente
     @PutMapping(path = {"/ausente/{id}"})
-    public Cita ausente(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
+    public CitaTemp ausente(@PathVariable("id") int id){
+        CitaTemp cita = service.listarId(id);
         cita.setEstado("Ausente");
         return service.edit(cita);
     }
 
     //Marca la cita como cancelada
     @PutMapping(path = {"/cancelada/{id}"})
-    public Cita cancelada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
+    public CitaTemp cancelada(@PathVariable("id") int id){
+        CitaTemp cita = service.listarId(id);
         cita.setEstado("Cancelada");
         return service.edit(cita);
     }
 
     //Marca la cita como reagendada
     @PutMapping(path = {"/reagendada/{id}"})
-    public Cita reagendada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
+    public CitaTemp reagendada(@PathVariable("id") int id){
+        CitaTemp cita = service.listarId(id);
         cita.setEstado("Reagendada");
         return service.edit(cita);
     }
-
 }

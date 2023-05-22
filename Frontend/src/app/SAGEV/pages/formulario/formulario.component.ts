@@ -108,22 +108,28 @@ export class FormularioComponent implements OnInit {
 
 
   guardarCita(cita: Cita): void {
-    //Si las validaciones estan mal...
+    // si las validaciones estan mal...
     if (!this.validaciones()) {
       return
     }
     // console.log(cita)
-    //Carga la cita con los valores ingresados en el formulario
+    // carga la cita con los valores ingresados en el formulario
     this.CargarCita()
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     cita.fecha.setHours(cita.fecha.getHours() - 6)
+    // guardar en la tabla histórica de citas 
     this.service.guardarCita(cita)
       .subscribe(data => {
-        alert("Se agregó la cita con éxito")
-        // Se debe actualizar la página para evitar sacar dos citas iguales
-        window.location.reload()
-        //this.router.navigate(["listar"]);
-      }) 
+
+    })
+    // Guardar cita en la tabla temporal de citas
+    this.service.guardarCitaTemp(cita)
+    .subscribe(data => {
+      alert("Se agregó la cita con éxito")
+      // Se debe actualizar la página para evitar sacar dos citas iguales
+      window.location.reload()
+      //this.router.navigate(["listar"]);
+    })
     this.enviarCorreo(cita)
     this.resetForm()
   }

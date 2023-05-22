@@ -32,7 +32,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCitasFuncionario(this.modeloFuncionario.idFuncionario)
+    this.getCitasTempFuncionario(this.modeloFuncionario.idFuncionario)
   }
 
   //Mostrar el pop up
@@ -71,13 +71,13 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // this.ngOnInit();
   }//Fin pop up
 
-  getCitasFuncionario(id: string): void {
+  getCitasTempFuncionario(id: string): void {
     // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda
     this.citasDisponibles = []
     this.citasDisponiblesReagenda = []
     // this.citasFuncionario = []
 
-    this.service.getCitasFuncionario(id)
+    this.service.getCitasTempFuncionario(id)
       .subscribe(data => {
         this.citasFuncionario = data
 
@@ -94,7 +94,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   actualizarEstado(estado: string): void {
     if (estado === "completada") {
-      this.service.actualizarEstadoCompletada(this.idCitaSeleccionada)
+      this.service.actualizarEstadoCompletadaTemp(this.idCitaSeleccionada)
         .subscribe(data => {
           alert("Estado de cita actualizado a completado con exito!")
           // Se vuelven a cargar todas las citas para que se actualice su estado en la tabla de citas,
@@ -104,7 +104,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
         })
     }
     if (estado === "ausente") {
-      this.service.actualizarEstadoAusente(this.idCitaSeleccionada)
+      this.service.actualizarEstadoAusenteTemp(this.idCitaSeleccionada)
         .subscribe(data => {
           alert("Estado de cita actualizado a ausente con exito!")
           this.ngOnInit()
@@ -112,7 +112,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
         })
     }
     if (estado === "reagendada") {
-      this.service.actualizarEstadoReagendada(this.idCitaSeleccionada)
+      this.service.actualizarEstadoReagendadaTemp(this.idCitaSeleccionada)
         .subscribe(data => {
           this.ngOnInit()
         })
@@ -138,9 +138,10 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citaReagendada.fecha.setMilliseconds(this.citaReagendada.fecha.getMilliseconds() + 10)
   }
 
-  guardarCita(): void {
+  // Guardar las citas reagendadas en tabla temporal de citas
+  guardarCitaTemp(): void {
     // console.log( this.citaReagendada.fecha)
-    this.service.guardarCita(this.citaReagendada)
+    this.service.guardarCitaTemp(this.citaReagendada)
       .subscribe(data => {
         alert("Se reagendó la cita con éxito")
         // Se debe actualizar la página para evitar sacar dos citas iguales
@@ -150,6 +151,14 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       })
     this.enviarCorreo(this.citaReagendada)
     // this.resetForm()
+  }
+
+  // Guardar las citas reagendadas en tabla histórica de citas
+  guardarCita(): void {
+    this.service.guardarCita(this.citaReagendada)
+      .subscribe(data => {
+        
+      })
   }
 
   enviarCorreo(cita: Cita) : void {

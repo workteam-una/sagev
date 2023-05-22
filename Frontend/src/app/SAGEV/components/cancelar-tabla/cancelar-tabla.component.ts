@@ -24,12 +24,12 @@ export class CancelarTablaComponent implements OnInit {
   constructor(private service: ServiceService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getCitasReservadasContribuyente() 
+    this.getCitasTempReservadasContribuyente() 
     
   }
 
-  getCitasReservadasContribuyente() : void {
-    this.service.getCitasContribuyente(this.idContribuyente)
+  getCitasTempReservadasContribuyente() : void {
+    this.service.getCitasTempContribuyente(this.idContribuyente)
     .subscribe(data => {
       this.citasContribuyente = data
       
@@ -52,7 +52,7 @@ export class CancelarTablaComponent implements OnInit {
   }
 
   marcarEstadoCancelada() : void {
-    this.service.actualizarEstadoCancelada(this.idCitaSeleccionada)
+    this.service.actualizarEstadoCanceladaTemp(this.idCitaSeleccionada)
     .subscribe(data => {
       alert("Estado de cita actualizado a cancelada con exito!")
       this.ngOnInit()

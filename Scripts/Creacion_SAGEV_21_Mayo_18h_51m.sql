@@ -4,6 +4,7 @@
 
 ----Dropear las tablas
 --drop table Cita;
+--drop table CitaTemp;
 --drop table Horario;
 --drop table Funcionario;
 --drop table Departamento;
@@ -11,6 +12,7 @@
 
 ----Dropear las secuencias
 --drop sequence sec_Id_cita;
+--drop sequence sec_Id_cita_temp;
 --drop sequence sec_Id_Horario;
 
 --Creación de las tablas
@@ -72,6 +74,21 @@ create table Cita
   RazonReagenda varchar(255) null
 );
 
+create table CitaTemp
+(
+  Id int not null,
+  IdFuncionario varchar(30) not null,
+  IdContribuyente varchar(30) not null,
+  NombreContribuyente varchar(50) not null,
+  Apellido1Contribuyente varchar(50) not null,
+  Apellido2Contribuyente varchar(50) not null,
+  CorreoContribuyente varchar(100) not null,
+  telefonoContribuyente varchar(30) not null,
+  Fecha datetime not null,
+  Detalle varchar(255) null,
+  Estado varchar(50) not null,
+  RazonReagenda varchar(255) null
+);
 
 --Secuencias 
 create sequence sec_Id_cita as int
@@ -80,6 +97,10 @@ create sequence sec_Id_cita as int
 --Se genera una secuencia para evitar tener
 --que asignar los números de forma manual o 
 --generados con un método de asignación al azar
+
+create sequence sec_Id_cita_temp as int
+	start with 1000
+	increment by 1;
 
 create sequence sec_Id_Horario as int
 	start with 1
@@ -90,6 +111,7 @@ alter table Area add primary key (NumArea);
 alter table Departamento add primary key (NumDepartamento);
 alter table Funcionario add primary key (IdFuncionario);
 alter table Cita add primary key (Id);
+alter table CitaTemp add primary key (Id);
 alter table Horario add primary key (Id);
 
 --FKs
@@ -104,6 +126,10 @@ foreign key (NumDepartamento) references Departamento(NumDepartamento);
 
 --cita_fk_funcionario
 alter table Cita add constraint cita_fk_funcionario
+foreign key (IdFuncionario) references Funcionario(IdFuncionario);
+
+--cita_temp_fk_funcionario
+alter table CitaTemp add constraint cita_temp_fk_funcionario
 foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 
 --Horario_fk_funcionario
@@ -126,6 +152,11 @@ alter table Funcionario add constraint funcionario_ck_Administrador check
 
 --cita_ck_Estado
 alter table Cita add constraint cita_ck_Estado check
+(Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada', 'Reagendada'));
+go
+
+--cita_temp_ck_Estado
+alter table CitaTemp add constraint cita_temp_ck_Estado check
 (Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada', 'Reagendada'));
 go
 
@@ -301,4 +332,45 @@ as
 begin
 	delete from Cita where @PId = Id;
 end;
+go
+
+--Tabla CitaTemp
+ 
+--Procedimiento de insertar en tabla CitaTemp
+create or alter procedure usp_insertar_cita_temp @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
+@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100),
+@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
+@PEstado varchar(50), @PRazonReagenda varchar(255)
+as
+begin
+	insert into CitaTemp (Id, IdFuncionario, IdContribuyente, NombreContribuyente, Apellido1Contribuyente, Apellido2Contribuyente, CorreoContribuyente, 
+	telefonoContribuyente, Fecha, Detalle, Estado, RazonReagenda) values (next value for sec_Id_cita_temp, @PIdFuncionario, 
+	@PIdContribuyente,@PNombreContribuyente, @PApellido1Contribuyente, @PApellido2Contribuyente, 
+	@PCorreoContribuyente, @PtelefonoContribuyente, @PFecha, @PDetalle, @PEstado, @PRazonReagenda);
+end;
+go
+
+--Procedimiento de actualizar en tabla CitaTemp
+create or alter procedure usp_actualizar_cita_temp @PId int, @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
+@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100), 
+@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
+@PEstado varchar(50), @PRazonReagenda varchar(255)
+as
+begin
+	update CitaTemp
+		set IdFuncionario = @PIdFuncionario, IdContribuyente = @PIdContribuyente, NombreContribuyente = @PNombreContribuyente, 
+		Apellido1Contribuyente = @PApellido1Contribuyente, Apellido2Contribuyente = @PApellido2Contribuyente, 
+		CorreoContribuyente= @PCorreoContribuyente, telefonoContribuyente = @PtelefonoContribuyente,
+		Fecha = @PFecha, Detalle = @PDetalle, Estado = @PEstado, RazonReagenda = @PRazonReagenda
+	where Id = @PId;
+end;
+go
+
+--Procedimiento de borrar en tabla 
+create or alter procedure usp_eliminar_cita_temp @PId int
+as
+begin
+	delete from CitaTemp where @PId = Id;
+end;
+
 go
