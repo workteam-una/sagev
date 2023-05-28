@@ -2,6 +2,8 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Router } from '@angular/router';
 import { Cita } from '../../modelo/cita';
+import * as  Notiflix from 'notiflix';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-administrador-tabla',
@@ -71,7 +73,13 @@ export class AdministradorTablaComponent implements OnInit {
       fechaInicioFormatoTS <= c.fecha && fechaFinalFormatoTS >= c.fecha)
     }
     else {
-      alert("El rango de fechas no es correcto")
+      Swal.fire({
+        title: 'Error al filtrar las citas',
+        text: '¡Debe seleccionar un rango de fechas válido!',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       return
     }
   }

@@ -1,15 +1,15 @@
-.divBotones{
+.div-botones{
     display: flex;
-    margin: 0 auto;
     margin-top: 2%;
     padding: 1%;
-    width: 90%;
-    border-radius: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
 }
 
-.btnOpciones{
+/* .btn-opciones{
     margin-left: 4%;
-}
+} */
 
 /*Inicio del CSS de los pop up*/
 .uc-modal {
@@ -69,10 +69,10 @@
     width: 40%;
 }
 
-.selectInfo{
-    width: 40%;
-    margin-bottom: 2%;
+.select-info{
+    width: 73.5%;
 }
+
 .titulo{
     margin: 1.5%;
     text-align: center;
@@ -127,4 +127,8 @@
     color:#fff;
     background-color:#6ca34f !important;
     border-color:#4cae4c !important;
+}
+
+.div-mb {
+    margin-bottom: 1%;
 }

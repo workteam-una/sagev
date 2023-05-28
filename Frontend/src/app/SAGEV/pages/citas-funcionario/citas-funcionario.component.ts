@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-citas-funcionario',
@@ -126,7 +127,13 @@ export class CitasFuncionarioComponent implements OnInit {
       // Se actualiza el estado del funcionario suplente como 'S', es decir, queda como encargado
       this.service.actualizarEncargadoSi(idSuplente)
       .subscribe(data => {
-        alert("¡Funcionario suplente asignado como encargado con éxito!")
+        Swal.fire({
+          title: '¡Funcionario suplente asignado como encargado con éxito!',
+          text: 'Ahora las citas serán agendadas al suplente',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
         // Se actualiza el estado del funcionario en sesión como 'N', es decir, ya NO queda como encargado
         this.service.actualizarEncargadoNo(this.modeloFuncionario.idFuncionario)
         .subscribe(data => {
@@ -143,7 +150,13 @@ export class CitasFuncionarioComponent implements OnInit {
       suplentes, por lo que quedaría más de un funcionario como encargado.
     */ 
     if (this.buscarOtroFuncionarioSuplenteEncargado(idSuplente) === true) {
-      alert("¡Ya existe un funcionario suplente asignado como encargado!")
+      Swal.fire({
+        title: 'Error al modificar funcionario encargado',
+        text: 'Ya existe un funcionario suplente asignado como encargado del departamento',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       return
     }
     /* 
@@ -157,7 +170,13 @@ export class CitasFuncionarioComponent implements OnInit {
       // Se actualiza el estado del funcionario en sesión como 'S', es decir, queda como encargado
       this.service.actualizarEncargadoSi(this.modeloFuncionario.idFuncionario)
       .subscribe(data => {
-        alert("¡Usted ha sido asignado como encargado con éxito!")
+        Swal.fire({
+          title: '¡Usted ha sido asignado como encargado con éxito!',
+          text: 'Ahora las citas le serán agendadas a usted',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
         // Se actualiza el estado del funcionario suplente como 'N', es decir, ya NO queda como encargado
         this.service.actualizarEncargadoNo(idSuplente)
         .subscribe(data => {

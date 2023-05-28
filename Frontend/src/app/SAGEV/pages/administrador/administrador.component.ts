@@ -5,6 +5,7 @@ import { Component, ContentChild, ContentChildren, ElementRef, Input, OnInit, Vi
 import { Funcionario } from '../../modelo/funcionario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Area } from '../../modelo/area';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-administrador',
@@ -18,18 +19,21 @@ export class AdministradorComponent implements OnInit {
   formModalAgrFunc: any
   formModalPswrdFunc: any
 
+  showModalArea: number = -1;
+  showModalDpto = -1;
+  showModalAgrFunc = -1;
+  showModalPswrdFunc = -1;
 
-
-  idfunc: string
+  idFunc: string
   contra1: string
   contra2: string //Esto se puede hacer mejor
-  funcionariopojo: Funcionario = new Funcionario() //Este es un modelo que me sirve para poder hacer put si problemas
+  funcionarioPojo: Funcionario = new Funcionario() //Este es un modelo que me sirve para poder hacer put si problemas
 
   funcionarios: Funcionario[] = []
 
   areas: Area[] = []
   departamentos: Departamento[] = []
-  nuevoFuncionario: Funcionario = new Funcionario
+  nuevoFuncionario: Funcionario = new Funcionario()
   nuevaArea: Area = new Area
   nuevoDepa: Departamento = new Departamento
 
@@ -63,11 +67,13 @@ export class AdministradorComponent implements OnInit {
     //Validaciones del formulario nuevo funcionario
     this.funcionarioForm = this.formBuilder.group({
       nombre: ['', Validators.required],
-      apellidouno: ['', Validators.required,],
+      apellidouno: ['', Validators.required],
       apellidodos: ['', Validators.required],
       cedula: ['', [Validators.required, Validators.minLength(9)]],
       email: ['', [Validators.required, Validators.email]],
-      clave: ['', Validators.required]
+      clave: ['', Validators.required],
+      departamento: ['', Validators.required],
+      suplente: ['', Validators.required]
     });
     //Validaciones del formulario nueva area
     this.areaForm = this.formBuilder.group({
@@ -83,11 +89,10 @@ export class AdministradorComponent implements OnInit {
     })
     //Validaciones del formulario crear nueva contraseña
     this.cambiarcontraForm = this.formBuilder.group({
+      idfuncionario: ['', Validators.required],
       contrauno: ['', Validators.required],
       contrados: ['', Validators.required]
     })
-
-
   }
 
   //Pop up agregar nueva area
@@ -110,14 +115,26 @@ export class AdministradorComponent implements OnInit {
     this.cargarNuevaArea()
     console.log(this.nuevaArea)
     if (this.validarNumeroArea(a.numArea)) {
-      alert("El número de área digitado ya está en uso")
+      Swal.fire({
+        title: 'Error al agregar nueva área',
+        text: 'El número de área digitado ya está en uso',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       return
     }
     this.service.guardarArea(a)
     .subscribe(data => {
-      alert("Se agregó el área con éxito")
+      Swal.fire({
+        title: '¡Área agregada con éxito!',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
     })
     this.resetFormNAF()
+    this.closeArea()
   }
 
   guardarDepartamento(d: Departamento) : void {
@@ -126,36 +143,74 @@ export class AdministradorComponent implements OnInit {
     }
     this.cargarNuevoDepartamento()
     if (this.validarNumeroDepartamento(d.numDepartamento)) {
-      alert("El número de departamento digitado ya está en uso")
+      Swal.fire({
+        title: 'Error al agregar nueva departamento',
+        text: 'El número de departamento digitado ya está en uso',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       return
     }
     this.service.guardarDepartamentos(d)
     .subscribe(data => {
-      alert("Se agregó el departamento con éxito")
+      Swal.fire({
+        title: '¡Departamento agregado con éxito!',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
     })
     this.resetFormNDF()
+    this.closeDpto()
   }
 
-  guardarFuncionario(func: Funcionario): void {
-    if(!this.validacionesNFF()){
+  guardarFuncionario(): void {
+    if(!this.validacionesNFF()) {
      return
     }
   this.cargarNuevoFuncionario()
-  this.service.guardarFuncionario(func)
+  console.log(this.nuevoFuncionario)
+  // if (this.nuevoFuncionario.numDepartamento === 0) {
+  //   Swal.fire({
+  //     title: 'Error al agregar funcionario',
+  //     text: '¡Ingrese un número de departamento válido!',
+  //     icon: 'error',
+  //     confirmButtonText: 'Aceptar',
+  //     confirmButtonColor: '#3085d6',
+  //   })
+  //   return
+  // }
+  // if (this.nuevoFuncionario.suplente === "") {
+  //   Swal.fire({
+  //     title: 'Error al agregar funcionario',
+  //     text: '¡Debe seleccionar si el funcionario va a ser suplente o no!',
+  //     icon: 'error',
+  //     confirmButtonText: 'Aceptar',
+  //     confirmButtonColor: '#3085d6',
+  //   })
+  //   return
+  // }
+  this.service.guardarFuncionario(this.nuevoFuncionario)
   .subscribe(data =>{
-    alert("Se agregó el funcionario con éxito")
-    // Se debe actualizar la página para evitar sacar dos citas iguales
-    //window.location.reload()
-    //this.router.navigate(["listar"]);
+    Swal.fire({
+      title: '¡Funcionario agregado con éxito!',
+      icon: 'success',
+      confirmButtonText: 'Aceptar',
+      confirmButtonColor: '#3085d6',
+    }).then(() => {
+      window.location.reload()
+    })
   })
   this.resetFormNFF()
+  this.closeAgrFunc()
 }
 
   validarNumeroArea(numArea: number) : boolean {
     console.log(numArea)
     let numAreaDuplicado = false
     this.areas.forEach(a => {
-      console.log(a.numArea)
+      // console.log(a.numArea)
       // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
       if(a.numArea === Number(numArea)) {
         numAreaDuplicado = true
@@ -181,7 +236,7 @@ export class AdministradorComponent implements OnInit {
   validarNumeroDepartamento(numDepa: number) : boolean {
     let numDepaDuplicado = false
     this.departamentos.forEach(d => {
-            // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
+      // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
       if(d.numDepartamento === Number(numDepa)) {
         numDepaDuplicado = true
       }
@@ -189,7 +244,38 @@ export class AdministradorComponent implements OnInit {
     return numDepaDuplicado
   }
 
-   showModalArea: number = -1;
+  cambiarContra(): void{
+    if(!this.validacionesCCF()){
+      return
+    }
+    this.cargarContras()
+    if(this.contra1 != this.contra2){
+      Swal.fire({
+        title: 'Error al modificar la contraseña',
+        text: 'Las contraseñas ingresadas no coinciden',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+      return
+    }
+    else{
+      // Cargando al funcionario con el id y contraseña ya validadas para permitir el cambio
+      this.cargarFuncionarioContraNueva()
+      this.service.cambiarContraFunc(this.funcionarioPojo)
+      .subscribe(data => {
+        Swal.fire({
+          title: '¡Contraseña modificada con éxito!',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      })
+      this.resetFormCCF()
+      this.closePswrdFunc()
+    }
+
+  }
 
    showArea(indexArea) : void {
     this.showModalArea = indexArea;
@@ -205,8 +291,6 @@ export class AdministradorComponent implements OnInit {
     this.formModalDpto.showDpto();
    }
 
-   showModalDpto = -1;
-
    showDpto(indexDpto) : void {
     this.showModalDpto = indexDpto;
   }
@@ -216,12 +300,9 @@ export class AdministradorComponent implements OnInit {
   }
 
   //Pop up agregar nuevo funcionario
-
   openModalAgrFunc() : void {
     this.formModalAgrFunc.showAgrFunc();
    }
-
-   showModalAgrFunc = -1;
 
    showAgrFunc(indexAgrFunc) : void {
     this.showModalAgrFunc = indexAgrFunc;
@@ -236,10 +317,8 @@ export class AdministradorComponent implements OnInit {
   openModal() : void {
     this.formModalPswrdFunc.showPswrdFunc();
    }
-
-   showModalPswrdFunc = -1;
-
-   showPswrdFunc(indexPswrdFunc) : void {
+   
+  showPswrdFunc(indexPswrdFunc) : void {
     this.showModalPswrdFunc = indexPswrdFunc;
   }
 
@@ -256,32 +335,9 @@ export class AdministradorComponent implements OnInit {
     this.nuevoDepa.numArea = Number(numArea)
   }
 
-  setIdFunc(id: string): void {
-    this.idfunc = id
-  }
-
-
-  cambiarContra(): void{
-    if(!this.validacionesCCF()){
-      return
-    }
-    this. cargarContras()
-    if(this.contra1 != this.contra2){
-      alert("Las contraseñas son diferentes")
-      return
-    }
-    else{
-      //Empaquetanod el funcionario modelo para enviarlo por put
-      this.funcionariopojo.idFuncionario = this.idfunc
-      this.funcionariopojo.contrasenna = this.contra1
-      this.service.cambiarContraFunc(this.funcionariopojo)
-      .subscribe(data => {
-        alert("Se cambio la contraseña con exito!")
-      })
-      this.closePswrdFunc()
-    }
-
-  }
+  // setIdFunc(id: string): void {
+  //   this.idfunc = id
+  // }
 
   // // Cambia el estado del botón a True
   // confirmarBusquedaFiltros() : void {
@@ -316,18 +372,22 @@ export class AdministradorComponent implements OnInit {
   }
 
   cargarNuevoFuncionario() : void {
-    //Nombre
+    // Departamento
+    this.nuevoFuncionario.numDepartamento = this.funcionarioForm.get('departamento')?.value;
+    // Nombre
     this.nuevoFuncionario.nombre = this.funcionarioForm.get('nombre')?.value;
-      //Apellido 1
-      this.nuevoFuncionario.apellido1 = this.funcionarioForm.get('apellidouno')?.value;
-      //Apellido 2
-      this.nuevoFuncionario.apellido2 =  this.funcionarioForm.get('apellidodos')?.value;
-      //ID(cedula)
-      this.nuevoFuncionario.idFuncionario =  this.funcionarioForm.get('cedula')?.value;
-      //Email
-      this.nuevoFuncionario.correo =  this.funcionarioForm.get('email')?.value;
-      //Clave
-      this.nuevoFuncionario.contrasenna = this.funcionarioForm.get('clave')?.value;
+    // Apellido 1
+    this.nuevoFuncionario.apellido1 = this.funcionarioForm.get('apellidouno')?.value;
+    // Apellido 2
+    this.nuevoFuncionario.apellido2 =  this.funcionarioForm.get('apellidodos')?.value;
+    // ID(cedula)
+    this.nuevoFuncionario.idFuncionario =  this.funcionarioForm.get('cedula')?.value;
+    // Email
+    this.nuevoFuncionario.correo =  this.funcionarioForm.get('email')?.value;
+    // Clave
+    this.nuevoFuncionario.contrasenna = this.funcionarioForm.get('clave')?.value;
+    // Suplente
+    this.nuevoFuncionario.suplente = this.funcionarioForm.get('suplente')?.value;
   }
 
   // un get del formulario NAF
@@ -423,11 +483,19 @@ export class AdministradorComponent implements OnInit {
   }
 
   //Esto es inseguro
-  cargarContras(){
-    //Contra1
+  cargarContras() : void {
+    // Funcionario
+    this.idFunc = this.cambiarcontraForm.get('idfuncionario')?.value;
+    // Contraseña 1
     this.contra1 = this.cambiarcontraForm.get('contrauno')?.value;
-    //Contra2
+    // Contraseña 2
     this.contra2 = this.cambiarcontraForm.get('contrados')?.value;
+  }
+
+  // Carga al funcionario que se va a enviar
+  cargarFuncionarioContraNueva() : void {
+    this.funcionarioPojo.idFuncionario = this.idFunc
+    this.funcionarioPojo.contrasenna = this.contra1
   }
 
 }

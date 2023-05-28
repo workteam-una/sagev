@@ -68,7 +68,8 @@
 .cbEstado{
     margin-top: 5%;
     border-radius: 6px;
-    font-size: 120%;
+    /* font-size: 120%; */
+    width: 70%;
 }
 
 /* Fin de CSS para pop up */

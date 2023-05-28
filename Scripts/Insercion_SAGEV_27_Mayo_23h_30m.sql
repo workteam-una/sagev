@@ -139,3 +139,5 @@ select * from Departamento;
 select * from Funcionario;
 select * from Horario;
 select * from Cita;
+--Listar los triggers de la base de datos
+select name, create_date, is_disabled, is_instead_of_trigger from sys.triggers where type = 'TR';

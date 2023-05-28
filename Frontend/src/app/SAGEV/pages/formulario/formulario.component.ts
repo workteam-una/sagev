@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
 import { Correo } from '../../modelo/correo';
+import * as  Notiflix from 'notiflix';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-formulario',
@@ -35,8 +37,6 @@ export class FormularioComponent implements OnInit {
       telefono: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
     });
-
-    console.log("ShowModal en el init: " + this.showModal)
   }
 
   //Mostrar el pop up
@@ -60,8 +60,7 @@ export class FormularioComponent implements OnInit {
   close(): void {
     this.showModal = -1;
     this.shModal.emit(this.showModal);
-    console.log("ShowModal en el close: " + this.showModal)
-  }//Fin pop up
+  } //Fin pop up
 
 
   //Ejecuta las validaciones
@@ -100,7 +99,7 @@ export class FormularioComponent implements OnInit {
   //Limpia el formulario
   resetForm(): void {
     this.enviar = false;
-    this.clientForm.reset();
+    // this.clientForm.reset();
   }
 
   // un get del formulario
@@ -108,11 +107,14 @@ export class FormularioComponent implements OnInit {
 
 
   guardarCita(cita: Cita): void {
-    // si las validaciones estan mal...
+    // si las validaciones estan mal salga del método
     if (!this.validaciones()) {
       return
     }
-    // console.log(cita)
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
     // carga la cita con los valores ingresados en el formulario
     this.CargarCita()
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
@@ -125,13 +127,19 @@ export class FormularioComponent implements OnInit {
     // Guardar cita en la tabla temporal de citas
     this.service.guardarCitaTemp(cita)
     .subscribe(data => {
-      alert("Se agregó la cita con éxito")
-      // Se debe actualizar la página para evitar sacar dos citas iguales
-      window.location.reload()
-      //this.router.navigate(["listar"]);
+      Swal.fire({
+        title: '¡Cita reservada con éxito!',
+        text: 'Los detalles de la reserva serán enviados al correo electrónico ingresado',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6'
+      }).then(() => {
+        window.location.reload()
+      })
     })
     this.enviarCorreo(cita)
     this.resetForm()
+    Notiflix.Loading.remove();
   }
 
   enviarCorreo(cita: Cita) : void {
@@ -151,7 +159,7 @@ export class FormularioComponent implements OnInit {
 
     this.service.enviaCorreo(correo)
       .subscribe(data => {
-        alert("Se envió el correo con exito")
+        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
       })
 
   }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Funcionario } from '../../modelo/funcionario';
+import * as  Notiflix from 'notiflix';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -38,8 +40,13 @@ export class LoginComponent implements OnInit {
           this.validarCredenciales();
         }
         catch (error) {
-          //Se debe sustituir por un pop-up
-          alert("La cédula o contraseña son incorrectas")
+          Swal.fire({
+            title: 'Error al iniciar sesión',
+            text: 'La cédula o contraseña son incorrectas',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6'
+          })
         }
       });
   }
@@ -51,20 +58,36 @@ export class LoginComponent implements OnInit {
     if(this.modeloFuncionarioCargado === null){idMal = true};
     if(this.modeloFuncionarioCargado.contrasenna != this.modeloFuncionario.contrasenna){passwordMal = true};
     if(idMal || passwordMal) {
-      //Se debe sustituir por un pop-up
-      alert("La cédula o contraseña son incorrectas")
+      Swal.fire({
+            title: 'Error al iniciar sesión',
+            text: 'La cédula o contraseña son incorrectas',
+            icon: 'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6'
+          })
       return;
     }
 
     if(this.modeloFuncionarioCargado.administrador === 'S'){
+      Notiflix.Loading.dots({
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        svgSize: '100px',
+      })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
       // Forward a la vista del funcionario
       this.router.navigate(["administrador"])
-  }else{
+      Notiflix.Loading.remove()
+    } 
+    else {
+      Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+      })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
       // Forward a la vista del funcionario
       this.router.navigate(["citasFunc"])
-  }
+      Notiflix.Loading.remove()
+    }
   }
 
   // Guardar el objeto funcionario en el local storage del navegador

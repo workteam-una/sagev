@@ -15,6 +15,9 @@
 --drop sequence sec_Id_cita_temp;
 --drop sequence sec_Id_Horario;
 
+----Dropear el trigger
+--drop trigger if exists tr_eliminar_citas_antiguas;
+
 --Creación de las tablas
 
 go
@@ -142,22 +145,38 @@ foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 alter table Funcionario add constraint funcionario_ck_Encargado check
 (Encargado in ('S','N'));
 
+
 --funcionario_ck_Suplente
 alter table Funcionario add constraint funcionario_ck_Suplente check
 (Encargado in ('S','N'));
+
 
 --funcionario_ck_Administrador
 alter table Funcionario add constraint funcionario_ck_Administrador check
 (Encargado in ('S','N'));
 
+
 --cita_ck_Estado
 alter table Cita add constraint cita_ck_Estado check
 (Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada', 'Reagendada'));
-go
+
 
 --cita_temp_ck_Estado
 alter table CitaTemp add constraint cita_temp_ck_Estado check
 (Estado in ('Pendiente', 'Completada', 'Ausente', 'Cancelada', 'Reagendada'));
+go
+
+--Triggers
+
+-- Elimina las citas temporales almacenadas con 28 días de antigüedad
+create trigger tr_eliminar_citas_antiguas
+on CitaTemp
+for delete, insert, update
+as
+begin
+  delete from CitaTemp
+  where Fecha < dateadd(day, -28, getdate())
+end
 go
 
 --Procedimientos básicos

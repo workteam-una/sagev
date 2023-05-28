@@ -2,6 +2,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Cita } from '../../modelo/cita';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-cancelar-tabla',
@@ -54,7 +55,12 @@ export class CancelarTablaComponent implements OnInit {
   marcarEstadoCancelada() : void {
     this.service.actualizarEstadoCanceladaTemp(this.idCitaSeleccionada)
     .subscribe(data => {
-      alert("Estado de cita actualizado a cancelada con exito!")
+      Swal.fire({
+        title: '¡Cita cancelada con éxito!',
+        icon: 'success',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       this.ngOnInit()
       this.close()
     })

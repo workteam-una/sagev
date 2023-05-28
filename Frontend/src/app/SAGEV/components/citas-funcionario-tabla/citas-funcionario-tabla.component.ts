@@ -4,6 +4,8 @@ import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
 import { Funcionario } from '../../modelo/funcionario';
 import { Correo } from '../../modelo/correo';
+import * as  Notiflix from 'notiflix';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-citas-funcionario-tabla',
@@ -96,9 +98,13 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     if (estado === "completada") {
       this.service.actualizarEstadoCompletadaTemp(this.idCitaSeleccionada)
         .subscribe(data => {
-          alert("Estado de cita actualizado a completado con exito!")
-          // Se vuelven a cargar todas las citas para que se actualice su estado en la tabla de citas,
-          // del funcionario, lo malo de esto es que si son muchas citas puede llegar a ser mucha carga.
+          Swal.fire({
+            title: '¡Cambio de estado exitoso!',
+            text: 'La cita ha cambiado su estado a "completada"',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
           this.ngOnInit()
           this.closeEstado()
         })
@@ -106,7 +112,13 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     if (estado === "ausente") {
       this.service.actualizarEstadoAusenteTemp(this.idCitaSeleccionada)
         .subscribe(data => {
-          alert("Estado de cita actualizado a ausente con exito!")
+          Swal.fire({
+            title: '¡Cambio de estado exitoso!',
+            text: 'La cita ha cambiado su estado a "ausente"',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
           this.ngOnInit()
           this.closeEstado()
         })
@@ -114,6 +126,13 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     if (estado === "reagendada") {
       this.service.actualizarEstadoReagendadaTemp(this.idCitaSeleccionada)
         .subscribe(data => {
+          Swal.fire({
+            title: '¡Cita reagendada con éxito!',
+            text: 'Los detalles de la reagenda serán enviados al contribuyente vía correo electrónico',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
           this.ngOnInit()
         })
     }
@@ -124,6 +143,17 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   }
 
   modificarCitaReagendada(fecha: string, razon: string) : void {
+    // Si se selecciona la opción por defecto con valor nulo entonces notifica al contribuyente y se sale del método
+    if (fecha === '') {
+      Swal.fire({
+        title: 'Error al reagendar la cita',
+        text: '¡Debe seleccionar una fecha válida!',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+      return
+    }
     // Se setea el id en null para que no utilice el mismo id de la cita que se seleccionó para ser reagendada    
     this.citaReagendada.id = null
     // Limpiando la fecha para evitar problemas al reemplazarla más abajo
@@ -136,21 +166,26 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citaReagendada.fecha.setHours(this.citaReagendada.fecha.getHours() - 6)
     // Si la cita se genera con los milisegundos en .000 entonces al recuperarla de la base de datos lo hace con un formato inválido
     this.citaReagendada.fecha.setMilliseconds(this.citaReagendada.fecha.getMilliseconds() + 10)
+
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+    // Una vez seteados los datos de la cita reagendada se procede a guardarlos en ambas tablas y cambiar su estado
+    this.guardarCitaTemp()
+    this.guardarCita()
+    this.actualizarEstado("reagendada")
+    Notiflix.Loading.remove();
   }
 
   // Guardar las citas reagendadas en tabla temporal de citas
   guardarCitaTemp(): void {
-    // console.log( this.citaReagendada.fecha)
+
     this.service.guardarCitaTemp(this.citaReagendada)
       .subscribe(data => {
-        alert("Se reagendó la cita con éxito")
-        // Se debe actualizar la página para evitar sacar dos citas iguales
-        // window.location.reload()
         this.closeReagenda()
-        //this.router.navigate(["listar"]);
       })
     this.enviarCorreo(this.citaReagendada)
-    // this.resetForm()
   }
 
   // Guardar las citas reagendadas en tabla histórica de citas
@@ -171,14 +206,14 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     correo.subject = "Reagenda de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaReagendada.nombreContribuyente + "\n\n" + "Le informamos que el funcionario a cargo de su cita la ha reagendado para el día " + this.devuelveDiaSemana(cita.fecha) + " "
       + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
-      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ". Según el funcionario, la razón de la reagenda es: " + cita.razonReagenda
+      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + cita.razonReagenda
       + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, pedimos las disculpas del caso"
 
     console.log(correo.message)
 
     this.service.enviaCorreo(correo)
       .subscribe(data => {
-        alert("Se envió el correo con exito")
+        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
       })
 
   }

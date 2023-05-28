@@ -13,9 +13,9 @@
     <div>
         ¡Inicio de sesión exitoso! Bienvenid@ {{modeloFuncionario.nombre}} {{modeloFuncionario.apellido1}} 
     </div>
-    <div class="btnModFun">
+    <div class="div-modif-func">
       <!-- Esta verificación se hace para que el boton de modificar el funcionario a cargo no se le muestre al funcionario suplente -->
-        <button *ngIf="modeloFuncionario.suplente === 'N'" class="btn btn-primary btnOpciones btn-hover" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
+        <button *ngIf="modeloFuncionario.suplente === 'N'" class="btn btn-primary btn-hover col-12" (click)="showModFunc(1)">Modificar funcionario a cargo</button>
     </div>  
   </div>
 

@@ -1,10 +1,8 @@
-<div>
-  <div class="divBotones">
-    <button class="btn btn-primary btnOpciones btn-hover" (click)="showArea(1)">Agregar nueva área</button>
-    <button class="btn btn-primary btnOpciones btn-hover" (click)="showDpto(1)">Agregar nuevo departamento</button>
-    <button class="btn btn-primary btnOpciones btn-hover" (click)="showAgrFunc(1)">Agregar nuevo funcionario</button>
-    <button class="btn btn-primary btnOpciones btn-hover" (click)="showPswrdFunc(1)">Cambiar contraseña a funcionario</button>
-  </div>
+<div class="div-botones">
+    <button class="btn btn-primary btn-opciones btn-hover" (click)="showArea(1)">Agregar nueva área</button>
+    <button class="btn btn-primary btn-opciones btn-hover" (click)="showDpto(1)">Agregar nuevo departamento</button>
+    <button class="btn btn-primary btn-opciones btn-hover" (click)="showAgrFunc(1)">Agregar nuevo funcionario</button>
+    <button class="btn btn-primary btn-opciones btn-hover" (click)="showPswrdFunc(1)">Cambiar contraseña a funcionario</button>
 </div>
 
 <!-- Pop up para agregar una nueva area-->
@@ -62,7 +60,7 @@
     <div class="uc-m-body">
       <label>Seleccione el área a la cual pertenece el nuevo departamento</label><br>
       <div>
-        <select #selectArea name="area" id="area" class="form-select" class="form-select selectInfo"
+        <select #selectArea name="area" id="area" class="form-select" class="form-select"
           (change)="setAreaDepa(selectArea.value)">
           <option selected value=''></option>
           <option *ngFor="let area of areas" value="{{area.numArea}}">
@@ -113,25 +111,27 @@
   <div class="uc-m-content">
     <div class="uc-m-header">
       <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()"> -->
-      
       <h4>Agregar un nuevo funcionario</h4>
-      
     </div>
     <div class="uc-m-body">
-      <label>Seleccione el departamento al cual pertenece el nuevo funcionario</label><br>
-      <div>
-        <select #selectDepa name="dept" id="dept" class="form-select" class="form-select selectInfo"
-          (change)="setDepaFuncionario(selectDepa.value)">
-          <option selected value=''></option>
-          <option *ngFor="let departamento of departamentos" value="{{departamento.numDepartamento}}">
-            {{departamento.numDepartamento}} - {{departamento.nombre}}
-          </option>
-        </select>
-      </div>
-
       <!-- div que almacena todo el formulario -->
       <div style="margin-bottom: 2%;">
         <form [formGroup]="funcionarioForm">
+          <!-- Selector del departamento -->
+          <label>Seleccione el departamento al cual pertenece el nuevo funcionario</label><br>
+          <div>
+            <!-- (change)="setDepaFuncionario(selectDepa.value)" -->
+            <select #selectDepa name="dept" id="dept" class="form-select select-info" formControlName="departamento"
+            [ngClass]="{ 'is-invalid': enviarNFF && f['departamento'].errors }">
+              <option selected></option>
+              <option *ngFor="let departamento of departamentos" value="{{departamento.numDepartamento}}">
+                {{departamento.numDepartamento}} - {{departamento.nombre}}
+              </option>
+            </select>
+            <div *ngIf="enviarNFF && f['departamento'].errors" class="invalid-feedback div-mb">
+              <div *ngIf="f['departamento'].errors?.['required']">Debe seleccionar un departamento</div>
+            </div>
+          </div>
           <!-- div que almacena todos textfields -->
           <div style="display: flex;">
             <!-- div que almacena los textfields de la izquierda-->
@@ -207,18 +207,25 @@
               </div>
             </div>
           </div>
+          <!-- Selector para suplente -->
+          <div>
+            <label>Seleccione si el funcionario va a ser suplente</label><br>
+            <div>
+              <select name="areas" id="areas" formControlName="suplente" class="form-select select-info"
+              [ngClass]="{ 'is-invalid': enviarNFF && f['suplente'].errors }">
+                <option selected></option>
+                <option value="S">Si</option>
+                <option value="N">No</option>
+              </select>
+              <div *ngIf="enviarNFF && f['suplente'].errors" class="invalid-feedback">
+                <div *ngIf="f['suplente'].errors?.['required']">Debe seleccionar si el funcionario va a ser suplente o no</div>
+              </div>
+            </div>
+          </div>
         </form>
       </div>
-      <label>Seleccione si el funcionario va a ser suplente</label><br>
-      <div>
-        <select name="areas" id="areas" class="form-select selectInfo" [(ngModel)]="nuevoFuncionario.suplente">
-          <!-- <option value="">Seleccionar el rol del funcionario</option> -->
-          <option value="S">Si</option>
-          <option value="N">No</option>
-        </select>
-      </div>
       <div class="uc-m-footer">
-        <button class="btn btn-primary btn-hover" (click)="guardarFuncionario(nuevoFuncionario)">Confirmar</button>
+        <button class="btn btn-primary btn-hover" (click)="guardarFuncionario()">Confirmar</button>
         <button class="btn btn-danger" (click)="closeAgrFunc()">Salir</button>
       </div>
     </div>
@@ -235,34 +242,40 @@
       <h4>Cambiar contraseña a un funcionario</h4>
     </div>
     <div class="uc-m-body">
-      <label>Seleccione el funcionario</label><br>
-      <div>
-        <select #selectFunc name="func" id="func" class="form-select" class="form-select selectInfo"
-        (change)="setIdFunc(selectFunc.value);">
-        <option selected value=''></option>
-        <option *ngFor="let funcionario of funcionarios" value="{{funcionario.idFuncionario}}">
-          {{funcionario.nombre}} {{funcionario.apellido1}} ({{funcionario.idFuncionario}})
-        </option>
-      </select>
-      </div>
     <div style="margin-bottom: 2%;">
       <form [formGroup]="cambiarcontraForm">
-      <label>Ingrese la nueva contraseña</label><br>
-      <div>
-        <input formControlName="contrauno" name="contranueva" type="text" class="form-control" 
-        [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrauno'].errors }">
-        <div *ngIf="enviarCCF && ccf['contrauno'].errors" class="invalid-feedback">
-          <div *ngIf="ccf['contrauno'].errors?.['required']">Contraseña en blanco</div>
+        <label>Seleccione el funcionario</label><br>
+        <div>
+          <!-- (change)="setIdFunc(selectFunc.value);"> -->
+          <select #selectFunc formControlName="idfuncionario" id="func" class="form-select" class="form-select selectInfo"
+          [ngClass]="{ 'is-invalid': enviarCCF && ccf['idfuncionario'].errors }">
+          <option selected></option>
+          <option *ngFor="let funcionario of funcionarios" value="{{funcionario.idFuncionario}}">
+            {{funcionario.nombre}} {{funcionario.apellido1}} ({{funcionario.idFuncionario}})
+          </option>
+          </select>
+          <div *ngIf="enviarCCF && ccf['idfuncionario'].errors" class="invalid-feedback div-mb">
+            <div *ngIf="ccf['idfuncionario'].errors?.['required']">
+              Debe seleccionar un funcionario para realizarle el cambio de contraseña
+            </div>
+          </div>
         </div>
-      </div>
-      <label>Confirmar la contraseña</label><br>
-      <div>
-        <input formControlName="contrados" name="contranueva" type="text" class="form-control" 
-        [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrados'].errors }">
-        <div *ngIf="enviarCCF && ccf['contrados'].errors" class="invalid-feedback">
-          <div *ngIf="ccf['contrados'].errors?.['required']">Confirme la contraseña</div>
+        <label>Ingrese la nueva contraseña</label><br>
+        <div>
+          <input formControlName="contrauno" name="contranueva" type="text" class="form-control" 
+          [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrauno'].errors }">
+          <div *ngIf="enviarCCF && ccf['contrauno'].errors" class="invalid-feedback div-mb">
+            <div *ngIf="ccf['contrauno'].errors?.['required']">Contraseña en blanco</div>
+          </div>
         </div>
-      </div>
+        <label>Confirmar la contraseña</label><br>
+        <div>
+          <input formControlName="contrados" name="contranueva" type="text" class="form-control" 
+          [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrados'].errors }">
+          <div *ngIf="enviarCCF && ccf['contrados'].errors" class="invalid-feedback">
+            <div *ngIf="ccf['contrados'].errors?.['required']">Confirme la contraseña</div>
+          </div>
+        </div>
       </form>
     </div>
     </div>
