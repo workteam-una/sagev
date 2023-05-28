@@ -16,18 +16,32 @@
       <h4>Agregar una nueva área</h4>
     </div>
     <div class="uc-m-body">
+      <form [formGroup]="areaForm">
       <label>Digite el número del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.numArea" required>
+        <input formControlName="numero" name="areanueva" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNAF && naf['numero'].errors }">
+        <div *ngIf="enviarNAF && naf['numero'].errors" class="invalid-feedback">
+          <div *ngIf="naf['numero'].errors?.['required']">Número del área en blanco</div>
+        </div>
       </div>
       <label>Digite el nombre del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.nombre" required>
+        <input formControlName="nombre" name="areanueva" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNAF && naf['nombre'].errors }">
+        <div *ngIf="enviarNAF && naf['nombre'].errors" class="invalid-feedback">
+          <div *ngIf="naf['nombre'].errors?.['required']">Nombre del área en blanco</div>
+        </div>
       </div>
       <label>Digite la descripción del área a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" [(ngModel)]="nuevaArea.descripcion" required>
+        <input formControlName="descripcion" name="areanueva" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNAF && naf['descripcion'].errors }">
+        <div *ngIf="enviarNAF && naf['descripcion'].errors" class="invalid-feedback">
+          <div *ngIf="naf['descripcion'].errors?.['required']">Descripción del área en blanco</div>
+        </div>
       </div>
+    </form>
     </div>
     <div class="uc-m-footer">
       <button class="btn btn-primary btn-hover" (click)="guardarAreas(nuevaArea)">Confirmar</button>
@@ -46,7 +60,7 @@
       <h4>Agregar nuevo departamento</h4>
     </div>
     <div class="uc-m-body">
-      <label>Seleccione el area a la cual pertenece el nuevo departamento</label><br>
+      <label>Seleccione el área a la cual pertenece el nuevo departamento</label><br>
       <div>
         <select #selectArea name="area" id="area" class="form-select" class="form-select selectInfo"
           (change)="setAreaDepa(selectArea.value)">
@@ -56,25 +70,39 @@
           </option>
         </select>
       </div>
-      <label>Digite el numero del departamento a crear</label><br>
+    
+    <div style="margin-bottom: 2%;">
+      <form [formGroup]="departamentoForm">
+      <label>Digite el número del departamento a crear</label><br>
       <div>
-        <input name="departamentonueva" type="text" class="form-control inputInfo" id="validationDefault01" value=""
-          required [(ngModel)]="nuevoDepa.numDepartamento">
+        <input formControlName="numero" name="depanuevo" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNDF && ndf['numero'].errors }">
+        <div *ngIf="enviarNDF && ndf['numero'].errors" class="invalid-feedback">
+          <div *ngIf="ndf['numero'].errors?.['required']">Número del departamento en blanco</div>
+        </div>
       </div>
       <label>Digite el nombre del departamento a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-        [(ngModel)]="nuevoDepa.nombre">
+        <input formControlName="nombre" name="depanuevo" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNDF && ndf['nombre'].errors }">
+        <div *ngIf="enviarNDF && ndf['nombre'].errors" class="invalid-feedback">
+          <div *ngIf="ndf['nombre'].errors?.['required']">Nombre del departamento en blanco</div>
+        </div>
       </div>
-      <label>Digite la descripcion del departamento a crear</label><br>
+      <label>Digite la descripción del departamento a crear</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-        [(ngModel)]="nuevoDepa.descripcion">
+        <input formControlName="descripcion" name="depanuevo" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarNDF && ndf['descripcion'].errors }">
+        <div *ngIf="enviarNDF && ndf['descripcion'].errors" class="invalid-feedback">
+          <div *ngIf="ndf['descripcion'].errors?.['required']">Descripción del departamento en blanco</div>
+        </div>
       </div>
+    </form>
     </div>
     <div class="uc-m-footer">
       <button class="btn btn-primary btn-hover" (click)="guardarDepartamento(nuevoDepa)">Confirmar</button>
       <button class="btn btn-danger" (click)="closeDpto()">Salir</button>
+    </div>
     </div>
   </div>
 </div>
@@ -113,8 +141,8 @@
                 <label>Nombre del funcionario</label><br>
                 <div>
                   <input type="text" formControlName="nombre" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }" [(ngModel)]="nuevoFuncionario.nombre">
-                  <div *ngIf="enviar && f['nombre'].errors" class="invalid-feedback">
+                  [ngClass]="{ 'is-invalid': enviarNFF && f['nombre'].errors }">
+                  <div *ngIf="enviarNFF && f['nombre'].errors" class="invalid-feedback">
                     <div *ngIf="f['nombre'].errors?.['required']">Nombre en blanco</div>
                   </div>
                 </div>
@@ -124,9 +152,8 @@
                 <label>Primer apellido del funcionario</label><br>
                 <div>
                   <input type="text" formControlName="apellidouno" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }"
-                    [(ngModel)]="nuevoFuncionario.apellido1">
-                  <div *ngIf="enviar && f['apellidouno'].errors" class="invalid-feedback">
+                  [ngClass]="{ 'is-invalid': enviarNFF && f['apellidouno'].errors }">
+                  <div *ngIf="enviarNFF && f['apellidouno'].errors" class="invalid-feedback">
                     <div *ngIf="f['apellidouno'].errors?.['required']">Primer apellido en blanco</div>
                   </div>
                 </div>
@@ -136,9 +163,8 @@
                 <label>Segundo apellido del funcionario</label><br>
                 <div>
                   <input type="text" formControlName="apellidodos" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }"
-                    [(ngModel)]="nuevoFuncionario.apellido2">
-                  <div *ngIf="enviar && f['apellidodos'].errors" class="invalid-feedback">
+                  [ngClass]="{ 'is-invalid': enviarNFF && f['apellidodos'].errors }">
+                  <div *ngIf="enviarNFF && f['apellidodos'].errors" class="invalid-feedback">
                     <div *ngIf="f['apellidodos'].errors?.['required']">Segundo apellido en blanco</div>
                   </div>
                 </div>
@@ -151,9 +177,8 @@
                 <label>Cédula del funcionario</label><br>
                 <div>
                   <input formControlName="cedula" type="text" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"
-                    [(ngModel)]="nuevoFuncionario.idFuncionario">
-                  <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
+                    [ngClass]="{ 'is-invalid': enviarNFF && f['cedula'].errors }">
+                  <div *ngIf="enviarNFF && f['cedula'].errors" class="invalid-feedback">
                     <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
                   </div>
                 </div>
@@ -163,8 +188,8 @@
                 <label>Correo del funcionario</label><br>
                 <div>
                   <input type="text" formControlName="email" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['email'].errors }" [(ngModel)]="nuevoFuncionario.correo">
-                  <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
+                    [ngClass]="{ 'is-invalid': enviarNFF && f['email'].errors }">
+                  <div *ngIf="enviarNFF && f['email'].errors" class="invalid-feedback">
                     <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
                   </div>
                 </div>
@@ -174,10 +199,9 @@
                 <label>Contraseña del funcionario</label><br>
                 <div>
                   <input type="text" formControlName="clave" class="form-control"
-                    [ngClass]="{ 'is-invalid': enviar && f['clave'].errors }"
-                    [(ngModel)]="nuevoFuncionario.contrasenna">
-                  <div *ngIf="enviar && f['clave'].errors" class="invalid-feedback">
-                    <div *ngIf="f['clave'].errors?.['required']">Contraseña en blanco o inválido</div>
+                  [ngClass]="{ 'is-invalid': enviarNFF && f['clave'].errors }">
+                  <div *ngIf="enviarNFF && f['clave'].errors" class="invalid-feedback">
+                    <div *ngIf="f['clave'].errors?.['required']">Contraseña en blanco o inválida</div>
                   </div>
                 </div>
               </div>
@@ -185,14 +209,6 @@
           </div>
         </form>
       </div>
-      <!-- <label>Seleccione si el funcionario va a ser encargado</label><br>
-      <div>
-        <select name="areas" id="areas" class="form-select selectInfo" [(ngModel)]="nuevoFuncionario.suplente">
-          <option value="">Seleccionar el rol del funcionario</option>
-          <option value="S">Encargado</option>
-          <option value="N">Suplente</option>
-        </select>
-      </div> -->
       <label>Seleccione si el funcionario va a ser suplente</label><br>
       <div>
         <select name="areas" id="areas" class="form-select selectInfo" [(ngModel)]="nuevoFuncionario.suplente">
@@ -225,20 +241,30 @@
         (change)="setIdFunc(selectFunc.value);">
         <option selected value=''></option>
         <option *ngFor="let funcionario of funcionarios" value="{{funcionario.idFuncionario}}">
-          {{funcionario.nombre}} ({{funcionario.idFuncionario}})
+          {{funcionario.nombre}} {{funcionario.apellido1}} ({{funcionario.idFuncionario}})
         </option>
       </select>
       </div>
+    <div style="margin-bottom: 2%;">
+      <form [formGroup]="cambiarcontraForm">
       <label>Ingrese la nueva contraseña</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-        [(ngModel)]="contra1">
+        <input formControlName="contrauno" name="contranueva" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrauno'].errors }">
+        <div *ngIf="enviarCCF && ccf['contrauno'].errors" class="invalid-feedback">
+          <div *ngIf="ccf['contrauno'].errors?.['required']">Contraseña en blanco</div>
+        </div>
       </div>
       <label>Confirmar la contraseña</label><br>
       <div>
-        <input name="areanueva" type="text" class="form-control inputInfo" id="validationDefault01" value="" required
-        [(ngModel)]="contra2">
+        <input formControlName="contrados" name="contranueva" type="text" class="form-control" 
+        [ngClass]="{ 'is-invalid': enviarCCF && ccf['contrados'].errors }">
+        <div *ngIf="enviarCCF && ccf['contrados'].errors" class="invalid-feedback">
+          <div *ngIf="ccf['contrados'].errors?.['required']">Confirme la contraseña</div>
+        </div>
       </div>
+      </form>
+    </div>
     </div>
     <div class="uc-m-footer">
       <button class="btn btn-primary btn-hover" (click)="cambiarContra()">Confirmar</button>
@@ -266,4 +292,3 @@
 <div class="tablaHistorial">
   <app-administrador-tabla [fechaInicio]="fechaInicio" [fechaFinal]="fechaFinal"></app-administrador-tabla>
 </div>
-

@@ -180,7 +180,7 @@ ul li a::before {
     color: var(--clr);
     width: 0;
     overflow: hidden;
-    transition: 0.5s;
+    transition: 0.2s;
 
     -webkit-text-stroke: 1px var(--cl);
 }

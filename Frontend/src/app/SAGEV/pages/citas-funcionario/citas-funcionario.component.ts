@@ -112,6 +112,10 @@ export class CitasFuncionarioComponent implements OnInit {
 
   // Asigna o desasigna como encargado a un funcionario suplente al desasignar o asignar al funcionario en sesión
   modificarFuncionarioEncargado(idSuplente: string) : void {
+    // Si se selecciona la opción por defecto entonces salga de la función y no haga nada
+    if (idSuplente === "") {
+      return
+    }
     /*
       Validación 1: El funcionario en sesión quiere asignar a un suplente como encargado. No necesita una validación más 
       para ver si existe un suplente que no esté a cargo, porque por como funcionan las cosas se da por hecho que el único 
