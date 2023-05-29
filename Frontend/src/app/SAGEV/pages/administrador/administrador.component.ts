@@ -132,9 +132,11 @@ export class AdministradorComponent implements OnInit {
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#3085d6',
       })
+      this.ngOnInit()
     })
     this.resetFormNAF()
     this.closeArea()
+    
   }
 
   guardarDepartamento(d: Departamento) : void {
@@ -160,6 +162,7 @@ export class AdministradorComponent implements OnInit {
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#3085d6',
       })
+      this.ngOnInit()
     })
     this.resetFormNDF()
     this.closeDpto()
@@ -198,12 +201,12 @@ export class AdministradorComponent implements OnInit {
       icon: 'success',
       confirmButtonText: 'Aceptar',
       confirmButtonColor: '#3085d6',
-    }).then(() => {
-      window.location.reload()
     })
+    this.ngOnInit()
   })
   this.resetFormNFF()
   this.closeAgrFunc()
+  
 }
 
   validarNumeroArea(numArea: number) : boolean {
@@ -270,6 +273,7 @@ export class AdministradorComponent implements OnInit {
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#3085d6',
         })
+        this.ngOnInit()
       })
       this.resetFormCCF()
       this.closePswrdFunc()
