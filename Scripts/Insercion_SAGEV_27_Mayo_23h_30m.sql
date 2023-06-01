@@ -104,13 +104,12 @@ execute usp_insertar_funcionario @PidFuncionario = '112050556', @PnumDepartament
 @Pnombre = 'Douglas',  @Papellido1 = 'Sancho', @Papellido2 = 'Oconitrillo', @Pcontrasenna = '123',
 @Pencargado = 'S', @PSuplente = 'N', @PAdministrador = 'N';
 
-
 --Area de acueducto
 execute usp_insertar_funcionario @PidFuncionario = '204750875', @PnumDepartamento = 1100, @Pcorreo = 'jsancho@munisantodomingo.go.cr',
 @Pnombre = 'Jorge',  @Papellido1 = 'Sancho', @Papellido2 = 'Pereira', @Pcontrasenna = '123',
 @Pencargado = 'S', @PSuplente = 'N', @PAdministrador = 'N';
 
---Nuevo funcionario, pedir cedula
+--Este funcinonario va a ser reemplazado por: Anthony Madrigal Carballo, quedan pendientes su cédula y correo.
 execute usp_insertar_funcionario @PidFuncionario = '702010345', @PnumDepartamento = 1100, @Pcorreo = 'jaguilar@munisantodomingo.go.cr',
 @Pnombre = 'Jorge',  @Papellido1 = 'Aguilar', @Papellido2 = 'Hernandez', @Pcontrasenna = '123',
 @Pencargado = 'N', @PSuplente = 'S', @PAdministrador = 'N';
@@ -123,6 +122,8 @@ execute usp_insertar_funcionario @PidFuncionario = '110870401', @PnumDepartament
 execute usp_insertar_funcionario @PidFuncionario = '303670002', @PnumDepartamento = 400, @Pcorreo = 'jcano@munisantodomingo.go.cr',
 @Pnombre = 'Jessica',  @Papellido1 = 'Cano', @Papellido2 = 'Chaves', @Pcontrasenna = '123',
 @Pencargado = 'S', @PSuplente = 'N', @PAdministrador = 'N';
+
+--Aquí va a estar el usuario del administrador 
 
 --Insercion de horarios
 execute usp_insertar_horario @PIdFuncionario = '106660080', @PHoraInicio = '8:00', @PHorafinal = '12:00', @PDuracion = '30', @Pdia = 'Martes';

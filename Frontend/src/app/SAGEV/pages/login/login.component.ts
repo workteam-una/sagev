@@ -75,7 +75,8 @@ export class LoginComponent implements OnInit {
       })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
       // Forward a la vista del funcionario
-      this.router.navigate(["administrador"])
+      // this.router.navigate(["administrador"], { queryParams: { access: '063d0217' } })
+      this.router.navigate(["administrador/063d0217"])
       Notiflix.Loading.remove()
     } 
     else {
@@ -97,4 +98,16 @@ export class LoginComponent implements OnInit {
     localStorage.setItem("modeloFuncionario",JSON.stringify(this.modeloFuncionario));
   }
 
+  creaId(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    // El valor es 10 por defecto, se puede modificar
+    while (counter < 10) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
 }

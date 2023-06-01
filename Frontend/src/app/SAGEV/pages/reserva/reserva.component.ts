@@ -256,22 +256,22 @@ export class ReservaComponent implements OnInit {
   }
 
   /*
-    Filtra las citas disponibles para que muestre solo las que no han sido reservadas.
-    Itera las citas disponibles y comparando su fecha una a una con las fechas de todas las citas rerservadas,
-    en caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array
+    Filtra las citas disponibles para que muestre solo las que no han sido reservadas. 
+    Itera las citas disponibles y va comparando su fecha una a una con las fechas de todas las citas reservadas, en caso de coincidir, 
+    se elimina la posición donde se encuentra la cita disponible y se actualiza el array.
+    Además, dentro de la comparativa se consula si el estado de la cita es "cancelada", de serlo la posición de esa cita no se elimina.
   */
   filtrarCitasDisponibles(): void {
-
     // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
     for (let i = 0; i < this.citasDisponibles.length; i++)
     {
       for (let j = 0; j < this.citasReservadas.length; j++)
       {
-        // console.log("Cita disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleString() + " " + this.citasDisponibles[i].hora +
-        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toLocaleString() + " " + this.citasReservadas[j].hora)
+        // console.log("Cita disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleString() +
+        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toLocaleString())
 
-        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal
-        if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasReservadas[j].fecha.toLocaleString()) {
+        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal. 
+        if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasReservadas[j].fecha.toLocaleString() && this.citasReservadas[j].estado !== 'Cancelada') {
 
           // console.log("Me cumplí con disponible #" + i + " y con reservada #" + j)
           // console.log("\n")
@@ -282,14 +282,15 @@ export class ReservaComponent implements OnInit {
         }
       }
     }
+
     /* 
-      Filtrando las citas una última vez para eliminar las que tienen fechas anteriores al día actual dentro de la misma semana
+      Filtrando las citas para eliminar las que tienen fechas anteriores al día actual dentro de la misma semana
       ej. Si hoy es martes a las 7:00 p.m y habian citas en la mañana, no me las va a mostrar
       ej 2. Si hoy es jueves no me va a mostrar las citas del martes de esta semana
       ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible.
     */
-    console.log(this.fechaHoy)
     this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
+
   }
 
   devuelveDiaSemana(d: Date): string {

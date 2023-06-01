@@ -31,7 +31,7 @@ const routes: Routes = [
     component: CitasFuncionarioComponent
   },
   {
-    path: 'administrador',
+    path: 'administrador/063d0217',
     component: AdministradorComponent
   },
   {
