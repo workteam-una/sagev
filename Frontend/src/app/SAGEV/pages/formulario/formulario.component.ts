@@ -153,7 +153,7 @@ export class FormularioComponent implements OnInit {
     correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Le informamos que su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " "
       + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
       cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })
-      + " ha sido reservada con éxito." + "\n\n" + "Este correo es generado de forma automática, favor no responder."
+      + " con el funcionario " + this.nombreFuncionario + " ha sido reservada con éxito." + "\n\n" + "Este correo es generado de forma automática, favor no responder."
 
     console.log(correo.message)
 

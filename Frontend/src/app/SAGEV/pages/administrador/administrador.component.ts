@@ -392,6 +392,10 @@ export class AdministradorComponent implements OnInit {
     this.nuevoFuncionario.contrasenna = this.funcionarioForm.get('clave')?.value;
     // Suplente
     this.nuevoFuncionario.suplente = this.funcionarioForm.get('suplente')?.value;
+
+    if (this.nuevoFuncionario.suplente === "N") {
+      this.nuevoFuncionario.encargado = "S"
+    }
   }
 
   // un get del formulario NAF

@@ -207,18 +207,18 @@
               </div>
             </div>
           </div>
-          <!-- Selector para suplente -->
+          <!-- Selector para encargado -->
           <div>
-            <label>Seleccione si el funcionario va a ser suplente</label><br>
+            <label>Seleccione si el funcionario va a ser encargado o suplente</label><br>
             <div>
               <select name="areas" id="areas" formControlName="suplente" class="form-select select-info"
               [ngClass]="{ 'is-invalid': enviarNFF && f['suplente'].errors }">
                 <option selected></option>
-                <option value="S">Si</option>
-                <option value="N">No</option>
+                <option value="N">Encargado</option>
+                <option value="S">Suplente</option>
               </select>
               <div *ngIf="enviarNFF && f['suplente'].errors" class="invalid-feedback">
-                <div *ngIf="f['suplente'].errors?.['required']">Debe seleccionar si el funcionario va a ser suplente o no</div>
+                <div *ngIf="f['suplente'].errors?.['required']">Debe seleccionar si el funcionario va a ser suplente</div>
               </div>
             </div>
           </div>

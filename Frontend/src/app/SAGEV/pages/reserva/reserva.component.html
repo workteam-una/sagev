@@ -30,13 +30,13 @@
   <div *ngFor="let funcionario of funcionariosEncargadosPorDepa" class="div-info">
   <!-- Si el área o el departamento no tienen valor seleccionado entonces no muestre la información del funcionario encargado -->
   <div *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
-    <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h6>
+    <h5 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h5>
     <ul class="list-group">
       <li>
         {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}} <p style="color: red">{{mostrarTextoSuplente(funcionario.suplente)}}</p>
       </li>
     </ul>
-    <h6 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Tramite(s) a cargo</h6>
+    <h5>Tramite(s) a cargo</h5>
     <ul class="list-group">
       <!-- <li *ngFor="let departamento of descripcionesPorDepa" class="liTramites">{{departamento.descripcion}}</li> -->
       <li *ngFor="let departamento of descripcionesPorDepa">
