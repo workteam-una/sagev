@@ -1,22 +1,29 @@
 <div id="tituloCancelar">
-    <h4>Cancelar sus citas reservadas</h4>
+    <h4>¿Como cancelo uno cita reservada?</h4>
 </div>
 
 <div id="instrucciones">
     <h5>
         <li class="liInstrucciones">
             Para cancelar sus citas reservadas introduzca su número de cédula
-            en el buscador para que se muestren las citas reservadas
+            en el buscador para que se muestren sus citas reservadas
         </li>
         <li class="liInstrucciones">
             Luego de ingresar su cédula, seleccione la cita que quiere cancelar para
             desplegar la confirmación
         </li>
+        <li class="liInstrucciones">
+            Para cancelar la cita debe ingresar el identificador unico de cita 
+            que se le brindo en el correo de confirmación y luego dar click en "Cancelar cita"
+        </li>
     </h5>
 </div>
 
 <div class="divCedula">
-    <p>Ingrese su número de cédula con 9 dígitos y sin dejar espacios</p>
+    <div class="centered-div">
+    <p>Para ver sus citas reservadas ingrese su número de cédula con 9 dígitos y sin dejar espacios</p>
+    </div>
+    <div>
     <div class="divBusqueda">
         <input #botonBuscar name="cedulaContribuyente" type="text" class="form-control inputCedula" id="validationDefault01">
         <button class="btn btn-primary btnBuscar" (click)="verificarCitasContribuyente(botonBuscar.value)">Buscar</button>

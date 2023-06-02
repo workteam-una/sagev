@@ -45,6 +45,13 @@ p {
     text-align: center;
 }
 
+.centered-div {
+    text-align: center;
+    display: inline-block;
+    margin-left: 25%;
+    margin-right: 25%;
+}
+
 button:hover {
     color:#fff;
     background-color:#6ca34f !important;

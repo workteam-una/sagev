@@ -16,6 +16,7 @@ export class CancelarTablaComponent implements OnInit {
   // @Input() idContribuyente: String
 
   idCitaSeleccionada: number
+  
 
   estadoCita: boolean = false
 
@@ -52,7 +53,17 @@ export class CancelarTablaComponent implements OnInit {
     console.log(changes)
   }
 
-  marcarEstadoCancelada() : void {
+  marcarEstadoCancelada(inputTokenCita: string) : void {
+    let TokenCita = parseInt(inputTokenCita)
+    if(TokenCita !== this.idCitaSeleccionada){
+      Swal.fire({
+        title: 'Este identificador no se encuentra',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+      return
+    }
     this.service.actualizarEstadoCanceladaTemp(this.idCitaSeleccionada)
     .subscribe(data => {
       Swal.fire({

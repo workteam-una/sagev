@@ -43,10 +43,13 @@
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
-      <label>¿Está seguro de que desea cancelar la cita?</label><br>
+      <label>Digite el identificador unico de la cita</label><br>
+    </div>
+    <div class="inputToken">
+      <input #tokenCita name="tokenCita" type="text" class="form-control" />
     </div>
     <div class="uc-m-footer">
-      <button class="btn btn-primary" (click)=" marcarEstadoCancelada()">Cancelar cita</button>
+      <button class="btn btn-primary" (click)=" marcarEstadoCancelada(tokenCita.value)">Cancelar cita</button>
       <button class="btn btn-danger" (click)="close()">Salir</button>
     </div>
   </div>
