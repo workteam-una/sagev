@@ -4,7 +4,7 @@
   </p>
 </div>
 
-<table class="table">
+<table class="table" id="tabla-reserva">
   <thead class="table-primary">
     <tr *ngIf="citasDisponibles.length !== 0; else sinCitas">
       <th scope="col">Fecha</th>
@@ -40,4 +40,4 @@
 
 <!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->
 <app-formulario *ngIf="fechaCitaString !== ''" [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
-[horaCitaFormateada]="horaCitaFormateada" [nombreFuncionario]="nombreFuncionario" [showModal]="showModal" (shModal)="recibirshModal($event)"></app-formulario>
+[horaCitaFormateada]="horaCitaFormateada" [funcionarioEncargado]="funcionarioEncargado" [showModal]="showModal" (shModal)="recibirshModal($event)"></app-formulario>

@@ -19,7 +19,7 @@
       <h5>Departamento</h5>
       <select #selectDepa class="form-select" aria-label="Default select example"
         (change)="filtrarFuncionariosEncargadosPorDepa(selectDepa.value); filtrarDescripcionesPorDepa(selectDepa.value); 
-        getCitasReservadas(this.funcionarioEncargado.idFuncionario); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteDepartamento(selectDepa.value)">
+        getCitasReservadas(this.funcionarioEncargado.idFuncionario); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteDepartamento(selectDepa.value);">
         <option selected value=''>Seleccione el departamento</option>
         <option *ngFor="let departamento of departamentosPorArea " value="{{departamento.numDepartamento}}">
           {{departamento.numDepartamento}} - {{departamento.nombre}}
@@ -53,9 +53,10 @@
   
 <!-- <h5 class="tituloTabla">Citas disponibles</h5> -->
 
-<div class="tablaCitas">
+<div class="tablaCitas" id="tablaCitas">
   <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''" (mostrarBotones)="recibirMostrarBotones($event)"></app-reserva-tabla>
 </div>
+
 
 <!-- Botones "anterior" y "siguiente"-->
 

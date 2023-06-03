@@ -7,6 +7,7 @@ import { Cita } from '../../modelo/cita';
 import { Correo } from '../../modelo/correo';
 import * as  Notiflix from 'notiflix';
 import Swal from 'sweetalert2';
+import { Funcionario } from '../../modelo/funcionario';
 
 @Component({
   selector: 'app-formulario',
@@ -19,6 +20,7 @@ export class FormularioComponent implements OnInit {
   @Input() fechaCitaString: string
   @Input() horaCitaFormateada: string
   @Input() nombreFuncionario: string
+  @Input() funcionarioEncargado: Funcionario
 
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
@@ -78,22 +80,30 @@ export class FormularioComponent implements OnInit {
 
   }
 
-  //Cargar cita con lo escrito en el formulario
-  CargarCita():void{
-    this.prueba = this.clientForm.get('nombre')?.value;
-    console.log("VALOR DE PRUEBA: "+this.prueba);
+  //Cargar cita con lo escrito en el formulario 
+  cargarCita() : void{
     //Nombre cliente
     this.citaPadre.nombreContribuyente = this.clientForm.get('nombre')?.value;
     //Apellido 1
     this.citaPadre.apellido1Contribuyente = this.clientForm.get('apellidouno')?.value;
     //Apellido 2
-    this.citaPadre.apellido2Contribuyente =  this.clientForm.get('apellidodos')?.value;
+    this.citaPadre.apellido2Contribuyente = this.clientForm.get('apellidodos')?.value;
     //ID(cedula)
-    this.citaPadre.idContribuyente =  this.clientForm.get('cedula')?.value;
+    this.citaPadre.idContribuyente = this.clientForm.get('cedula')?.value;
     //Telefono
-    this.citaPadre.telefonoContribuyente =  this.clientForm.get('telefono')?.value;
+    this.citaPadre.telefonoContribuyente = this.clientForm.get('telefono')?.value;
     //Correo
     this.citaPadre.correoContribuyente = this.clientForm.get('email')?.value;
+
+    // Motivo de la cita
+    if(this.citaPadre.detalle === undefined){
+      this.citaPadre.detalle = "No especifica"
+    }
+
+    
+    //Genero un token para la nueva cita
+    this.citaPadre.token = this.creaToken();
+
   }
 
   //Limpia el formulario
@@ -106,7 +116,9 @@ export class FormularioComponent implements OnInit {
   get f() { return this.clientForm.controls; }
 
 
-  guardarCita(cita: Cita): void {
+  guardarCita(): void {
+     
+
     // si las validaciones estan mal salga del método
     if (!this.validaciones()) {
       return
@@ -115,17 +127,19 @@ export class FormularioComponent implements OnInit {
       backgroundColor: 'rgba(0,0,0,0.1)',
       svgSize: '100px',
     })
-    // carga la cita con los valores ingresados en el formulario
-    this.CargarCita()
+    
+   // carga la cita con los valores ingresados en el formulario
+   this.cargarCita()
+   
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
-    cita.fecha.setHours(cita.fecha.getHours() - 6)
+    this.citaPadre.fecha.setHours(this.citaPadre.fecha.getHours() - 6)
     // guardar en la tabla histórica de citas 
-    this.service.guardarCita(cita)
+    this.service.guardarCita(this.citaPadre)
       .subscribe(data => {
 
     })
     // Guardar cita en la tabla temporal de citas
-    this.service.guardarCitaTemp(cita)
+    this.service.guardarCitaTemp(this.citaPadre)
     .subscribe(data => {
       Swal.fire({
         title: '¡Cita reservada con éxito!',
@@ -137,7 +151,7 @@ export class FormularioComponent implements OnInit {
         window.location.reload()
       })
     })
-    this.enviarCorreo(cita)
+    this.enviarCorreo(this.citaPadre)
     this.resetForm()
     Notiflix.Loading.remove();
   }
@@ -151,10 +165,10 @@ export class FormularioComponent implements OnInit {
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Le informamos que su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " "
-      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
-      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })
-      + " con el funcionario " + this.nombreFuncionario + " ha sido reservada con éxito." + "\n" 
-      + "El identificador unico de su cita es " + cita.id + ". Utilìcelo en caso que necesite cancelar su cita." + "\n\n"
+      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " + cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })
+      + " con el/la funcionario/a " + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + " ha sido reservada con éxito." + "\n" 
+      + "Motivo: " + cita.detalle + "\n\n"
+      + "El identificador unico de su cita es: " + cita.token + ". Utilícelo en caso que necesite cancelar su cita." + "\n\n"
       + "Este correo es generado de forma automática, favor no responder."
 
     console.log(correo.message)
@@ -182,4 +196,18 @@ export class FormularioComponent implements OnInit {
     let mes = meses[d.getMonth()]
     return mes
   }
+
+  creaToken(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    // El valor es 10 por defecto, se puede modificar
+    while (counter < 10) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+  }
+
 }

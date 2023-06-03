@@ -3,6 +3,7 @@ import { Cita } from '../../modelo/cita';
 import { Funcionario } from '../../modelo/funcionario';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Router } from '@angular/router';
+import { ViewportScroller } from "@angular/common";
 
 @Component({
   selector: 'app-reserva-tabla',
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
 })
 export class ReservaTablaComponent implements OnInit {
 
-  constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) { }
+  constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef, private scroller: ViewportScroller) { }
 
   @Input() funcionarioEncargado: Funcionario
   @Input() citasDisponibles: Cita[] = []
@@ -39,6 +40,14 @@ export class ReservaTablaComponent implements OnInit {
   @Output()
   mostrarBotones = new EventEmitter<number>();
 
+  ngOnInit(): void {
+    // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
+    
+    //Enviando variable al componente padre para avisar que ya se cargo este componente
+    this.mostrarBotones.emit(1);
+    this.scroller.scrollToAnchor("tabla-reserva")
+  }
+
   showModal: number
 
   //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
@@ -46,13 +55,6 @@ export class ReservaTablaComponent implements OnInit {
     this.showModal = shModal;
     this.cd.detectChanges();
     console.log("recibi el valor: "+ this.showModal)
-  }
-
-  ngOnInit(): void {
-    // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
-    
-    //Enviando variable al componente padre para avisar que ya se cargo este componente
-    this.mostrarBotones.emit(1);
   }
 
   refrescarShowModal(): void{
@@ -75,12 +77,16 @@ export class ReservaTablaComponent implements OnInit {
   cargarDatosFormulario(): void {
     this.fechaCitaString = this.citaPadre.fecha.toLocaleDateString()
     this.horaCitaFormateada = this.citaPadre.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
-    this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
+    //this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
   }
 
   cargarCitaPadre(citaSelec: Cita): void {
     this.citaPadre.fecha = citaSelec.fecha;
     this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
+    this.citaPadre.nombreFuncionario = this.funcionarioEncargado.nombre
+    this.citaPadre.apellido1Funcionario = this.funcionarioEncargado.apellido1
+    this.citaPadre.apellido2Funcionario = this.funcionarioEncargado.apellido2
+    console.log("Reserva tabla: "+ this.citaPadre.nombreFuncionario)
   }
 
   devuelveDiaSemana(d: Date): string {

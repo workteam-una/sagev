@@ -4,13 +4,13 @@
   </p>
 </div>
 
-<table class="table">
+<table class="table" id="tabla-cancelar">
   <thead class="table-primary">
     <tr>
       <th scope="col">Fecha</th>
       <th scope="col">Hora</th>
       <th scope="col">Funcionario</th>
-      <th scope="col">Descripción</th>
+      <th scope="col">Motivo</th>
       <th scope="col">Estado</th>
       <th scope="col" class="text-center">Cancelar cita</th>
     </tr>
@@ -19,11 +19,11 @@
     <tr *ngFor="let cita of citasContribuyente">
       <td>{{cita.fecha.toLocaleDateString()}}</td>
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
-      <td>{{cita.idFuncionario}}</td>
+      <td>{{cita.nombreFuncionario}} {{cita.apellido1Funcionario}} {{cita.apellido2Funcionario}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
-      <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada'" class="text-center">
-        <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id);">Cancelar</button>
+      <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada'" class="text-center" id="boton-cancelar">
+        <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id, cita.token);">Cancelar</button>
       </td>
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-danger col-7" disabled>Cancelada</button>
@@ -35,22 +35,23 @@
   </tbody>
 </table>
 
-
-
-<div class="uc-modal" *ngIf="showModal === 1">
+<div class="uc-modal" *ngIf="showModal === 1" id="popup">
   <div class="uc-m-content">
     <div class="uc-m-header">
+      <span class="material-symbols-outlined" (click)="close()">
+        X
+      </span>
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
-      <label>Digite el identificador unico de la cita</label><br>
+      <label>Digite el identificador único de la cita</label><br>
     </div>
     <div class="inputToken">
       <input #tokenCita name="tokenCita" type="text" class="form-control" />
     </div>
-    <div class="uc-m-footer">
+    <div class="uc-m-footer text-center">
       <button class="btn btn-primary" (click)=" marcarEstadoCancelada(tokenCita.value)">Cancelar cita</button>
-      <button class="btn btn-danger" (click)="close()">Salir</button>
+      <!-- <button class="btn btn-danger" (click)="close()">Salir</button> -->
     </div>
   </div>
 </div>

@@ -1,6 +1,4 @@
---Creacion de las tablas
-
---Script SAGEV (Grupo 17)
+--Script SAGEV (Sistema de Agenda Virtual de Citas)
 
 ----Dropear las tablas
 --drop table Cita;
@@ -15,7 +13,7 @@
 --drop sequence sec_Id_cita_temp;
 --drop sequence sec_Id_Horario;
 
-----Dropear el trigger
+------Dropear el trigger
 --drop trigger if exists tr_eliminar_citas_antiguas;
 
 --Creación de las tablas
@@ -45,8 +43,8 @@ create table Funcionario
   Apellido1 varchar(50) not null,
   Apellido2 varchar(50) not null,
   Contrasenna varchar(50) not null,
-  Encargado char(1) not null,
-  Suplente char(1) not null,
+  Encargado varchar(2) not null,
+  Suplente varchar(2) not null,
   Administrador char(1) null
 );
 
@@ -69,12 +67,16 @@ create table Cita
   NombreContribuyente varchar(50) not null,
   Apellido1Contribuyente varchar(50) not null,
   Apellido2Contribuyente varchar(50) not null,
+  NombreFuncionario varchar(50) not null,
+  Apellido1Funcionario varchar(50) not null,
+  Apellido2Funcionario varchar(50) not null,
   CorreoContribuyente varchar(100) not null,
   telefonoContribuyente varchar(30) not null,
   Fecha datetime not null,
   Detalle varchar(255) null,
   Estado varchar(50) not null,
-  RazonReagenda varchar(255) null
+  RazonReagenda varchar(255) null,
+  Token varchar(20) not null
 );
 
 create table CitaTemp
@@ -85,12 +87,16 @@ create table CitaTemp
   NombreContribuyente varchar(50) not null,
   Apellido1Contribuyente varchar(50) not null,
   Apellido2Contribuyente varchar(50) not null,
+  NombreFuncionario varchar(50) not null,
+  Apellido1Funcionario varchar(50) not null,
+  Apellido2Funcionario varchar(50) not null,
   CorreoContribuyente varchar(100) not null,
   telefonoContribuyente varchar(30) not null,
   Fecha datetime not null,
   Detalle varchar(255) null,
   Estado varchar(50) not null,
-  RazonReagenda varchar(255) null
+  RazonReagenda varchar(255) null,
+  Token varchar(20) not null
 );
 
 --Secuencias 
@@ -143,17 +149,17 @@ foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 
 --funcionario_ck_Encargado
 alter table Funcionario add constraint funcionario_ck_Encargado check
-(Encargado in ('S','N'));
+(Encargado in ('S','N','NA'));
 
 
 --funcionario_ck_Suplente
 alter table Funcionario add constraint funcionario_ck_Suplente check
-(Encargado in ('S','N'));
+(Suplente in ('S','N','NA'));
 
 
 --funcionario_ck_Administrador
 alter table Funcionario add constraint funcionario_ck_Administrador check
-(Encargado in ('S','N'));
+(Administrador in ('S','N'));
 
 
 --cita_ck_Estado
@@ -247,7 +253,7 @@ go
 --Procedimiento de insertar en tabla Funcionario
 create or alter procedure usp_insertar_funcionario @PIdFuncionario varchar(30), @PNumDepartamento int, 
 @PCorreo varchar(100), @PNombre varchar(50), @PApellido1 varchar(50), @PApellido2 varchar(50), 
-@PContrasenna varchar(50), @PEncargado char(1), @PSuplente char(1), @PAdministrador char(1)
+@PContrasenna varchar(50), @PEncargado varchar(2), @PSuplente varchar(2), @PAdministrador char(1)
 as
 begin 
 	insert into Funcionario (IdFuncionario, NumDepartamento, Correo, Nombre, 
@@ -260,7 +266,7 @@ go
 --Procedimiento de actualizar en tabla Funcionario
 create or alter procedure usp_actualizar_funcionario @PIdFuncionario varchar(30), @PNumDepartamento int, 
 @PCorreo varchar(100), @PNombre varchar(50), @PApellido1 varchar(50), 
-@PApellido2 varchar(50), @PContrasenna varchar(50), @PEncargado char(1), @PSuplente char(1), @PAdministrador char(1)
+@PApellido2 varchar(50), @PContrasenna varchar(50), @PEncargado varchar(2), @PSuplente varchar(2), @PAdministrador char(1)
 as
 begin
     update Funcionario 
@@ -316,31 +322,28 @@ go
 --Tabla Cita
  
 --Procedimiento de insertar en tabla Cita
-create or alter procedure usp_insertar_cita @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
-@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100),
-@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
-@PEstado varchar(50), @PRazonReagenda varchar(255)
+create or alter procedure usp_insertar_cita @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), @PApellido1Contribuyente varchar(50), 
+@PApellido2Contribuyente varchar(50), @PNombreFuncionario varchar(50), @PApellido1Funcionario varchar(50), @PApellido2Funcionario varchar(50), @PCorreoContribuyente varchar(100),
+@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255), @PEstado varchar(50), @PRazonReagenda varchar(255), @PToken varchar(20)
 as
 begin
-	insert into Cita (Id, IdFuncionario, IdContribuyente, NombreContribuyente, Apellido1Contribuyente, Apellido2Contribuyente, CorreoContribuyente, 
-	telefonoContribuyente, Fecha, Detalle, Estado, RazonReagenda) values (next value for sec_Id_cita, @PIdFuncionario, 
-	@PIdContribuyente,@PNombreContribuyente, @PApellido1Contribuyente, @PApellido2Contribuyente, 
-	@PCorreoContribuyente, @PtelefonoContribuyente, @PFecha, @PDetalle, @PEstado, @PRazonReagenda);
+	insert into Cita (Id, IdFuncionario, IdContribuyente, NombreContribuyente, Apellido1Contribuyente, Apellido2Contribuyente, NombreFuncionario, Apellido1Funcionario, 
+	Apellido2Funcionario, CorreoContribuyente, telefonoContribuyente, Fecha, Detalle, Estado, RazonReagenda, Token) values (next value for sec_Id_cita, @PIdFuncionario, 
+	@PIdContribuyente, @PNombreContribuyente, @PApellido1Contribuyente, @PApellido2Contribuyente, @PNombreFuncionario, @PApellido1Funcionario, @PApellido2Funcionario,
+	@PCorreoContribuyente, @PtelefonoContribuyente, @PFecha, @PDetalle, @PEstado, @PRazonReagenda, @PToken);
 end;
 go
 
 --Procedimiento de actualizar en tabla Cita
-create or alter procedure usp_actualizar_cita @PId int, @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
-@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100), 
-@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
-@PEstado varchar(50), @PRazonReagenda varchar(255)
+create or alter procedure usp_actualizar_cita @PId int, @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), @PApellido1Contribuyente varchar(50), 
+@PApellido2Contribuyente varchar(50), @PNombreFuncionario varchar(50), @PApellido1Funcionario varchar(50), @PApellido2Funcionario varchar(50), @PCorreoContribuyente varchar(100), 
+@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255), @PEstado varchar(50), @PRazonReagenda varchar(255), @PToken varchar(20)
 as
 begin
 	update Cita
-		set IdFuncionario = @PIdFuncionario, IdContribuyente = @PIdContribuyente, NombreContribuyente = @PNombreContribuyente, 
-		Apellido1Contribuyente = @PApellido1Contribuyente, Apellido2Contribuyente = @PApellido2Contribuyente, 
-		CorreoContribuyente= @PCorreoContribuyente, telefonoContribuyente = @PtelefonoContribuyente,
-		Fecha = @PFecha, Detalle = @PDetalle, Estado = @PEstado, RazonReagenda = @PRazonReagenda
+		set IdFuncionario = @PIdFuncionario, IdContribuyente = @PIdContribuyente, NombreContribuyente = @PNombreContribuyente, Apellido1Contribuyente = @PApellido1Contribuyente, 
+		Apellido2Contribuyente = @PApellido2Contribuyente, NombreFuncionario = @PNombreFuncionario, Apellido1Funcionario = @PApellido1Funcionario, Apellido2Funcionario = @PApellido2Funcionario,
+		CorreoContribuyente= @PCorreoContribuyente, telefonoContribuyente = @PtelefonoContribuyente, Fecha = @PFecha, Detalle = @PDetalle, Estado = @PEstado, RazonReagenda = @PRazonReagenda, Token = @PToken
 	where Id = @PId;
 end;
 go
@@ -356,31 +359,29 @@ go
 --Tabla CitaTemp
  
 --Procedimiento de insertar en tabla CitaTemp
-create or alter procedure usp_insertar_cita_temp @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
-@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100),
-@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
-@PEstado varchar(50), @PRazonReagenda varchar(255)
+create or alter procedure usp_insertar_cita_temp @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), @PApellido1Contribuyente varchar(50), 
+@PApellido2Contribuyente varchar(50), @PNombreFuncionario varchar(50), @PApellido1Funcionario varchar(50), @PApellido2Funcionario varchar(50), @PCorreoContribuyente varchar(100),
+@PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255), @PEstado varchar(50), @PRazonReagenda varchar(255), @PToken varchar(20)
 as
 begin
-	insert into CitaTemp (Id, IdFuncionario, IdContribuyente, NombreContribuyente, Apellido1Contribuyente, Apellido2Contribuyente, CorreoContribuyente, 
-	telefonoContribuyente, Fecha, Detalle, Estado, RazonReagenda) values (next value for sec_Id_cita_temp, @PIdFuncionario, 
-	@PIdContribuyente,@PNombreContribuyente, @PApellido1Contribuyente, @PApellido2Contribuyente, 
-	@PCorreoContribuyente, @PtelefonoContribuyente, @PFecha, @PDetalle, @PEstado, @PRazonReagenda);
+	insert into CitaTemp (Id, IdFuncionario, IdContribuyente, NombreContribuyente, Apellido1Contribuyente, Apellido2Contribuyente, NombreFuncionario, Apellido1Funcionario, 
+	Apellido2Funcionario, CorreoContribuyente, telefonoContribuyente, Fecha, Detalle, Estado, RazonReagenda, Token) values (next value for sec_Id_cita_temp, @PIdFuncionario, 
+	@PIdContribuyente, @PNombreContribuyente, @PApellido1Contribuyente, @PApellido2Contribuyente, @PNombreFuncionario, @PApellido1Funcionario, @PApellido2Funcionario,
+	@PCorreoContribuyente, @PtelefonoContribuyente, @PFecha, @PDetalle, @PEstado, @PRazonReagenda, @PToken);
 end;
 go
 
 --Procedimiento de actualizar en tabla CitaTemp
-create or alter procedure usp_actualizar_cita_temp @PId int, @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), 
-@PApellido1Contribuyente varchar(50), @PApellido2Contribuyente varchar(50), @PCorreoContribuyente varchar(100), 
+create or alter procedure usp_actualizar_cita_temp @PId int, @PIdFuncionario varchar(30), @PIdContribuyente varchar(30), @PNombreContribuyente varchar(50), @PApellido1Contribuyente varchar(50), 
+@PApellido2Contribuyente varchar(50), @PNombreFuncionario varchar(50), @PApellido1Funcionario varchar(50), @PApellido2Funcionario varchar(50), @PCorreoContribuyente varchar(100), 
 @PtelefonoContribuyente varchar(30), @PFecha datetime, @PDetalle varchar(255),
-@PEstado varchar(50), @PRazonReagenda varchar(255)
+@PEstado varchar(50), @PRazonReagenda varchar(255), @PToken varchar(20)
 as
 begin
 	update CitaTemp
-		set IdFuncionario = @PIdFuncionario, IdContribuyente = @PIdContribuyente, NombreContribuyente = @PNombreContribuyente, 
-		Apellido1Contribuyente = @PApellido1Contribuyente, Apellido2Contribuyente = @PApellido2Contribuyente, 
-		CorreoContribuyente= @PCorreoContribuyente, telefonoContribuyente = @PtelefonoContribuyente,
-		Fecha = @PFecha, Detalle = @PDetalle, Estado = @PEstado, RazonReagenda = @PRazonReagenda
+		set IdFuncionario = @PIdFuncionario, IdContribuyente = @PIdContribuyente, NombreContribuyente = @PNombreContribuyente, Apellido1Contribuyente = @PApellido1Contribuyente, 
+		Apellido2Contribuyente = @PApellido2Contribuyente, NombreFuncionario = @PNombreFuncionario, Apellido1Funcionario = @PApellido1Funcionario, Apellido2Funcionario = @PApellido2Funcionario,
+		CorreoContribuyente= @PCorreoContribuyente, telefonoContribuyente = @PtelefonoContribuyente, Fecha = @PFecha, Detalle = @PDetalle, Estado = @PEstado, RazonReagenda = @PRazonReagenda, Token = @PToken
 	where Id = @PId;
 end;
 go

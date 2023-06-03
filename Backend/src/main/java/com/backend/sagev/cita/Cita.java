@@ -44,6 +44,15 @@ public class Cita {
     @Column(name = "Apellido2Contribuyente")
     private String apellido2Contribuyente;
 
+    @Column(name = "NombreFuncionario")
+    private String nombreFuncionario;
+
+    @Column(name = "Apellido1Funcionario")
+    private String apellido1Funcionario;
+
+    @Column(name = "Apellido2Funcionario")
+    private String apellido2Funcionario;
+
     @Column(name = "CorreoContribuyente")
     private String correoContribuyente;
 
@@ -70,6 +79,9 @@ public class Cita {
     private String razonReagenda;
     //En realiad esto se parsea a razon_reagenda por defcto (sanake_case)
     //Aunque ahora configurado para que se paresee a RazonReagenda (Pascal Case)
+
+    @Column(name = "Token")
+    private String token;
 
 
     public int getId() {
@@ -167,4 +179,38 @@ public class Cita {
     public void setRazonReagenda(String razonReagenda) {
         this.razonReagenda = razonReagenda;
     }
+
+    public String getNombreFuncionario() {
+        return nombreFuncionario;
+    }
+
+    public void setNombreFuncionario(String nombreFuncionario) {
+        this.nombreFuncionario = nombreFuncionario;
+    }
+
+    public String getApellido1Funcionario() {
+        return apellido1Funcionario;
+    }
+
+    public void setApellido1Funcionario(String apellido1Funcionario) {
+        this.apellido1Funcionario = apellido1Funcionario;
+    }
+
+    public String getApellido2Funcionario() {
+        return apellido2Funcionario;
+    }
+
+    public void setApellido2Funcionario(String apellido2Funcionario) {
+        this.apellido2Funcionario = apellido2Funcionario;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    
 }

@@ -1,7 +1,7 @@
 .uc-modal {
     position: fixed;
     background: #000000bf;
-    top: 0;
+    top: auto;
     left: 0;
     right: 0;
     bottom: 0;
@@ -9,7 +9,7 @@
 
 .uc-m-content{
     background: #fff;
-    width: 30%;
+    width: 35%;
     margin: 15% auto;
     border-radius: 10px;
 }
@@ -34,9 +34,16 @@
     top: 10px;
 }
 
+.uc-m-header .material-symbols-outlined{
+    cursor: pointer;
+    position: absolute;
+    right: 15px;
+    top: 10px;
+}
+
 .uc-m-body{
     padding: 20px;
-    min-height: 100px;
+    min-height: 30px;
 }
 
 .uc-m-footer{

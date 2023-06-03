@@ -27,7 +27,7 @@
       <tr *ngFor="let cita of citasReservadasFiltradas">
         <td>{{cita.fecha.toLocaleDateString()}}</td>
         <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
-        <td>{{cita.idFuncionario}}</td>
+        <td>{{cita.nombreFuncionario}} {{cita.apellido1Funcionario}} {{cita.apellido2Funcionario}}</td>
         <td>{{cita.nombreContribuyente}}</td>
         <td>{{cita.detalle}}</td>
       </tr>

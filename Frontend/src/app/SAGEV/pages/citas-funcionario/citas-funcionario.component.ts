@@ -65,7 +65,7 @@ export class CitasFuncionarioComponent implements OnInit {
     console.log("Numero de departamento del funcionario" + numDepartamentoParam)
     // Obtenga todos los funcionarios en el departamento seleccionado del funcionario que inició sesión, sin incluirlo a él
     this.funcionariosEncargadosPorDepa = this.funcionarios.filter( 
-      (f) => f.numDepartamento === numDepartamentoParam && f.idFuncionario !== this.modeloFuncionario.idFuncionario
+      (f) => f.numDepartamento === numDepartamentoParam && f.idFuncionario !== this.modeloFuncionario.idFuncionario && f.administrador !== "S" 
     )
     console.log(this.funcionariosEncargadosPorDepa)
   }

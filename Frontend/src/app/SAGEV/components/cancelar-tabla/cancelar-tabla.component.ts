@@ -2,6 +2,7 @@ import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { Cita } from '../../modelo/cita';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
+import { ViewportScroller } from "@angular/common";
 import Swal from 'sweetalert2';
 
 @Component({
@@ -16,6 +17,7 @@ export class CancelarTablaComponent implements OnInit {
   // @Input() idContribuyente: String
 
   idCitaSeleccionada: number
+  tokenCitaSeleccionada: string
   
 
   estadoCita: boolean = false
@@ -23,11 +25,13 @@ export class CancelarTablaComponent implements OnInit {
   citasContribuyente: Cita[] = []
   @Input() idContribuyente: string
 
-  constructor(private service: ServiceService, private router: Router) { }
+  constructor(private service: ServiceService, private router: Router, private scroller: ViewportScroller) { }
 
   ngOnInit(): void {
-    this.getCitasTempReservadasContribuyente() 
-    
+    this.getCitasTempReservadasContribuyente()
+    this.scroller.scrollToAnchor("tabla-cancelar")
+    //this.scroller.scrollToPosition([0, 160])
+    console.log(this.scroller.getScrollPosition())
   }
 
   getCitasTempReservadasContribuyente() : void {
@@ -54,10 +58,10 @@ export class CancelarTablaComponent implements OnInit {
   }
 
   marcarEstadoCancelada(inputTokenCita: string) : void {
-    let TokenCita = parseInt(inputTokenCita)
-    if(TokenCita !== this.idCitaSeleccionada){
+    let tokenCita: string = inputTokenCita
+    if(tokenCita !== this.tokenCitaSeleccionada){
       Swal.fire({
-        title: 'Este identificador no se encuentra',
+        title: 'El identificador ingresado es incorrecto',
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#3085d6',
@@ -84,10 +88,12 @@ export class CancelarTablaComponent implements OnInit {
 
    showModal: number = -1;
 
-   show(index: number, id: number){
+   show(index: number, id: number, token: string){
     this.showModal = index;
     //Aqui setea el id de la cita, convenientemente
     this.idCitaSeleccionada = id;
+    this.tokenCitaSeleccionada = token;
+    
   }
 
   close() : void {

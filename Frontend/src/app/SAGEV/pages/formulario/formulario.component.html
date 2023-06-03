@@ -18,7 +18,7 @@
     </div>
     <div class="col-md-4">
         <label for="validationDefault03"class="form-label">Funcionario</label>
-        <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{nombreFuncionario}}" required disabled>
+        <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{citaPadre.nombreFuncionario}} {{citaPadre.apellido1Funcionario}} {{citaPadre.apellido2Funcionario}}" required disabled>
     </div>
     <div class="col-md-4">
         <label for="validationDefault04" class="form-label">Nombre</label>
@@ -69,7 +69,7 @@
     </div>
 
     <div class="col-12 divEnviar text-center">
-        <button class="btn btn-primary btnEnviar" (click)="guardarCita(citaPadre);">Enviar formulario</button>    
+        <button class="btn btn-primary btnEnviar" (click)="guardarCita();">Enviar formulario</button>    
     </div>
 
 </form>

@@ -233,6 +233,9 @@ export class AdministradorComponent implements OnInit {
     this.service.getFuncionarios()
     .subscribe(dataFunc => {
       this.funcionarios = dataFunc
+      // Remover el funcionario administrador para no permitir cambiarle la contraseña
+      this.funcionarios = this.funcionarios.filter(f => f.administrador !== 'S')
+      
     })
   }
 
