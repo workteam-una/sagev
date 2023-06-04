@@ -13,7 +13,7 @@ element{
 
 #fondoCasa{
     
-    background-image: url('src\assets\images\casaAdobe.jfif');
+    /* background-image: url('src\assets\images\casaAdobe.jfif'); */
     width: 100vw;
     height: 31vh;
     background-repeat: no-repeat;

@@ -97,7 +97,7 @@ export class FormularioComponent implements OnInit {
 
     // Motivo de la cita
     if(this.citaPadre.detalle === undefined){
-      this.citaPadre.detalle = "No especifica"
+      this.citaPadre.detalle = "Sin especificar"
     }
 
     
@@ -164,11 +164,11 @@ export class FormularioComponent implements OnInit {
 
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
-    correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" + "Le informamos que su cita para el día " + this.devuelveDiaSemana(cita.fecha) + " "
-      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " + cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' })
-      + " con el/la funcionario/a " + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + " ha sido reservada con éxito." + "\n" 
-      + "Motivo: " + cita.detalle + "\n\n"
-      + "El identificador unico de su cita es: " + cita.token + ". Utilícelo en caso que necesite cancelar su cita." + "\n\n"
+    correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" 
+      + 'Le informamos que su cita con motivo: "' + cita.detalle + '" a cargo de ' + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + " "
+      + "para el " + this.devuelveDiaSemana(cita.fecha) + " " + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " 
+      + cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + " ha sido reservada con éxito." + "\n\n" 
+      + "En caso de que necesite cancelar su cita, el identificador único de la misma es: " + cita.token + "\n\n"
       + "Este correo es generado de forma automática, favor no responder."
 
     console.log(correo.message)

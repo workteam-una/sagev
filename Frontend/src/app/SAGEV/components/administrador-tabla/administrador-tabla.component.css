@@ -85,3 +85,8 @@
     background-color:#6ca34f !important;
     border-color:#4cae4c !important;
 }
+
+td {
+    max-width: 250px;
+    word-wrap: break-word;
+}

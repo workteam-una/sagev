@@ -207,7 +207,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     correo.message = "Estimado/a " + this.citaReagendada.nombreContribuyente + "\n\n" + "Le informamos que el funcionario a cargo de su cita la ha reagendado para el día " + this.devuelveDiaSemana(cita.fecha) + " "
       + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
       cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + cita.razonReagenda
-      + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, pedimos las disculpas del caso"
+      + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, pedimos las disculpas del caso."
 
     console.log(correo.message)
 

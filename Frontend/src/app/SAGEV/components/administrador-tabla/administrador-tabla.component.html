@@ -13,7 +13,7 @@
 </div>
 
 <div class="scroll">
-<table class="table" >
+<table class="table text-center" >
     <thead class="table-primary">
       <tr>
         <th scope="col">Fecha</th>
@@ -28,7 +28,7 @@
         <td>{{cita.fecha.toLocaleDateString()}}</td>
         <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
         <td>{{cita.nombreFuncionario}} {{cita.apellido1Funcionario}} {{cita.apellido2Funcionario}}</td>
-        <td>{{cita.nombreContribuyente}}</td>
+        <td>{{cita.nombreContribuyente}} {{cita.apellido1Contribuyente}} {{cita.apellido2Contribuyente}}</td>
         <td>{{cita.detalle}}</td>
       </tr>
     </tbody>

@@ -171,6 +171,7 @@ ul li a {
     /* text-transform: uppercase; */
     color: #fff;
     -webkit-text-stroke: 1px rgb(255, 255, 255, 0.5);
+    cursor: pointer;
 }
 
 
