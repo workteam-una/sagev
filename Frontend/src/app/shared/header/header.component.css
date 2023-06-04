@@ -118,6 +118,15 @@ element {
     background-color: aquamarine;
 }
 
+.newNavbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 8vh;
+    background: #1e71c4;
+    /* 255e96 */
+}
+/* 
 a {
     text-decoration: none;
 }
@@ -131,24 +140,12 @@ img {
     height: 55%;
 }
 
-
-/* CSS de nuevo header */
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
 
-}
-
-.newNavbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 8vh;
-    background: #1e71c4;
-    /* 255e96 */
 }
 
 ul {
@@ -168,10 +165,9 @@ ul li a {
     text-decoration: none;
     line-height: 1.2em;
     letter-spacing: 2px;
-    /* text-transform: uppercase; */
+    text-transform: uppercase;
     color: #fff;
     -webkit-text-stroke: 1px rgb(255, 255, 255, 0.5);
-    cursor: pointer;
 }
 
 
@@ -189,4 +185,7 @@ ul li a::before {
 ul li a:hover::before {
     width: 100%;
     filter: drop-shadow(0 0 25px var(--clr));
-}
+} */
+
+/* ------------------------------------------ */
+
