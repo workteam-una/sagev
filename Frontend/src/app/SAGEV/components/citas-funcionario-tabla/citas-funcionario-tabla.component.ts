@@ -88,6 +88,70 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       })
   }
 
+  // Carga la cita original (la que va a ser reagendada) y la nueva cita (reagendada) con la cita que se seleccionó
+  cargarCitaReagendadaOriginal(cita: Cita) : void {
+    this.citaOriginal = this.deepCopy<Cita>(cita)
+    this.citaReagendada = this.deepCopy<Cita>(cita)
+  }
+
+  // Setea la nueva fecha de la cita y el motivo de la reagenda
+  modificarCitaReagendada(fecha: string, razon: string) : void {
+    // Si se selecciona la opción por defecto en el select (combobox) con valor nulo, entonces lo notifica al funcionario
+    if (fecha === '') {
+      Swal.fire({
+        title: 'Error al reagendar la cita',
+        text: '¡Debe seleccionar una fecha válida!',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+      return
+    }
+    // Se setea el id en null para que no utilice el mismo id de la cita que se seleccionó para ser reagendada    
+    this.citaReagendada.id = null
+    // Limpiando la fecha para evitar problemas al reemplazarla más abajo
+    this.citaReagendada.fecha = null
+    // Como esta cita va a ser completamente nueva, con base en los datos anteriores debo reestablecer el valor del estado
+    this.citaReagendada.estado = 'Pendiente'
+    this.citaReagendada.fecha = new Date(fecha)
+    // Si la Razón de la reagenda de la cita está vacía agregue el texto "sin especificar"
+    if(razon !== undefined && razon !== ''){
+      this.citaReagendada.razonReagenda = razon
+    }
+    else {
+      this.citaReagendada.razonReagenda = "Sin especificar"
+    }
+    // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
+    this.citaReagendada.fecha.setHours(this.citaReagendada.fecha.getHours() - 6)
+    // Si la cita se genera con los milisegundos en .000 entonces al recuperarla de la base de datos lo hace con un formato inválido
+    this.citaReagendada.fecha.setMilliseconds(this.citaReagendada.fecha.getMilliseconds() + 10)
+
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+    // Una vez seteados los datos de la cita reagendada se procede a guardarlos en ambas tablas y cambiar su estado
+    this.guardarCitaTemp()
+    Notiflix.Loading.remove();
+  }
+
+  // Guardar las citas reagendadas en tabla temporal de citas
+  guardarCitaTemp(): void {
+    this.service.guardarCitaTemp(this.citaReagendada)
+      .subscribe(data => {
+        this.guardarCita()
+        this.closeReagenda()
+      })
+  }
+
+  // Guardar las citas reagendadas en tabla histórica de citas
+  guardarCita(): void {
+    this.service.guardarCita(this.citaReagendada)
+      .subscribe(data => {
+        this.actualizarEstado("reagendada")
+      })
+  }
+
   // Acutaliza el estado de una cita seleccionada
   actualizarEstado(estado: string): void {
     if (estado === "completada") {
@@ -128,70 +192,10 @@ export class CitasFuncionarioTablaComponent implements OnInit {
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#3085d6',
           })
+          this.enviarCorreo(this.citaOriginal, this.citaReagendada)
           this.ngOnInit()
         })
     }
-  }
-
-  // Carga la cita original (la que va a ser reagendada) y la nueva cita (reagendada) con la cita que se seleccionó
-  cargarCitaReagendadaOriginal(cita: Cita) : void {
-    this.citaOriginal = this.deepCopy<Cita>(cita)
-    this.citaReagendada = this.deepCopy<Cita>(cita)
-  }
-
-  // Setea la nueva fecha de la cita y el motivo de la reagenda
-  modificarCitaReagendada(fecha: string, razon: string) : void {
-    // Si se selecciona la opción por defecto en el select (combobox) con valor nulo, entonces lo notifica al funcionario
-    if (fecha === '') {
-      Swal.fire({
-        title: 'Error al reagendar la cita',
-        text: '¡Debe seleccionar una fecha válida!',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6',
-      })
-      return
-    }
-    // Se setea el id en null para que no utilice el mismo id de la cita que se seleccionó para ser reagendada    
-    this.citaReagendada.id = null
-    // Limpiando la fecha para evitar problemas al reemplazarla más abajo
-    this.citaReagendada.fecha = null
-    // Como esta cita va a ser completamente nueva, con base en los datos anteriores debo reestablecer el valor del estado
-    this.citaReagendada.estado = 'Pendiente'
-    this.citaReagendada.fecha = new Date(fecha)
-    // Razón de la reagenda
-    this.citaReagendada.razonReagenda = razon
-    // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
-    this.citaReagendada.fecha.setHours(this.citaReagendada.fecha.getHours() - 6)
-    // Si la cita se genera con los milisegundos en .000 entonces al recuperarla de la base de datos lo hace con un formato inválido
-    this.citaReagendada.fecha.setMilliseconds(this.citaReagendada.fecha.getMilliseconds() + 10)
-
-    Notiflix.Loading.dots({
-      backgroundColor: 'rgba(0,0,0,0.1)',
-      svgSize: '100px',
-    })
-    // Una vez seteados los datos de la cita reagendada se procede a guardarlos en ambas tablas y cambiar su estado
-    this.guardarCitaTemp()
-    this.guardarCita()
-    this.actualizarEstado("reagendada")
-    Notiflix.Loading.remove();
-  }
-
-  // Guardar las citas reagendadas en tabla temporal de citas
-  guardarCitaTemp(): void {
-    this.service.guardarCitaTemp(this.citaReagendada)
-      .subscribe(data => {
-        this.enviarCorreo(this.citaOriginal, this.citaReagendada)
-        this.closeReagenda()
-      })
-  }
-
-  // Guardar las citas reagendadas en tabla histórica de citas
-  guardarCita(): void {
-    this.service.guardarCita(this.citaReagendada)
-      .subscribe(data => {
-        
-      })
   }
 
   // Envia un correo al contribuyente, avisando que su cita a sido reagendada por el funcionario
@@ -203,7 +207,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     correo.subject = "Reagenda de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaOriginal.nombreContribuyente + "\n\n" + "Le informamos que su cita programada para el " + this.devuelveDiaSemana(citaOriginal.fecha) + " "
     + citaOriginal.fecha.getDate() + " de " + this.devuelveMes(citaOriginal.fecha) + " a las " + citaOriginal.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) 
-    + " ha sido reagendada por el funcionario a cargo.\nAhora está programada para el día " + this.devuelveDiaSemana(citaReagendada.fecha) + " " + citaReagendada.fecha.getDate() + " de " + this.devuelveMes(citaReagendada.fecha) 
+    + " ha sido reagendada por el funcionario a cargo.\nAhora la cita se encuentra programada para el día " + this.devuelveDiaSemana(citaReagendada.fecha) + " " + citaReagendada.fecha.getDate() + " de " + this.devuelveMes(citaReagendada.fecha) 
     + " a las " + citaReagendada.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + citaReagendada.razonReagenda
     + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, le pedimos disculpas por cualquier inconveniente causado."
     this.service.enviaCorreo(correo)

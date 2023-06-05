@@ -89,16 +89,27 @@ export class FormularioComponent implements OnInit {
     this.citaPadre.token = this.creaToken()
   }
 
+  /* 
+    Método que tras una seguidilla de eventos guarda la cita en la tabla histórica y temporal, para luego
+    enviar el correo de confirmación de la cita tanto para el funcionario como para el contribuyente
+  */
+  guardarCitasEnviarCorreos() : void {
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+    this.guardarCita()
+    // Se sacó un promedio del tiempo empleado y este fue el resultado
+    Notiflix.Loading.remove(5000)
+  }
+
   // Almacena la cita en la base de datos
   guardarCita() : void {
     // Si las validaciones encuentran un error se sale del método
     if (!this.validaciones()) {
       return
     }
-    Notiflix.Loading.dots({
-      backgroundColor: 'rgba(0,0,0,0.1)',
-      svgSize: '100px',
-    })
+
    // Carga la cita con los valores ingresados en el formulario
    this.cargarCita()
     // Se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
@@ -106,23 +117,19 @@ export class FormularioComponent implements OnInit {
     // Guardar en la tabla histórica de citas 
     this.service.guardarCita(this.citaPadre)
       .subscribe(data => {
+        // Guardar cita en la tabla temporal de citas
+        this.guardarCitaTemp()
     })
-    // Guardar cita en la tabla temporal de citas
+    
+  }
+
+  // Guardar la cita en la tabla temporal de citas
+  guardarCitaTemp() : void {
     this.service.guardarCitaTemp(this.citaPadre)
     .subscribe(data => {
-      Swal.fire({
-        title: '¡Cita reservada con éxito!',
-        text: 'Los detalles de la reserva serán enviados al correo electrónico ingresado',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6'
-      }).then(() => {
-        window.location.reload()
-      })
+      this.enviarCorreo(this.citaPadre)
+
     })
-    this.enviarCorreo(this.citaPadre)
-    this.resetForm()
-    Notiflix.Loading.remove()
   }
 
   // Genera el contenido de un correo electrónico dirigido al contribuyente una vez realiza el envío del formulario para reservar la cita
@@ -144,30 +151,35 @@ export class FormularioComponent implements OnInit {
       .subscribe(data => {
         this.enviarCorreoFunc(this.citaPadre)
       })
-
   }
 
   // Genera el contenido de un correo electrónico dirigido al funcionario una vez se le agende una cita nueva
   enviarCorreoFunc(cita: Cita) : void {
     let correo: Correo = new Correo
-    // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
-    cita.fecha.setHours(cita.fecha.getHours() + 6)
     correo.to = this.funcionarioEncargado.correo
     correo.subject = "SAGEV: Nueva cita con " + cita.nombreContribuyente + " para el " + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha)
-    correo.message = "Estimado/a " + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + "\n\n" + 
+    correo.message = "Estimado/a " + this.funcionarioEncargado.nombre + "\n\n" + 
     "Se le informa que tiene una nueva cita agendada para el " + this.devuelveDiaSemana(cita.fecha) + " "
       + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
       cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\n" +
       "Contribuyente: " + cita.nombreContribuyente + " " + cita.apellido1Contribuyente + " " + cita.apellido2Contribuyente + "\n" +
       "Teléfono: " + cita.telefonoContribuyente + "\n" +
       "Correo: " + cita.correoContribuyente + "\n" +
-      "Necesidad del contribuyente: " + cita.detalle + "\n\n" + 
-      "Este correo es generado de forma automática, favor no responder."
+      "Necesidad del contribuyente: " + cita.detalle
 
     this.service.enviaCorreo(correo)
       .subscribe(() => {
+        Swal.fire({
+          title: '¡Cita reservada con éxito!',
+          text: 'Los detalles de la reserva serán enviados al correo electrónico ingresado',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6'
+        }).then(() => {
+          // Limpiar el formulario y refrescar la página
+          this.resetForm()
+        })
       })
-
   }
 
   // Mostrar el pop-up
@@ -179,11 +191,12 @@ export class FormularioComponent implements OnInit {
   close() : void {
     this.showModal = -1;
     this.shModal.emit(this.showModal);
-  } //Fin pop up
+  }
 
   // Limpia el formulario
   resetForm() : void {
     this.enviar = false
+    window.location.reload()
   }
 
   // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español de ese día
