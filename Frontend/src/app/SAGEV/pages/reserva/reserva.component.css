@@ -14,9 +14,6 @@
     margin-top: 3%;
     margin-right: 5%;
     margin-left: 5%;
-    /* text-align: center; */
-    /* margin-left: 15%; */
-    /* resize: none; */
 }
 
 .div-titulo {
@@ -40,7 +37,6 @@
     margin: auto;
     width: 75%;
     padding: 10px;
-    /* overflow-y: scroll; */
 }
 
 .tituloTabla {
@@ -63,40 +59,30 @@
     margin-bottom: 2%;
   }
   
-  .div-btnAnterior {
-    width: 50%;
-  }
-  
-  .div-btnSiguiente {
-    width: 50%;
-    direction: rtl;
-  }
-  
-  .btn-anterior {
-  
-    
-  }
-  
-  .btn-siguiente {
-  
-    
-  }
-  
-  .btn-anterior:hover {
-    color:#6ca34f !important;
-    background-color: #fff;
-    border-color:#4cae4c !important;
-  }
-  
-  .btn-siguiente:hover {
-    color:#6ca34f !important;
-    background-color: #fff;
-    border-color:#4cae4c !important;
-  }
+.div-btnAnterior {
+  width: 50%;
+}
 
-  .avisodeSuplente{
-    margin-top: 5%;
-    color: red;
-    text-align: center;
-    margin-right: 10%;
-  }
+.div-btnSiguiente {
+  width: 50%;
+  direction: rtl;
+}
+
+.btn-anterior:hover {
+  color:#6ca34f !important;
+  background-color: #fff;
+  border-color:#4cae4c !important;
+}
+
+.btn-siguiente:hover {
+  color:#6ca34f !important;
+  background-color: #fff;
+  border-color:#4cae4c !important;
+}
+
+.avisodeSuplente{
+  margin-top: 5%;
+  color: red;
+  text-align: center;
+  margin-right: 10%;
+}

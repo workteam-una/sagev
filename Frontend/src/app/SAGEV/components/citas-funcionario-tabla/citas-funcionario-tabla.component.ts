@@ -16,12 +16,17 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   formModal: any
 
+  // Modelo Funcionario tiene parte de la informacion del funcionario que hizo login
   @Input() modeloFuncionario: Funcionario
+  // Citas pendientes del funcionario logeado
   citasFuncionario: Cita[] = []
   idCitaSeleccionada: number
-
+  /* Genera una lista de citas disponibles*/
   citasDisponibles: Cita[] = []
+  /* Citas Disponibles que el funcionario puede elegir para sustituir (reagendar) la cita 
+     a la que no puede asistir */
   citasDisponiblesReagenda: Cita[] = []
+  /* La cita que se selecciono desde la lista */
   citaReagendada: Cita
 
   // Esta es la cita que se selecciona para poder mostrar la información de ella en el correo de reagenda 
@@ -38,63 +43,52 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.getCitasTempFuncionario(this.modeloFuncionario.idFuncionario)
   }
 
-  //Mostrar el pop up
+  // Mostrar el pop up
   showModalEstado: number = -1
   showModalReagenda: number = -1
 
-  //Este metodo además de setear el valor de showModal para mostrar el popup
-  //tambien va a setear el id de la cita seleccionada para poder cambiar su estado
+  // Este metodo además de setear el valor de showModal para mostrar el popup
+  // tambien va a setear el id de la cita seleccionada para poder cambiar su estado
   showEstado(index: number, id: number): void {
     this.showModalEstado = index;
-    //Aqui setea el id de la cita, convenientemente
+    //Aqui setea el id de la cita seleccionada
     this.idCitaSeleccionada = id;
   }
 
+  // Cierra el pop-up
   closeEstado(): void {
     this.showModalEstado = -1;
-  }//Fin pop up
+  }
 
+ // Muestra el pop-up para reagendar
   showReagenda(index: number, id: number): void {
     this.showModalReagenda = index;
-    //Aqui setea el id de la cita, convenientemente
+    // Aqui setea el id de la cita seleccionada
     this.idCitaSeleccionada = id;
   }
 
+  // Cierra el pop up de reagendar cita
   closeReagenda(): void {
     this.showModalReagenda = -1;
-    /* 
-      Este init se tiene que poner porque como estoy usando ngModel en el textArea y este al inicio 
-      está vacío entonces me modifica el valor de la cita de la lista a la que se está igualando y 
-      muestra el campo vacio al cerrar el pop-up (bien raro). Entonces, al iniciar de nuevo el 
-      componente no sale vacío el textarea, porque se vuelve a cargar el detalle original.
+  }
 
-      Si se tuviese que evitar reiniciar el componente lo que se puede hacer es un método que me envíe el valor
-      que se introdujo en el text-area y se setee en la cita nueva ahí, sin usar el ngModel básicamente. 
-    */
-    // this.ngOnInit();
-  }//Fin pop up
-
+  // Carga las citas pendientes del funcionario. Se llama "Temp" de temporal, porque solo carga las citas del ultimo mes.
   getCitasTempFuncionario(id: string): void {
-    // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda
+    // Para evitar que se dupliquen al abrir y cerrar el pop-up de reagenda se limpian las listas
     this.citasDisponibles = []
     this.citasDisponiblesReagenda = []
-    // this.citasFuncionario = []
-
     this.service.getCitasTempFuncionario(id)
       .subscribe(data => {
         this.citasFuncionario = data
-
-        // Se están parseando las fechas aquí para solo tener que hacerlo una vez
+        // Se están parsean las fechas de formato SQL a formato TypeScript
         this.citasFuncionario.forEach(c => {
           c.fecha = this.sqlToJsDate(c.fecha)
         })
-
-        // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
-        // this.citasSemanaActual()
         this.generaCitasDisponiblesReagenda()
       })
   }
 
+  // Acutaliza el estado de una cita seleccionada
   actualizarEstado(estado: string): void {
     if (estado === "completada") {
       this.service.actualizarEstadoCompletadaTemp(this.idCitaSeleccionada)
@@ -145,8 +139,9 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citaReagendada = this.deepCopy<Cita>(cita)
   }
 
+  // Setea la nueva fecha de la cita y el motivo de la reagenda
   modificarCitaReagendada(fecha: string, razon: string) : void {
-    // Si se selecciona la opción por defecto con valor nulo entonces notifica al contribuyente y se sale del método
+    // Si se selecciona la opción por defecto en el select (combobox) con valor nulo, entonces lo notifica al funcionario
     if (fecha === '') {
       Swal.fire({
         title: 'Error al reagendar la cita',
@@ -164,14 +159,8 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // Como esta cita va a ser completamente nueva, con base en los datos anteriores debo reestablecer el valor del estado
     this.citaReagendada.estado = 'Pendiente'
     this.citaReagendada.fecha = new Date(fecha)
-      // Motivo de la cita
-      if(this.citaReagendada.razonReagenda !== undefined){
-        this.citaReagendada.razonReagenda = razon
-      }
-      else
-      {
-        this.citaReagendada.razonReagenda = "Sin especificar"
-      }
+    // Razón de la reagenda
+    this.citaReagendada.razonReagenda = razon
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     this.citaReagendada.fecha.setHours(this.citaReagendada.fecha.getHours() - 6)
     // Si la cita se genera con los milisegundos en .000 entonces al recuperarla de la base de datos lo hace con un formato inválido
@@ -190,12 +179,11 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
   // Guardar las citas reagendadas en tabla temporal de citas
   guardarCitaTemp(): void {
-
     this.service.guardarCitaTemp(this.citaReagendada)
       .subscribe(data => {
+        this.enviarCorreo(this.citaOriginal, this.citaReagendada)
         this.closeReagenda()
       })
-    this.enviarCorreo(this.citaOriginal, this.citaReagendada)
   }
 
   // Guardar las citas reagendadas en tabla histórica de citas
@@ -206,12 +194,11 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       })
   }
 
+  // Envia un correo al contribuyente, avisando que su cita a sido reagendada por el funcionario
   enviarCorreo(citaOriginal: Cita, citaReagendada: Cita) : void {
     let correo: Correo = new Correo
-
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
     citaReagendada.fecha.setHours(citaReagendada.fecha.getHours() + 6)
-
     correo.to = citaOriginal.correoContribuyente
     correo.subject = "Reagenda de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaOriginal.nombreContribuyente + "\n\n" + "Le informamos que su cita programada para el " + this.devuelveDiaSemana(citaOriginal.fecha) + " "
@@ -219,16 +206,13 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     + " ha sido reagendada por el funcionario a cargo.\nAhora está programada para el día " + this.devuelveDiaSemana(citaReagendada.fecha) + " " + citaReagendada.fecha.getDate() + " de " + this.devuelveMes(citaReagendada.fecha) 
     + " a las " + citaReagendada.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + citaReagendada.razonReagenda
     + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, le pedimos disculpas por cualquier inconveniente causado."
-
-    console.log(correo.message)
-
     this.service.enviaCorreo(correo)
       .subscribe(data => {
-        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
+        
       })
-
   }
 
+  // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español de ese día
   devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
@@ -236,6 +220,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     return dia
   }
 
+  // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español de ese mes
   devuelveMes(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -243,12 +228,11 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     return mes
   }
 
-
   // ---------------------------------------------------------------------------------------------------------------
+  // ------------------------ Estos metodos son los mismos de reserva.component.ts ---------------------------------
   // ---------------------------------------------------------------------------------------------------------------
-  // ---------------------------------------------------------------------------------------------------------------
-
-
+  
+  // La función siempre va a devolver la fecha del lunes de la semana actual haciendo el cálculo con base en la fecha actual
   devolverLunesSemanaActual(): Date {
     let fechaLunes = new Date() //Fecha del lunes de la semana actual
     let hoy = new Date().getDay() //Dia de la semana actual
@@ -309,30 +293,24 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     return lunesSemanaActual
   }
 
-  // Esta función genera las citas de cada funcionario según un horario fijo
+   // Esta función genera las citas de cada funcionario según un horario fijo (martes de 8:00 a 11:30 y jueves de 1:00 a 3:30)
   generaCitasDisponibles(aumentoDias: number): void {
-
-    // this.contadorCitasDisponibles = this.contadorCitasDisponibles + contadorParametros;
 
     // Martes de la semana actual a las 8:00 a.m
     let fechaMartesI = this.obtenerFechaDiaSemana("Martes")
     fechaMartesI.setHours(8, 0, 0)
-    //fechaMartesI.setDate(fechaMartesI.getDate() + aumentoDias)
 
     // Martes de la semana actual a las 12:00 m.d
     let fechaMartesF = this.obtenerFechaDiaSemana("Martes")
     fechaMartesF.setHours(12, 0, 0)
-    //fechaMartesF.setDate(fechaMartesF.getDate() + aumentoDias)
 
     // Jueves de la semana actual a la 1:00 p.m
     let fechaJuevesI = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesI.setHours(13, 0, 0)
-    //fechaJuevesI.setDate(fechaJuevesI.getDate() + aumentoDias)
 
     // Jueves de la semana actual a las 4:00 p.m
     let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesF.setHours(16, 0, 0)
-    //fechaMartesF.setDate(fechaJuevesF.getDate() + aumentoDias)
 
     // Genera citas disponibles los días martes de la semana actual
     for (let i = fechaMartesI; i < fechaMartesF; i.setMinutes(fechaMartesI.getMinutes() + 30)) {
@@ -349,9 +327,6 @@ export class CitasFuncionarioTablaComponent implements OnInit {
         // Aumentando la cantidad de días según el parámetro (0 - ninguno / semana actual | 7 - una semana / semana siguiente)
         citaAux.fecha.setDate(citaAux.fecha.getDate() + aumentoDias)
         this.citasDisponibles.push(citaAux)
-      }
-      else {
-        console.log("Cita ignorada: " + citaAux.fecha)
       }
     }
 
@@ -371,29 +346,16 @@ export class CitasFuncionarioTablaComponent implements OnInit {
         citaAux.fecha.setDate(citaAux.fecha.getDate() + aumentoDias)
         this.citasDisponibles.push(citaAux)
       }
-      else {
-        console.log("Cita ignorada: " + citaAux.fecha)
-      }
     }
   }
 
-  /*
-    Filtra las citas disponibles para que muestre solo las que no han sido reservadas.
-    Itera las citas disponibles y comparando su fecha una a una con las fechas de todas las citas rerservadas,
-    en caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array
+ /*
+    Filtra las citas disponibles para que muestre solo las que no han sido reservadas. 
+    Itera las citas disponibles y va comparando su fecha una a una con las fechas de todas las citas reservadas. 
+    En caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array.
+    Dentro de la comparativa se consulta si el estado de la cita es "cancelada", de serlo, la posición de esa cita no se elimina.
   */
   filtrarCitasDisponibles(): void {
-
-    // console.log("citas disponibles")
-    // this.citasDisponibles.forEach(c => {
-    //   console.log(c)
-    // })
-
-    // console.log("citas funcionario")
-    // this.citasFuncionario.forEach(c => {
-    //   console.log(c)
-    // })
-
     // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
     for (let i = 0; i < this.citasDisponibles.length; i++) {
       for (let j = 0; j < this.citasFuncionario.length; j++) {
@@ -414,12 +376,6 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // Removiendo las citas de la semana que son anteriores al día actual
     this.citasDisponiblesReagenda = this.citasDisponiblesReagenda.filter(c => c.fecha > this.fechaHoy)
   }
-
-  // aumentarSemanasCitasDisponibles() : void {
-  //   this.citasDisponibles.forEach(c => {
-  //     c.fecha.setDate(c.fecha.getDate() + 7)
-  //   })
-  // }
 
   // Generar las citas disponibles de la semana siguiente
   generaCitasDisponiblesReagenda(): void {
@@ -454,17 +410,6 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     let sMillisecond = sqlDateArr4[1]
 
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
-  }
-
-  convertDate(date: Date) {
-    let yyyy = date.getFullYear().toString();
-    let mm = (date.getMonth() + 1).toString();
-    let dd = date.getDate().toString();
-
-    let mmChars = mm.split('');
-    let ddChars = dd.split('');
-
-    return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
   }
 
   // Copiar un objeto a profundidad para obtener todos los valores sin afectar al objeto original

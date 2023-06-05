@@ -1,13 +1,13 @@
 package com.backend.sagev.funcionario;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//Que hace esta clase?: En esta clase nada mas se desarrolla los metodos de la interfaz
-// FuncionarioService
-
 @Service
 public class FuncionarioServicelmp implements FuncionarioService{
+    // Esta clase posee la implementación de las funciones del service, con base en el repositorio
 
     @Autowired
     private FuncionarioRepositorio repositorio;
@@ -22,11 +22,6 @@ public class FuncionarioServicelmp implements FuncionarioService{
         return repositorio.findByidFuncionario(idFuncionario);
     }
 
-    // @Override
-    // public Funcionario add(Funcionario f) {
-    //     return repositorio.add(f);
-    // }
-
     @Override
     public Funcionario edit(Funcionario f) {
         return repositorio.save(f);
@@ -34,7 +29,7 @@ public class FuncionarioServicelmp implements FuncionarioService{
 
     @Override
     public Funcionario delete(int idFuncionario) {
-        throw new UnsupportedOperationException("Para sagev: aun no implementamos esto.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
     
     @Override

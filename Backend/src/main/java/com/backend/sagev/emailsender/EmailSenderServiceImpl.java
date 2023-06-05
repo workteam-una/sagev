@@ -1,7 +1,5 @@
 package com.backend.sagev.emailsender;
 
-import javax.websocket.Decoder.Text;
-
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -22,7 +20,6 @@ public class EmailSenderServiceImpl implements EmailSenderService{
         simpleMailMessage.setTo(to);
         simpleMailMessage.setSubject(subject);
         simpleMailMessage.setText(message);
-
         this.mailSender.send(simpleMailMessage);
     }
 

@@ -4,7 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SharedModule } from './shared/shared.module';
 import { SAGEVModule } from './SAGEV/sagev.module';
-import { ReservaComponent } from './SAGEV/pages/reserva/reserva.component';
 import { ServiceService } from './Service/service.service';
 import { HttpClientModule } from '@angular/common/http';
 

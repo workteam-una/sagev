@@ -1,4 +1,4 @@
-<div class="uc-modal" *ngIf="showModal === 1 || showModal === 0">
+<div class="uc-modal" *ngIf="showModal === 1">
     <div class="uc-m-content">
         <div class="uc-m-header">
             <span class="material-symbols-outlined" (click)="close()">
@@ -7,72 +7,68 @@
             <h4>Complete el formulario para reservar su cita</h4>
         </div>
 
-<form [formGroup]="clientForm" class="row g-3 divFormulario">
-    <div class="col-md-4">
-        <label for="validationDefault01" class="form-label">Fecha</label>
-        <input name="fecha" type="text" class="form-control" id="validationDefault01" value="{{fechaCitaString}}" required disabled>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault02" class="form-label">Hora</label>
-        <input name="hora" type="text" class="form-control" id="validationDefault02" value="{{horaCitaFormateada}}" required disabled>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault03"class="form-label">Funcionario</label>
-        <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{citaPadre.nombreFuncionario}} {{citaPadre.apellido1Funcionario}} {{citaPadre.apellido2Funcionario}}" required disabled>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault04" class="form-label">Nombre</label>
-        <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }"/>
-        <div *ngIf="enviar && f['nombre'].errors" class="invalid-feedback">
-            <div *ngIf="f['nombre'].errors?.['required']">Nombre en blanco</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault05" class="form-label">Primer Apellido</label>
-        <input type="text" formControlName="apellidouno" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }"/>
-        <div *ngIf="enviar && f['apellidouno'].errors" class="invalid-feedback">
-            <div *ngIf="f['apellidouno'].errors?.['required']">Primer apellido en blanco</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault06" class="form-label">Segundo Apellido</label>
-        <input type="text" formControlName="apellidodos" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }"/>
-        <div *ngIf="enviar && f['apellidodos'].errors" class="invalid-feedback">
-            <div *ngIf="f['apellidodos'].errors?.['required']">Segundo apellido en blanco</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault07" class="form-label">Cédula</label>
-        <input type="text" formControlName="cedula" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"/>
-        <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
-            <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault08" class="form-label">Teléfono</label>
-        <input type="text" formControlName="telefono" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['telefono'].errors }"/>
-        <div *ngIf="enviar && f['telefono'].errors" class="invalid-feedback">
-            <div *ngIf="f['telefono'].errors?.['required']">Teléfono en blanco</div>
-        </div>
-    </div>
-    <div class="col-md-4">
-        <label for="validationDefault09" class="form-label">Correo Electrónico</label>
-        <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['email'].errors }"/>
-        <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
-            <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
-        </div>
-    </div>
-
-    <div for="validationDefault10" class="col-md-4 divDescr">
-        <label class="form-label">Motivo de la cita</label>
-        <textarea [(ngModel)]="citaPadre.detalle" name="descripcion" [ngModelOptions]="{standalone: true}" class="form-control ta-motivo" id="validationDefault10"></textarea>  <!-- type="text" class="form-control" id="validationDefault06" value="" required> -->
-    </div>
-
-    <div class="col-12 divEnviar text-center">
-        <button class="btn btn-primary btnEnviar" (click)="guardarCita();">Enviar formulario</button>    
-    </div>
-
-</form>
-
+        <form [formGroup]="clientForm" class="row g-3 divFormulario">
+            <div class="col-md-4">
+                <label for="validationDefault01" class="form-label">Fecha</label>
+                <input name="fecha" type="text" class="form-control" id="validationDefault01" value="{{fechaCitaString}}" required disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault02" class="form-label">Hora</label>
+                <input name="hora" type="text" class="form-control" id="validationDefault02" value="{{horaCitaFormateada}}" required disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault03"class="form-label">Funcionario</label>
+                <input name="nombreFuncionario" type="text" class="form-control" id="validationDefault03" value="{{citaPadre.nombreFuncionario}} {{citaPadre.apellido1Funcionario}} {{citaPadre.apellido2Funcionario}}" required disabled>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault04" class="form-label">Nombre</label>
+                <input type="text" formControlName="nombre" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['nombre'].errors }"/>
+                <div *ngIf="enviar && f['nombre'].errors" class="invalid-feedback">
+                    <div *ngIf="f['nombre'].errors?.['required']">Nombre en blanco</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault05" class="form-label">Primer Apellido</label>
+                <input type="text" formControlName="apellidouno" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidouno'].errors }"/>
+                <div *ngIf="enviar && f['apellidouno'].errors" class="invalid-feedback">
+                    <div *ngIf="f['apellidouno'].errors?.['required']">Primer apellido en blanco</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault06" class="form-label">Segundo Apellido</label>
+                <input type="text" formControlName="apellidodos" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['apellidodos'].errors }"/>
+                <div *ngIf="enviar && f['apellidodos'].errors" class="invalid-feedback">
+                    <div *ngIf="f['apellidodos'].errors?.['required']">Segundo apellido en blanco</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault07" class="form-label">Cédula</label>
+                <input type="text" formControlName="cedula" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['cedula'].errors }"/>
+                <div *ngIf="enviar && f['cedula'].errors" class="invalid-feedback">
+                    <div *ngIf="f['cedula'].errors?.['required']">Cédula en blanco o incompleta</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault08" class="form-label">Teléfono</label>
+                <input type="text" formControlName="telefono" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['telefono'].errors }"/>
+                <div *ngIf="enviar && f['telefono'].errors" class="invalid-feedback">
+                    <div *ngIf="f['telefono'].errors?.['required']">Teléfono en blanco</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <label for="validationDefault09" class="form-label">Correo Electrónico</label>
+                <input type="text" formControlName="email" class="form-control" [ngClass]="{ 'is-invalid': enviar && f['email'].errors }"/>
+                <div *ngIf="enviar && f['email'].errors" class="invalid-feedback">
+                    <div *ngIf="f['email'].errors?.['required']">Correo en blanco o inválido</div>
+                </div>
+            </div>
+            <div for="validationDefault10" class="col-md-4 divDescr">
+                <label class="form-label">Motivo de la cita</label>
+                <textarea [(ngModel)]="citaPadre.detalle" name="descripcion" [ngModelOptions]="{standalone: true}" class="form-control ta-motivo" id="validationDefault10"></textarea>  <!-- type="text" class="form-control" id="validationDefault06" value="" required> -->
+            </div>
+            <div class="col-12 divEnviar text-center">
+                <button class="btn btn-primary btnEnviar" (click)="guardarCita();">Enviar formulario</button>    
+            </div>
+        </form>
     </div>
 </div>

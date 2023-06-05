@@ -1,18 +1,17 @@
-<!-- <h3 class="tituloBienvenida">Reserva una cita</h3> -->
 <div class="div-titulo">
   <p class="lead">
     <strong>Seleccione un área y un departamento para desplegar las citas disponibles</strong>
   </p>
 </div>
 
+<!-- Selección de área y departamento -->
 <div class="div-area-depto-info">
   <div class="div-area-depto">
       <h5>Área</h5>
-      <!-- (change)="prueba($event)" -->
       <select #selectArea class="form-select" aria-label="Default select example"
         (change)="filtrarDepartamentosPorArea(selectArea.value); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteArea();">
         <option selected value=''>Seleccione el área</option>
-        <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.numArea}} - {{area.nombre}}</option>
+        <option *ngFor="let area of areas" value="{{area.numArea}}">{{area.nombre}}</option>
       </select>
       <br>
       <hr>
@@ -22,44 +21,40 @@
         getCitasReservadas(this.funcionarioEncargado.idFuncionario); resetearContadorSemanas(); mostrarBotonesAnteriorSiguienteDepartamento(selectDepa.value);">
         <option selected value=''>Seleccione el departamento</option>
         <option *ngFor="let departamento of departamentosPorArea " value="{{departamento.numDepartamento}}">
-          {{departamento.numDepartamento}} - {{departamento.nombre}}
+          {{departamento.nombre}}
         </option>
       </select>
   </div>
 
+  <!-- Funcionario a cargo y descripción del departamento -->
   <div *ngFor="let funcionario of funcionariosEncargadosPorDepa" class="div-info">
-  <!-- Si el área o el departamento no tienen valor seleccionado entonces no muestre la información del funcionario encargado -->
-  <div *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
-    <h5 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h5>
-    <ul class="list-group">
-      <li>
-        {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}} <p style="color: red">{{mostrarTextoSuplente(funcionario.suplente)}}</p>
-      </li>
-    </ul>
-    <h5>Tramite(s) a cargo</h5>
-    <ul class="list-group">
-      <!-- <li *ngFor="let departamento of descripcionesPorDepa" class="liTramites">{{departamento.descripcion}}</li> -->
-      <li *ngFor="let departamento of descripcionesPorDepa">
-        {{departamento.descripcion}}
-      </li>
-    </ul>
-  </div>
-  <div *ngIf="mostrarAvisoSuplente(funcionario.suplente)" class="avisodeSuplente">
-    <p>El funcionario encargado habitualmente de este departamento no se encuentra disponible, con gusto le atenderá el funcionario suplente</p>
+    <!-- Si el área o el departamento no tienen valor seleccionado entonces no muestre la información del funcionario encargado -->
+    <div *ngIf="selectArea.value !== '' && selectDepa.value !== ''">
+      <h5 *ngIf="funcionariosEncargadosPorDepa.length !== 0">Funcionario a cargo</h5>
+      <ul class="list-group">
+        <li>
+          {{funcionario.nombre}} {{funcionario.apellido1}} {{funcionario.apellido2}} <p style="color: red">{{mostrarTextoSuplente(funcionario.suplente)}}</p>
+        </li>
+      </ul>
+      <h5>Tramite(s) a cargo</h5>
+      <ul class="list-group">
+        <li *ngFor="let departamento of descripcionesPorDepa">
+          {{departamento.descripcion}}
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="mostrarAvisoSuplente(funcionario.suplente)" class="avisodeSuplente">
+      <p>El funcionario encargado habitualmente de este departamento no se encuentra disponible, con gusto le atenderá el funcionario suplente</p>
+    </div>
   </div>
 </div>
 
-</div>
-  
-<!-- <h5 class="tituloTabla">Citas disponibles</h5> -->
-
+<!-- Se crea este componente hasta que se haya seleccionado un departamento, se le envía el funcionario encargado y las citas disponibles -->
 <div class="tablaCitas" id="tablaCitas">
   <app-reserva-tabla [funcionarioEncargado]="funcionarioEncargado" [citasDisponibles]="citasDisponibles" *ngIf="selectDepa.value !== ''" (mostrarBotones)="recibirMostrarBotones($event)"></app-reserva-tabla>
 </div>
 
-
 <!-- Botones "anterior" y "siguiente"-->
-
 <div class="div-botones" *ngIf="mostrarBtns === 1">
   <div class="div-btnAnterior">
     <!-- Si el valor del contador es 0 quiere decir que me encuentro en la semana actual -->

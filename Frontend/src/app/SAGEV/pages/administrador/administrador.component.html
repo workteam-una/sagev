@@ -1,3 +1,4 @@
+<!-- Botones de la vista del funcionario -->
 <div class="div-botones">
     <button class="btn btn-primary btn-opciones btn-hover" (click)="showArea(1)">Agregar nueva área</button>
     <button class="btn btn-primary btn-opciones btn-hover" (click)="showDpto(1)">Agregar nuevo departamento</button>
@@ -5,12 +6,10 @@
     <button class="btn btn-primary btn-opciones btn-hover" (click)="showPswrdFunc(1)">Cambiar contraseña a funcionario</button>
 </div>
 
-<!-- Pop up para agregar una nueva area-->
+<!-- Pop up para agregar una nueva area -->
 <div class="uc-modal" *ngIf="showModalArea === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeArea()"> -->
-     
       <h4>Agregar una nueva área</h4>
     </div>
     <div class="uc-m-body">
@@ -53,7 +52,6 @@
 <div class="uc-modal" *ngIf="showModalDpto === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeDpto()"> -->
       
       <h4>Agregar nuevo departamento</h4>
     </div>
@@ -110,7 +108,6 @@
 <div class="uc-modal" *ngIf="showModalAgrFunc === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closeAgrFunc()"> -->
       <h4>Agregar un nuevo funcionario</h4>
     </div>
     <div class="uc-m-body">
@@ -120,7 +117,6 @@
           <!-- Selector del departamento -->
           <label>Seleccione el departamento al cual pertenece el nuevo funcionario</label><br>
           <div>
-            <!-- (change)="setDepaFuncionario(selectDepa.value)" -->
             <select #selectDepa name="dept" id="dept" class="form-select select-info" formControlName="departamento"
             [ngClass]="{ 'is-invalid': enviarNFF && f['departamento'].errors }">
               <option selected></option>
@@ -134,7 +130,7 @@
           </div>
           <!-- div que almacena todos textfields -->
           <div style="display: flex;">
-            <!-- div que almacena los textfields de la izquierda-->
+            <!-- div que almacena los textfields de la izquierda -->
             <div>
               <!-- div que almacena el nombre del funcionario -->
               <div>
@@ -207,7 +203,7 @@
               </div>
             </div>
           </div>
-          <!-- Selector para encargado -->
+          <!-- Selector para el encargado -->
           <div>
             <label>Seleccione si el funcionario va a ser encargado o suplente</label><br>
             <div>
@@ -237,8 +233,6 @@
 <div class="uc-modal" *ngIf="showModalPswrdFunc === 1">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <!-- <img class="material-icons" src="assets\images\close.svg" alt="close" (click)="closePswrdFunc()"> -->
-      
       <h4>Cambiar contraseña a un funcionario</h4>
     </div>
     <div class="uc-m-body">
@@ -246,7 +240,6 @@
       <form [formGroup]="cambiarcontraForm">
         <label>Seleccione el funcionario</label><br>
         <div>
-          <!-- (change)="setIdFunc(selectFunc.value);"> -->
           <select #selectFunc formControlName="idfuncionario" id="func" class="form-select" class="form-select selectInfo"
           [ngClass]="{ 'is-invalid': enviarCCF && ccf['idfuncionario'].errors }">
           <option selected></option>
@@ -293,14 +286,6 @@
     <strong>Seleccione una fecha inicial y final para filtrar las citas dentro de ese rango</strong>
 </p>
 </div>
-
-
-
-<!-- <div class="div-indicaciones-filtro">
-  <p class="lead">
-    <strong>Filtrar citas por rango de fechas</strong>
-  </p>
-</div> -->
 
 <div class="tablaHistorial">
   <app-administrador-tabla [fechaInicio]="fechaInicio" [fechaFinal]="fechaFinal"></app-administrador-tabla>

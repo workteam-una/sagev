@@ -1,13 +1,12 @@
 package com.backend.sagev.cita;
 
-import java.time.LocalDateTime;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CitaServiceImp implements CitaService {
+    // Esta clase posee la implementación de las funciones del service, con base en el repositorio
 
     @Autowired
     private CitaRepositorio repositorio;
@@ -26,15 +25,6 @@ public class CitaServiceImp implements CitaService {
     public List<Cita> listarIdContribuyente(String idContribuyente) {
         return repositorio.findByidContribuyenteOrderByFecha(idContribuyente);
     }
-    // @Override
-    // public List<Cita> listarRangoFechas(String fechaInicial, String fechaFinal) {
-    //     return repositorio.findByFechaBetween(fechaInicial, fechaFinal);
-    // }
-
-    // @Override
-    // public Cita add(Cita c) {
-    //     return repositorio.add(c);
-    // }
 
     @Override
     public Cita listarId(int id) {
@@ -53,6 +43,6 @@ public class CitaServiceImp implements CitaService {
 
     @Override
     public Cita delete(int id) {
-        throw new UnsupportedOperationException("Para sagev: aun no implementamos esto.");
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

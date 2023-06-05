@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,76 +15,73 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping({"/citas"})
 public class CitaControlador {
+    // Esta clase es la que recibe las consultas desde el frontend
+
     @Autowired
     CitaService service;
 
-    //Devuelve todas las citas
+    // Obtiene todas las citas en la tabla Cita
     @GetMapping
     public List<Cita>listar(){
         return service.listar();
     }
 
-    //Devuelve las citas reservadas con un funcionario
+    // Obtiene las citas reservadas con un funcionario con base en su id (cédula)
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
     public List<Cita>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
 
-    //Devuelve las citas reservadas con un contribuyente
+    // Obtiene las citas reservadas con un contribuyente
     @GetMapping(path = {"/contribuyente/{idContribuyente}"})
     public List<Cita>listarIdContribuyente(@PathVariable("idContribuyente") String idContribuyente){
         return service.listarIdContribuyente(idContribuyente);
     }
 
-    // @GetMapping(path = {"/filtradas/{fechaInicial}/{fechaFinal}"})
-    // public List<Cita>listarRangoFechas(@PathVariable("fechaInicial") String fechaInicial, @PathVariable("fechaFinal") String fechaFinal) {
-    //     //parsea la fecha de string a fecha
-
-    //     return service.listarRangoFechas(fechaInicial, fechaFinal);
-    // }
-
-    //Guarda la cita en la BD
+    // Guarda la cita en la tabla Cita de la base de datos
     @PostMapping
     public Cita agregar(@RequestBody Cita c){
         return service.save(c);
     }
 
-    //Es un busca retorna por el id
+    // Busca y retorna un registro de la tabla Cita con base en el id (cédula)
     @GetMapping(path = {"/{id}"})
     public Cita getById(@PathVariable("id") int id){
         return service.listarId(id);
     }
 
-    //Marca la cita como completada
-    @PutMapping(path = {"/completada/{id}"})
-    public Cita completada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
-        cita.setEstado("Completada");
-        return service.edit(cita);
-    }
+    // Métodos comentados porque ya no se usan. No se eliminan en caso de que se necesiten a futuro
 
-    //Marca la cita como ausente
-    @PutMapping(path = {"/ausente/{id}"})
-    public Cita ausente(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
-        cita.setEstado("Ausente");
-        return service.edit(cita);
-    }
+    // //Marca la cita como completada
+    // @PutMapping(path = {"/completada/{id}"})
+    // public Cita completada(@PathVariable("id") int id){
+    //     Cita cita = service.listarId(id);
+    //     cita.setEstado("Completada");
+    //     return service.edit(cita);
+    // }
 
-    //Marca la cita como cancelada
-    @PutMapping(path = {"/cancelada/{id}"})
-    public Cita cancelada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
-        cita.setEstado("Cancelada");
-        return service.edit(cita);
-    }
+    // //Marca la cita como ausente
+    // @PutMapping(path = {"/ausente/{id}"})
+    // public Cita ausente(@PathVariable("id") int id){
+    //     Cita cita = service.listarId(id);
+    //     cita.setEstado("Ausente");
+    //     return service.edit(cita);
+    // }
 
-    //Marca la cita como reagendada
-    @PutMapping(path = {"/reagendada/{id}"})
-    public Cita reagendada(@PathVariable("id") int id){
-        Cita cita = service.listarId(id);
-        cita.setEstado("Reagendada");
-        return service.edit(cita);
-    }
+    // //Marca la cita como cancelada
+    // @PutMapping(path = {"/cancelada/{id}"})
+    // public Cita cancelada(@PathVariable("id") int id){
+    //     Cita cita = service.listarId(id);
+    //     cita.setEstado("Cancelada");
+    //     return service.edit(cita);
+    // }
+
+    // //Marca la cita como reagendada
+    // @PutMapping(path = {"/reagendada/{id}"})
+    // public Cita reagendada(@PathVariable("id") int id){
+    //     Cita cita = service.listarId(id);
+    //     cita.setEstado("Reagendada");
+    //     return service.edit(cita);
+    // }
 
 }

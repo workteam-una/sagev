@@ -1,3 +1,4 @@
+<!-- Tabla que muestra las citas pendientes que tiene un funcionario con sus contribuyentes -->
 <table *ngIf="citasFuncionario.length !== 0 else sinCitas" class="table">
   <thead class="table-light">
     <tr>
@@ -19,10 +20,13 @@
       <td>{{cita.telefonoContribuyente}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
+      <!-- El botón solo se habilita cuando la cita está disponible -->
       <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada' && cita.estado !== 'Completada' && cita.estado !== 'Ausente'" class="text-center">
         <button type="button" class="btn btn-primary col-10" 
         (click)="showReagenda(1, cita.id); cargarCitaReagendadaOriginal(cita)">Reagendar</button>
       </td>
+      <!-- Hay varios ifs que cambian el color del botón según el estado de la cita, en este caso el botón 
+      deshabilitado de diferentes colores sirve como una ayuda visual, rápida de en que estado se encuentra la cita -->
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-danger btn-reagendar col-10" disabled>Reagendar</button>
       </td>
@@ -35,9 +39,6 @@
       <td *ngIf="cita.estado === 'Ausente'" class="text-center">
         <button type="button" class="btn btn-light btn-reagendar col-10" disabled>Reagendar</button>
       </td>
-      <!-- por ahora siempre que yo doy click en cambiar, se cambia el estado de la misma cita porque se envia un id quemado -->
-      <!-- por eso mismo hay que tener cuidado, porque hay que estar pendiente de cambiar el id cada vez si me metio otra cita quemada -->
-      <!-- Les quite un metodo openModal porque no sabia lo que hacia y me daba error xd -->
       <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada' && cita.estado !== 'Completada' && cita.estado !== 'Ausente'" class="text-center">
         <button type="button" class="btn btn-primary col-9" (click)="showEstado(1, cita.id)">Cambiar</button>
       </td>
@@ -53,11 +54,11 @@
       <td *ngIf="cita.estado === 'Ausente'" class="text-center">
         <button type="button" class="btn btn-light col-9" (click)="showEstado(1, cita.id)">Cambiar</button>
       </td>
-    <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
 
+<!-- Texto que se muestra en caso de no tener citas pendientes con contribuyentes  -->
 <ng-template #sinCitas>
   <h5 style="color: red; text-align: center;">Actualmente no cuenta con citas pendientes</h5>
   <div style="text-align: center; margin-top: 3%">
@@ -77,7 +78,6 @@
       <div class="uc-m-body">
         <h5>Seleccione el estado que desea asignar a la cita</h5>
           <select #selectEstado class="cbEstado" name="cambiarEstado" id="estado">
-              <!-- <option selected value="none">  </option> -->
               <option value="completada">Completada</option>
               <option value="ausente">Ausente</option>
           </select>
@@ -146,8 +146,6 @@
       <div class="col-12 divEnviar text-center">
           <button class="btn btn-primary btnEnviar" (click)="modificarCitaReagendada(selectFecha.value, razonReagenda.value);">Reagendar cita</button>
       </div>
-
     </form>
-
   </div>
 </div>

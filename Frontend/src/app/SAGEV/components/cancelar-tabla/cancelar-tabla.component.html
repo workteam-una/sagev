@@ -4,6 +4,7 @@
   </p>
 </div>
 
+<!-- Tabla para cancelar las citas -->
 <table class="table" id="tabla-cancelar">
   <thead class="table-primary">
     <tr>
@@ -35,23 +36,23 @@
   </tbody>
 </table>
 
+<!-- Pop-up para confirmar la cancelación de la cita -->
 <div class="uc-modal" *ngIf="showModal === 1" id="popup">
   <div class="uc-m-content">
     <div class="uc-m-header">
-      <span class="material-symbols-outlined" (click)="close()">
+    <span class="material-symbols-outlined" (click)="close()">
         X
-      </span>
+    </span>
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
-      <label>Digite el identificador único de la cita</label><br>
+      <label class="fs-3">Digite el identificador único de la cita</label><br>
     </div>
     <div class="inputToken">
       <input #tokenCita name="tokenCita" type="text" class="form-control" />
     </div>
     <div class="uc-m-footer text-center">
       <button class="btn btn-primary" (click)=" marcarEstadoCancelada(tokenCita.value)">Cancelar cita</button>
-      <!-- <button class="btn btn-danger" (click)="close()">Salir</button> -->
     </div>
   </div>
 </div>

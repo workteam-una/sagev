@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Cita } from '../../modelo/cita';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
@@ -12,51 +12,40 @@ import Swal from 'sweetalert2';
 })
 export class CancelarTablaComponent implements OnInit {
 
-  formModal: any
-  
-  // @Input() idContribuyente: String
-
-  idCitaSeleccionada: number
-  tokenCitaSeleccionada: string
-  
-
-  estadoCita: boolean = false
-
-  citasContribuyente: Cita[] = []
   @Input() idContribuyente: string
+  formModal: any
+  idCitaSeleccionada: number
+  tokenCitaSeleccionada: string 
+  estadoCita: boolean = false
+  // Lista de todas las citas reservadas por el contribuyente
+  citasContribuyente: Cita[] = []
+  // Si el valor es -1 el pop-up se cierra, si el valor es 1 el pop up se abre
+  showModal: number = -1;
 
   constructor(private service: ServiceService, private router: Router, private scroller: ViewportScroller) { }
 
+  /* 
+    Se da la instrucción de hacer un pequeño scroll justo después de crear el componente,
+   esto con el objetivo de que el usuario de cuenta que se cargó la tabla de citas 
+  */
   ngOnInit(): void {
     this.getCitasTempReservadasContribuyente()
     this.scroller.scrollToAnchor("tabla-cancelar")
-    //this.scroller.scrollToPosition([0, 160])
-    console.log(this.scroller.getScrollPosition())
   }
 
+  // Se obtienen las citas reservadas según la cédula de contribuyente ingresada
   getCitasTempReservadasContribuyente() : void {
     this.service.getCitasTempContribuyente(this.idContribuyente)
     .subscribe(data => {
-      this.citasContribuyente = data
-      
+      this.citasContribuyente = data     
       // Parseando la fecha de las citas a un formato que TS entiende
       this.citasContribuyente.forEach(c => {
         c.fecha = this.sqlToJsDate(c.fecha)
       })
-
-      // if (this.citasContribuyente.length === 0) {
-      // this.noExisteCedula = true
-      // }
-      // else {
-      //   this.noExisteCedula = false
-      // }
     })
   }
 
-  ngOnChanges(changes: SimpleChanges) : void {
-    console.log(changes)
-  }
-
+  // Si el token ingresado es igual al token de la cita seleccionada, marca esta cita como cancelada
   marcarEstadoCancelada(inputTokenCita: string) : void {
     let tokenCita: string = inputTokenCita
     if(tokenCita !== this.tokenCitaSeleccionada){
@@ -80,30 +69,29 @@ export class CancelarTablaComponent implements OnInit {
       this.ngOnInit()
       this.close()
     })
-    // this.ngOnInit();
   }
 
+  // Abre el pop up para cancelar una cita
   openModal() : void {
     this.formModal.show();
    }
 
-   showModal: number = -1;
-
    show(index: number, id: number, token: string){
+    // Index debe vale 1 para que se muestre el pop-up
     this.showModal = index;
-    //Aqui setea el id de la cita, convenientemente
+    // Cuando el pop-up se abre, en ese momento se obtiene el id y token de la cita seleccionada
     this.idCitaSeleccionada = id;
     this.tokenCitaSeleccionada = token;
     
   }
 
+  // Cierra el pop-up
   close() : void {
     this.showModal = -1;
   }
 
     // Convierte un objeto DateTime de SQL a un objeto Date de TS
     sqlToJsDate(sqlDate: any) : Date {
-
       //sqlDate in SQL DATETIME format ("yyyy-mm-dd hh:mm:ss.ms")
       let sqlDateArr1 = sqlDate.split("-")
       //format of sqlDateArr1[] = ['yyyy','mm','dd hh:mm:ms']
@@ -121,7 +109,7 @@ export class CancelarTablaComponent implements OnInit {
       //format of sqlDateArr4[] = ['ss','ms']
       let sSecond = sqlDateArr4[0]
       let sMillisecond = sqlDateArr4[1]
-  
+
       return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
     }
 }

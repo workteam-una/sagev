@@ -4,24 +4,9 @@ import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-// import org.hibernate.annotations.GenericGenerator;
-// import org.hibernate.annotations.Parameter;
-
 @Entity
 @Table(name = "Cita")
 public class Cita {
-
-    // @Id
-    // @Column(name = "Id")
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sec_Id_cita")
-    // @GenericGenerator(name = "sec_Id_cita", strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator", 
-    //     parameters = {
-    //         @Parameter(name = "sec_Id_cita", value = "sec_Id_cita"),
-    //         @Parameter(name = "initial_value", value = "1"), 
-    //         @Parameter(name = "increment_size", value = "1"),
-    //         @Parameter(name = "optimizer", value = "pooled-lo") 
-    //     }
-    // )
 
     @Id
     @Column(name = "Id")
@@ -59,13 +44,6 @@ public class Cita {
     @Column(name = "TelefonoContribuyente")
     private String telefonoContribuyente;
 
-    //Esto potencialmente se va a eliminar
-    // @Column(name = "IdAdministrador")
-    // private String idAdministrador;
-
-    //El tipo de dato se va a quedar como date en la base de datos
-    //Hoy 11/2/2022 se tomo la decisión de mantenerlo así para poder
-    //realizar filtrados a fechas en específico desde la base de datos
     @Column(name = "Fecha")
     private LocalDateTime fecha;
 
@@ -77,12 +55,9 @@ public class Cita {
 
     @Column(name = "RazonReagenda")
     private String razonReagenda;
-    //En realiad esto se parsea a razon_reagenda por defcto (sanake_case)
-    //Aunque ahora configurado para que se paresee a RazonReagenda (Pascal Case)
 
     @Column(name = "Token")
     private String token;
-
 
     public int getId() {
         return id;
@@ -211,6 +186,4 @@ public class Cita {
     public void setToken(String token) {
         this.token = token;
     }
-
-    
 }

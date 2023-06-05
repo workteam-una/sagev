@@ -1,12 +1,13 @@
 package com.backend.sagev.area;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AreaServiceImp implements AreaService{
+    // Esta clase posee la implementación de las funciones del service, con base en el repositorio
+
     @Autowired
     private AreaRepositorio repositorio;
 
@@ -19,11 +20,6 @@ public class AreaServiceImp implements AreaService{
     public Area listarNumArea(int numArea) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    // @Override
-    // public Area add(Area a) {
-    //     return repositorio.add(a);
-    // }
 
     @Override
     public Area delete(int numArea) {

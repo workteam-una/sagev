@@ -16,47 +16,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping({"/citasTemp"})
 public class CitaTempControlador {
+    // Esta clase es la que recibe las consultas desde el frontend
+
     @Autowired
     CitaTempService service;
 
-    //Devuelve todas las citas
+    // Obtiene todas las citas de la tabla Cita
     @GetMapping
     public List<CitaTemp>listar(){
         return service.listar();
     }
 
-    //Devuelve las citas reservadas con un funcionario
+    // Obtiene las citas reservadas con un funcionario con base en su id (cédula)
     @GetMapping(path = {"/funcionario/{idFuncionario}"})
     public List<CitaTemp>listarIdFuncionario(@PathVariable("idFuncionario") String idFuncionario){
         return service.listarIdFuncionario(idFuncionario);
     }
 
-    //Devuelve las citas reservadas con un contribuyente
+    // Obtiene todas las citas reservadas con un contribuyente con base en su cédula
     @GetMapping(path = {"/contribuyente/{idContribuyente}"})
     public List<CitaTemp>listarIdContribuyente(@PathVariable("idContribuyente") String idContribuyente){
         return service.listarIdContribuyente(idContribuyente);
     }
 
-    // @GetMapping(path = {"/filtradas/{fechaInicial}/{fechaFinal}"})
-    // public List<Cita>listarRangoFechas(@PathVariable("fechaInicial") String fechaInicial, @PathVariable("fechaFinal") String fechaFinal) {
-    //     //parsea la fecha de string a fecha
-
-    //     return service.listarRangoFechas(fechaInicial, fechaFinal);
-    // }
-
-    //Guarda la cita en la BD
+    // Guarda la cita en la tabla CitaTemp de la base de datos
     @PostMapping
     public CitaTemp agregar(@RequestBody CitaTemp c){
         return service.save(c);
     }
 
-    //Es un busca retorna por el id
+    // Busca y retorna un registro de la tabla Cita con base en el id
     @GetMapping(path = {"/{id}"})
     public CitaTemp getById(@PathVariable("id") int id){
         return service.listarId(id);
     }
 
-    //Marca la cita como completada
+    // Cambia el estado de la cita a "completada"
     @PutMapping(path = {"/completada/{id}"})
     public CitaTemp completada(@PathVariable("id") int id){
         CitaTemp cita = service.listarId(id);
@@ -64,7 +59,7 @@ public class CitaTempControlador {
         return service.edit(cita);
     }
 
-    //Marca la cita como ausente
+    // Cambia el estado de la cita a "ausente"
     @PutMapping(path = {"/ausente/{id}"})
     public CitaTemp ausente(@PathVariable("id") int id){
         CitaTemp cita = service.listarId(id);
@@ -72,7 +67,7 @@ public class CitaTempControlador {
         return service.edit(cita);
     }
 
-    //Marca la cita como cancelada
+    // Cambia el estado de la cita a "cancelada"
     @PutMapping(path = {"/cancelada/{id}"})
     public CitaTemp cancelada(@PathVariable("id") int id){
         CitaTemp cita = service.listarId(id);
@@ -80,7 +75,7 @@ public class CitaTempControlador {
         return service.edit(cita);
     }
 
-    //Marca la cita como reagendada
+    // Marca la cita como "reagendada"
     @PutMapping(path = {"/reagendada/{id}"})
     public CitaTemp reagendada(@PathVariable("id") int id){
         CitaTemp cita = service.listarId(id);

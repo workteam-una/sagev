@@ -15,12 +15,13 @@ export class CancelarComponent implements OnInit {
 
   citasContribuyente: Cita[] = []
 
-  // True cuando no existe la cédula
+  // Cuando no existe la cédula su estado será "True"
   noExisteCedula: boolean = false
 
   ngOnInit(): void {
   }
 
+  // Valida la existencia de la cédula del contribuyente y carga sus citas en caso de que tenga citas reservadas
   verificarCitasContribuyente(id: string) : void {
     if (id === "") {
       return
@@ -32,16 +33,16 @@ export class CancelarComponent implements OnInit {
       if (this.citasContribuyente.length === 0) {
       this.noExisteCedula = true
       
-      // Se setea a vacío para poder cerrar el componente citas-funcionario-tabla en el HTML, ya que este está condicionado al valor de esta variable
+      // Se setea a vacío para poder cerrar el componente "citas-funcionario-tabla" en el HTML, ya que este está condicionado al valor de esta variable
       this.idContribuyente = ""
       }
       else {
         this.noExisteCedula = false
-        this.idContribuyente = id //Seteando el id del contribuyente para enviarselo a la tabla
+        // Seteando el id del contribuyente para enviarselo a la tabla
+        this.idContribuyente = id 
       }
     })
   }
-
 
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
   sqlToJsDate(sqlDate: any) : Date {

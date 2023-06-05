@@ -4,6 +4,7 @@
   </p>
 </div>
 
+<!-- Esta tabla muestra las citas disponibles para reversar -->
 <table class="table" id="tabla-reserva">
   <thead class="table-primary">
     <tr *ngIf="citasDisponibles.length !== 0; else sinCitas">
@@ -12,7 +13,6 @@
       <th scope="col">Hora</th>
       <th scope="col">Funcionario</th>
       <th scope="col" class="text-center">Seleccionar</th>
-      <!-- <th scope="col">{{recibidoDePadre}}</th> -->
     </tr>
     <ng-template #sinCitas><h5 style="color: red; text-align: center;">No hay citas disponibles con el funcionario encargado en la semana actual</h5></ng-template>
   </thead>
@@ -22,9 +22,9 @@
       <td>{{devuelveDiaSemana(cita.fecha)}}</td>
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{funcionarioEncargado.nombre}} {{funcionarioEncargado.apellido1}} {{funcionarioEncargado.apellido2}}</td>
-      <!-- Validaciones extra: en caso de que las "citas fantasma" se añadan, no se pueden reservar -->
+      <!-- A veces se crean citas disponibles que no deberian estar ahi, en ese caso se hace esta validacion para que no se muestren -->
       <td *ngIf="cita.fecha.toLocaleTimeString() !== '12:00:00' && cita.fecha.toLocaleTimeString() !== '16:00:00' && cita.fecha > fechaHoy" class="text-center">
-        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarDatosFormulario(); refrescarShowModal();">
+        <button type="button" class="btn btn-primary" (click)="cargarCitaPadre(cita); cargarFechaHora(); refrescarShowModal();">
           Reservar
         </button>
       </td>
@@ -33,11 +33,10 @@
           Reservar
         </button>
       </td>
-    <!-- (click)="goToPage('formulario')"  entre button y type -->
     </tr>
   </tbody>
 </table>
 
-<!-- Se está usando fechaCitaString para mostrar o no este componente, aunque eso está medio cuestionable -->
+<!-- Cuando fechaCitaString posea un valor diferente de "" significa que se selecciono una cita, por lo que se muestra el pop up del formulario para reservar -->
 <app-formulario *ngIf="fechaCitaString !== ''" [citaPadre]="citaPadre" [fechaCitaString]="fechaCitaString" 
 [horaCitaFormateada]="horaCitaFormateada" [funcionarioEncargado]="funcionarioEncargado" [showModal]="showModal" (shModal)="recibirshModal($event)"></app-formulario>

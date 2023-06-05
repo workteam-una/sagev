@@ -5,14 +5,12 @@ import java.util.List;
 import org.springframework.data.repository.Repository;
 
 public interface AreaRepositorio extends Repository<Area, Integer>{
-    //No comprendo porque en los parametros de Repository se coloca
-    //Integer junto a Area, en el video se explica que en el segundo
-    //parametro se especifica el tipo del objeto, entonces esta extraño
+    // Estos son las funciones que ejecutan los querys directamente en la base de datos
+
     List<Area>findAll();
-    //findBy(variable) luego del "By" se coloca el nombre de la variable
-    //por la que se va a ir a ubicar el objeto. (por esto el error de 4h ;-;)
+    
+    // findBy(variable) luego del "By" se coloca el nombre de la variable
     Area findBynumArea(int numArea);
     Area save(Area a);
     void delete(Area a);
-    // Area add(Area a);
 }

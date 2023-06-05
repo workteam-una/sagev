@@ -14,14 +14,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping({"/departamentos"})
 public class DepControlador {
+    // Esta clase es la que recibe las consultas sobre departamentos, desde el frontend
+
     @Autowired
     DepService service;
 
+    // Obtiene todos los departamentos para mostrarlos en 
+    // el select de reserva y agregar un nuevo funcionario
     @GetMapping
     public List<Departamento>listar(){
         return service.listar();
     }
-
+    // Agerga un nuevo departamento
     @PostMapping
     public Departamento agregar(@RequestBody Departamento d){
         return service.save(d);

@@ -12,66 +12,62 @@ import Swal from 'sweetalert2';
 
 export class CitasFuncionarioComponent implements OnInit {
 
-  // Pop-up de modificar funcionario
+  constructor(private service: ServiceService, private router: Router) { }
+
+  // Pop-up de modificar el funcionario a cargo
   formModalModFunc: any
+
   funcionariosEncargadosPorDepa: Funcionario[] = []
   funcionarios: Funcionario[] = []
 
-  constructor(private service: ServiceService, private router: Router) { }
   modeloFuncionario: Funcionario = new Funcionario()
+
+  showModalModFunc = -1;
   
   ngOnInit(): void {
     this.cargarFuncionario()
     this.cargarFuncionariosDepa()
   }
 
-
-  //Utilizar el LocalStorage es algo provicional, hay que pasar los objetos
-  //de un modulo a otro
+  // Cargar el modelo del funcionario con los datos almacenados en el local
   cargarFuncionario(): void {
     this.modeloFuncionario = JSON.parse(localStorage.getItem("modeloFuncionario") || "");
 
     /* 
-      Utilizar el modelo del localstorage limitaba el funcionamiento, ya que aunque yo refrescara la
+      Utilizar el modelo del local storage limitaba el funcionamiento, ya que aunque yo refrescara la
       página o volviese a cargar el componente, no se actualizaba el estado de "encargado" del funcionario
-      el modelo solo se quedaba con el estado que tenía la primera vez que entró a la ventana. 
-      Por eso lo que se hace acá es utilizar el id del funcionario que inició sesión y traerlo desde la base
+      en el modelo solo se quedaba con el estado que tenía la primera vez que entró a la ventana. 
+      Por eso, lo que se hace acá es utilizar el id del funcionario que inició sesión y traerlo desde la base
       de datos con el estado actualizado al refrescar la página o refrescar el componente.
     */
     this.service.getFuncionarioId(this.modeloFuncionario.idFuncionario)
     .subscribe(dataFunc => {
       this.modeloFuncionario = dataFunc
-      console.log(this.modeloFuncionario)
     })    
   }
 
-    //Pop up modificar funcionario a cargo
+  // Pop-up modificar funcionario a cargo
+  openModalModFunc() : void {
+    this.formModalModFunc.showModFunc();
+  }
 
-    openModalModFunc() : void {
-      this.formModalModFunc.showModFunc();
-     }
-  
-     showModalModFunc = -1;
-  
-     showModFunc(indexModFunc) : void {
-      this.showModalModFunc = indexModFunc;
-    }
-  
-    closeModFunc() : void {
-      this.showModalModFunc = -1;
-    }
+  showModFunc(indexModFunc) : void {
+    this.showModalModFunc = indexModFunc;
+  }
+
+  closeModFunc() : void {
+    this.showModalModFunc = -1;
+  }
 
   filtrarFuncionariosEncargadosPorDepa(numDepartamentoParam: number) : void {
-    console.log("Numero de departamento del funcionario" + numDepartamentoParam)
-    // Obtenga todos los funcionarios en el departamento seleccionado del funcionario que inició sesión, sin incluirlo a él
+    // Obtiene todos los funcionarios en el departamento seleccionado del funcionario que inició sesión, sin incluirlo a él
     this.funcionariosEncargadosPorDepa = this.funcionarios.filter( 
       (f) => f.numDepartamento === numDepartamentoParam && f.idFuncionario !== this.modeloFuncionario.idFuncionario && f.administrador !== "S" 
     )
-    console.log(this.funcionariosEncargadosPorDepa)
   }
   
+  // Cargar los funcionarios por el departamento del funcionario en sesión
   cargarFuncionariosDepa() : void {
-    console.log("Cargando funcionarios por depa")
     this.service.getFuncionarios()
     .subscribe(dataFunc => {
       this.funcionarios = dataFunc
@@ -79,37 +75,35 @@ export class CitasFuncionarioComponent implements OnInit {
     })    
   }
 
-  /* 
-    Si devuelve true es porque el suplente que se recibe por parámetro no está como 
-    encargado pero sí hay un funcionario suplente distinto que está como encargado.
+  /*
+    Si devuelve true es porque el suplente que se recibe por parámetro no está como
+    encargado, pero sí hay un funcionario suplente distinto que está como encargado.
     Si devuelve false es porque la primera condición que verifica si el suplente
-    recibido por parámetro está como encargado retornó false, lo que significa
+    recibido por parámetro está como encargado retornó "false", lo que significa
     que el suplente que se recibe debe ser el único que está como encargado.
   */
-    buscarOtroFuncionarioSuplenteEncargado(idSuplente: string) : boolean {
-      let suplenteEncargado: boolean = false
-      let suplenteDiferenteEncargado: boolean = false
-      let resultado: boolean = false
-      this.funcionariosEncargadosPorDepa.forEach(
-        (f) => {
-          // Si el suplente que recibe no está como encargado
-          if(f.idFuncionario === idSuplente && f.encargado !== "S") {
-            console.log("hola")
-            suplenteEncargado = true
-          }
-          // Si hay un funcionario encargado distinto del suplente
-          if(f.idFuncionario !== idSuplente && f.encargado === "S") {
-            console.log("adios")
-            suplenteDiferenteEncargado = true
-          }
+  buscarOtroFuncionarioSuplenteEncargado(idSuplente: string) : boolean {
+    let suplenteEncargado: boolean = false
+    let suplenteDiferenteEncargado: boolean = false
+    let resultado: boolean = false
+    this.funcionariosEncargadosPorDepa.forEach(
+      (f) => {
+        // Si el suplente que recibe no está como encargado
+        if(f.idFuncionario === idSuplente && f.encargado !== "S") {
+          suplenteEncargado = true
         }
-      )
-      // Si el suplente que recibe no está como encargado y si hay otro suplente como encargado
-      if(suplenteEncargado && suplenteDiferenteEncargado) {
-        resultado = true
+        // Si hay un funcionario encargado distinto del suplente
+        if(f.idFuncionario !== idSuplente && f.encargado === "S") {
+          suplenteDiferenteEncargado = true
+        }
       }
-      return resultado;
+    )
+    // Si el suplente que recibe no está como encargado y si hay otro suplente como encargado
+    if(suplenteEncargado && suplenteDiferenteEncargado) {
+      resultado = true
     }
+    return resultado;
+  }
 
   // Asigna o desasigna como encargado a un funcionario suplente al desasignar o asignar al funcionario en sesión
   modificarFuncionarioEncargado(idSuplente: string) : void {
@@ -187,6 +181,8 @@ export class CitasFuncionarioComponent implements OnInit {
     }
   }
 
+  // Dependiendo del estado de la variable "encargado" de los funcionarios suplentes, 
+  // añade el texto "asignar" o "desasignar" en el pop-up de modificar funciario a cargo
   mostrarEncargado(encargado: string) : string {
     let texto = '';
     if (encargado === 'S') {

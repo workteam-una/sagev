@@ -27,7 +27,7 @@ export class LoginComponent implements OnInit {
   /* 
     Obtiene el id del funcionario del campo de texto y lo busca en la base de datos.
     Una vez que encuentra al funcionario, valida si la contraseña es correcta apoyandose en una
-    llamada al método "validarCredenciales()" para hacer el forward a la vista del funcionario.
+    llamada al método "validarCredenciales" para hacer el "forward" hacia la vista del funcionario.
   */
   obtenerFuncionario(): void {
     // Guardando el id del textfield de login
@@ -51,13 +51,17 @@ export class LoginComponent implements OnInit {
       });
   }
 
-  // Valida tanto el id como la contraseña del funcionario
+  // Valida que tanto el id como la contraseña del funcionario sean correctas
   validarCredenciales(): void {
-    let idMal: Boolean;
-    let passwordMal: Boolean;
-    if(this.modeloFuncionarioCargado === null){idMal = true};
-    if(this.modeloFuncionarioCargado.contrasenna != this.modeloFuncionario.contrasenna){passwordMal = true};
-    if(idMal || passwordMal) {
+    let idMal: Boolean
+    let passwordMal: Boolean
+    if(this.modeloFuncionarioCargado === null){
+      idMal = true
+    }
+    if(this.modeloFuncionarioCargado.contrasenna != this.modeloFuncionario.contrasenna){
+      passwordMal = true
+    }
+    if(idMal || passwordMal){
       Swal.fire({
             title: 'Error al iniciar sesión',
             text: 'La cédula o contraseña son incorrectas',
@@ -65,17 +69,15 @@ export class LoginComponent implements OnInit {
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#3085d6'
           })
-      return;
+      return
     }
-
     if(this.modeloFuncionarioCargado.administrador === 'S'){
       Notiflix.Loading.dots({
         backgroundColor: 'rgba(0,0,0,0.1)',
         svgSize: '100px',
       })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
-      // Forward a la vista del funcionario
-      // this.router.navigate(["administrador"], { queryParams: { access: '063d0217' } })
+      // Forward hacia la vista del administrador
       this.router.navigate(["administrador/063d0217"])
       Notiflix.Loading.remove()
     } 
@@ -85,29 +87,16 @@ export class LoginComponent implements OnInit {
       svgSize: '100px',
       })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
-      // Forward a la vista del funcionario
+      // Forward hacia la vista del funcionario
       this.router.navigate(["citasFunc"])
       Notiflix.Loading.remove()
     }
   }
 
-  // Guardar el objeto funcionario en el local storage del navegador
+  // Guarda el objeto funcionario que se cargó luego de ingresar las credenciales en el local storage del navegador
   guardarLocalStorage(funclogeado: Funcionario): void {
-    this.modeloFuncionario = funclogeado;
-    this.modeloFuncionario.contrasenna = "";
-    localStorage.setItem("modeloFuncionario",JSON.stringify(this.modeloFuncionario));
-  }
-
-  creaId(): string {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    // El valor es 10 por defecto, se puede modificar
-    while (counter < 10) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
+    this.modeloFuncionario = funclogeado
+    this.modeloFuncionario.contrasenna = ""
+    localStorage.setItem("modeloFuncionario", JSON.stringify(this.modeloFuncionario))
   }
 }

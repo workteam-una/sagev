@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
@@ -24,13 +23,13 @@ export class FormularioComponent implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
-  //Variables necesarias para hacer las validaciones
+  // Variables necesarias para hacer las validaciones
   public clientForm!: FormGroup
-  enviar = false;
-  prueba:string;
+  enviar = false
+  prueba : string
 
   ngOnInit(): void {
-    //Validaciones del formulario
+    // Validaciones del formulario
     this.clientForm = this.formBuilder.group({
       nombre: ['', Validators.required],
       apellidouno: ['', Validators.required],
@@ -41,40 +40,26 @@ export class FormularioComponent implements OnInit {
     });
   }
 
-  //Mostrar el pop up
+  // Variable para mostrar el pop-up
   @Input()
   showModal: number = -1;
 
-  //Variable que le avisa al componente reserva-tabla que cambio el valor de showmodal
+  // Variable que le avisa al componente reserva-tabla que cambio el valor de showModal
   @Output()
-  shModal = new EventEmitter<number>();
+  shModal = new EventEmitter<number>()
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes['showModal'])
-  }
+  // un get del formulario
+  get f() { return this.clientForm.controls }
 
-  //AUN NO LO ESTOY USANDO porque es el padre el que me envia la instruccion de abrir
-  show(index: number): void {
-    this.showModal = index;
-    //Aqui setea el id de la cita, convenientemente
-  }
-
-  close(): void {
-    this.showModal = -1;
-    this.shModal.emit(this.showModal);
-  } //Fin pop up
-
-
-  //Ejecuta las validaciones
-  validaciones(): boolean {
+  // Ejecuta las validaciones
+  validaciones() : boolean {
     this.enviar = true;
-    // El formulario es invalido
+    // El formulario es inválido
     if (this.clientForm.invalid) {
       return false;
     }
     else {
-      // El formulario esta bien
-      //console.log('SIS!! :-)\n\n' + JSON.stringify(this.clientForm.value, null, 6));
+      // El formulario está bien
       return true;
     }
 
@@ -88,38 +73,25 @@ export class FormularioComponent implements OnInit {
     this.citaPadre.apellido1Contribuyente = this.clientForm.get('apellidouno')?.value;
     //Apellido 2
     this.citaPadre.apellido2Contribuyente = this.clientForm.get('apellidodos')?.value;
-    //ID(cedula)
+    //Id (cédula)
     this.citaPadre.idContribuyente = this.clientForm.get('cedula')?.value;
-    //Telefono
+    //Teléfono
     this.citaPadre.telefonoContribuyente = this.clientForm.get('telefono')?.value;
     //Correo
     this.citaPadre.correoContribuyente = this.clientForm.get('email')?.value;
 
-    // Motivo de la cita
+    // Si el motivo de la cita está vacío agregue el texto "sin especificar"
     if(this.citaPadre.detalle === undefined){
       this.citaPadre.detalle = "Sin especificar"
     }
 
-    
-    //Genero un token para la nueva cita
-    this.citaPadre.token = this.creaToken();
-
+    // Genero un identificador único (token) que me va a servir para cancelar la cita
+    this.citaPadre.token = this.creaToken()
   }
 
-  //Limpia el formulario
-  resetForm(): void {
-    this.enviar = false;
-    // this.clientForm.reset();
-  }
-
-  // un get del formulario
-  get f() { return this.clientForm.controls; }
-
-
-  guardarCita(): void {
-     
-
-    // si las validaciones estan mal salga del método
+  // Almacena la cita en la base de datos
+  guardarCita() : void {
+    // Si las validaciones encuentran un error se sale del método
     if (!this.validaciones()) {
       return
     }
@@ -127,16 +99,13 @@ export class FormularioComponent implements OnInit {
       backgroundColor: 'rgba(0,0,0,0.1)',
       svgSize: '100px',
     })
-    
-   // carga la cita con los valores ingresados en el formulario
+   // Carga la cita con los valores ingresados en el formulario
    this.cargarCita()
-   
-    // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
+    // Se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     this.citaPadre.fecha.setHours(this.citaPadre.fecha.getHours() - 6)
-    // guardar en la tabla histórica de citas 
+    // Guardar en la tabla histórica de citas 
     this.service.guardarCita(this.citaPadre)
       .subscribe(data => {
-
     })
     // Guardar cita en la tabla temporal de citas
     this.service.guardarCitaTemp(this.citaPadre)
@@ -152,17 +121,15 @@ export class FormularioComponent implements OnInit {
       })
     })
     this.enviarCorreo(this.citaPadre)
-    
     this.resetForm()
-    Notiflix.Loading.remove();
+    Notiflix.Loading.remove()
   }
 
+  // Genera el contenido de un correo electrónico dirigido al contribuyente una vez realiza el envío del formulario para reservar la cita
   enviarCorreo(cita: Cita) : void {
     let correo: Correo = new Correo
-
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
     cita.fecha.setHours(cita.fecha.getHours() + 6)
-
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" 
@@ -173,16 +140,14 @@ export class FormularioComponent implements OnInit {
       + "En caso de que necesite cancelar su cita, el identificador único de la misma es: " + cita.token + "\n\n"
       + "Este correo es generado de forma automática, favor no responder."
 
-    console.log(correo.message)
-
     this.service.enviaCorreo(correo)
       .subscribe(data => {
         this.enviarCorreoFunc(this.citaPadre)
-        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
       })
 
   }
 
+  // Genera el contenido de un correo electrónico dirigido al funcionario una vez se le agende una cita nueva
   enviarCorreoFunc(cita: Cita) : void {
     let correo: Correo = new Correo
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
@@ -199,20 +164,29 @@ export class FormularioComponent implements OnInit {
       "Necesidad del contribuyente: " + cita.detalle + "\n\n" + 
       "Este correo es generado de forma automática, favor no responder."
 
-    console.log(correo.message)
-
     this.service.enviaCorreo(correo)
       .subscribe(() => {
-        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
       })
 
   }
 
+  // Mostrar el pop-up
+  show(index: number) : void {
+    this.showModal = index;
+  }
 
+  // Cerrar el pop-up
+  close() : void {
+    this.showModal = -1;
+    this.shModal.emit(this.showModal);
+  } //Fin pop up
 
-  // <td>{{devuelveDiaSemana(cita.fecha)}}</td>
-  // <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
+  // Limpia el formulario
+  resetForm() : void {
+    this.enviar = false
+  }
 
+  // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español de ese día
   devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
@@ -220,6 +194,7 @@ export class FormularioComponent implements OnInit {
     return dia
   }
 
+  // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español del mes en el que se encuentra
   devuelveMes(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
@@ -227,17 +202,17 @@ export class FormularioComponent implements OnInit {
     return mes
   }
 
+  // Crea un identificador de extensión modificable usando caracteres alfanuméricos
   creaToken(): string {
-    let result = '';
-    const characters = 'ABCDEFGHJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
+    let result = ''
+    const characters = 'ABCDEFGHJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789'
     const charactersLength = characters.length;
-    let counter = 0;
+    let counter = 0
     // El valor es 10 por defecto, se puede modificar
     while (counter < 10) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
+      result += characters.charAt(Math.floor(Math.random() * charactersLength))
+      counter += 1
     }
-    return result;
+    return result
   }
-
 }

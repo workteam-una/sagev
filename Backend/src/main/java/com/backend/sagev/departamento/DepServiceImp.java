@@ -17,16 +17,6 @@ public class DepServiceImp implements DepService {
     }
 
     @Override
-    public Departamento listarNumDepartamento(int numDepartamento) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    // @Override
-    // public Departamento add(Departamento d) {
-    //     return repositorio.add(d);
-    // }
-
-    @Override
     public Departamento delete(int numDepartamento) {
         throw new UnsupportedOperationException("Not supported yet.");
     }

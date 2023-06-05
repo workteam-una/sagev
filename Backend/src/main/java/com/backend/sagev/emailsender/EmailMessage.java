@@ -18,7 +18,7 @@ public class EmailMessage {
     public String getTo() {
         return to;
     }
-
+    
     public void setTo(String to) {
         this.to = to;
     }

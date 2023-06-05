@@ -1,17 +1,9 @@
-/* .btn-primary span::after {
-  content:"Reservar";
-} */
-  
-.btn-primary:hover {
+  .btn-primary:hover {
   color:#fff;
   background-color:#6ca34f !important;
   border-color:#4cae4c !important;
   
 }
-  
-/* .btn-primary:hover span::after {
-  content:"Reservar";
-} */
 
 .div-titulo {
   text-align: center;

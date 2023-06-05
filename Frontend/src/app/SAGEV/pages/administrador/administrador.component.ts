@@ -1,7 +1,7 @@
 import { Departamento } from '../../modelo/departamento';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Router } from '@angular/router';
-import { Component, ContentChild, ContentChildren, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Funcionario } from '../../modelo/funcionario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Area } from '../../modelo/area';
@@ -13,24 +13,29 @@ import Swal from 'sweetalert2';
   styleUrls: ['./administrador.component.css']
 })
 export class AdministradorComponent implements OnInit {
-
+  // Pop-up Agregar Area
   formModalArea: any
+  // Pop-up Agregar Departamento
   formModalDpto: any
+  // Pop-up Agregar Funcionario
   formModalAgrFunc: any
+  // Pop-up Agregar Area
   formModalPswrdFunc: any
 
-  showModalArea: number = -1;
-  showModalDpto = -1;
-  showModalAgrFunc = -1;
-  showModalPswrdFunc = -1;
+  // Variables que controlan si se muestran o no los pop-ups: -1 se cierra, 1 se abre
+  showModalArea: number = -1
+  showModalDpto = -1
+  showModalAgrFunc = -1
+  showModalPswrdFunc = -1
 
+  // Cédula del funcionario seleccionado para cambiar la contraseña
   idFunc: string
   contra1: string
-  contra2: string //Esto se puede hacer mejor
-  funcionarioPojo: Funcionario = new Funcionario() //Este es un modelo que me sirve para poder hacer put si problemas
-
+  // TODO: Esta validacion se puede hacer mejor
+  contra2: string 
+  // Este es un modelo que me sirve para poder hacer PUT (metodo HTTP) sin problemas
+  funcionarioPojo: Funcionario = new Funcionario() 
   funcionarios: Funcionario[] = []
-
   areas: Area[] = []
   departamentos: Departamento[] = []
   nuevoFuncionario: Funcionario = new Funcionario()
@@ -39,23 +44,21 @@ export class AdministradorComponent implements OnInit {
 
   @Input() fechaInicio: Date 
   @Input() fechaFinal: Date
-  // @Input() confirmarBusqueda: boolean = false;
 
-  //Declaracion de todos los formularios
-  //NFF: Nuevo Funcionario Formulario
+  // Declaración de todos los formularios
+
+  // NFF: Nuevo Funcionario Formulario
   funcionarioForm!: FormGroup
   enviarNFF = false;
-  //NAF: Nueva Area Formulario
+  // NAF: Nueva Area Formulario
   areaForm!: FormGroup
   enviarNAF = false;
-  //NAF: Nueva Departamento Formulario
+  // NAF: Nueva Departamento Formulario
   departamentoForm!: FormGroup
   enviarNDF = false;
-  //CCF: Cambiar Constraseña Formulario
+  // CCF: Cambiar Constraseña Formulario
   cambiarcontraForm!: FormGroup
   enviarCCF = false;
-
-
 
   constructor(private formBuilder: FormBuilder, private service: ServiceService, private router: Router) { }
 
@@ -64,7 +67,7 @@ export class AdministradorComponent implements OnInit {
     this.getAreas()
     this.getDepartamentos()
 
-    //Validaciones del formulario nuevo funcionario
+    // Validaciones del formulario nuevo funcionario
     this.funcionarioForm = this.formBuilder.group({
       nombre: ['', Validators.required],
       apellidouno: ['', Validators.required],
@@ -75,19 +78,19 @@ export class AdministradorComponent implements OnInit {
       departamento: ['', Validators.required],
       suplente: ['', Validators.required]
     });
-    //Validaciones del formulario nueva area
+    // Validaciones del formulario nueva area
     this.areaForm = this.formBuilder.group({
       numero: ['', Validators.required],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required]
     })
-    //Validaciones del formulario nueva area
+    // Validaciones del formulario nueva area
     this.departamentoForm = this.formBuilder.group({
       numero: ['', Validators.required],
       nombre: ['', Validators.required],
       descripcion: ['', Validators.required]
     })
-    //Validaciones del formulario crear nueva contraseña
+    // Validaciones del formulario crear nueva contraseña
     this.cambiarcontraForm = this.formBuilder.group({
       idfuncionario: ['', Validators.required],
       contrauno: ['', Validators.required],
@@ -95,8 +98,7 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
-  //Pop up agregar nueva area
-
+  // Pop-up agregar nueva area
   openModalArea() : void {
     this.formModalArea.showArea();
    }
@@ -108,12 +110,12 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
+  // Llama a las validaciones de le la nueva área a agregar y si son correctas la agrega
   guardarAreas(a: Area) : void {
     if(!this.validacionesNAF()){
       return
     }
     this.cargarNuevaArea()
-    console.log(this.nuevaArea)
     if (this.validarNumeroArea(a.numArea)) {
       Swal.fire({
         title: 'Error al agregar nueva área',
@@ -135,10 +137,10 @@ export class AdministradorComponent implements OnInit {
       this.ngOnInit()
     })
     this.resetFormNAF()
-    this.closeArea()
-    
+    this.closeArea()  
   }
 
+  // Llama a las validaciones del nuevo departamento a agregar y si son correctas la agrega
   guardarDepartamento(d: Departamento) : void {
     if(!this.validacionesNDF()){
       return
@@ -168,32 +170,12 @@ export class AdministradorComponent implements OnInit {
     this.closeDpto()
   }
 
+  // Llama a las validaciones del nuevo funcionario a agregar y si son correctas la agrega
   guardarFuncionario(): void {
     if(!this.validacionesNFF()) {
      return
     }
   this.cargarNuevoFuncionario()
-  console.log(this.nuevoFuncionario)
-  // if (this.nuevoFuncionario.numDepartamento === 0) {
-  //   Swal.fire({
-  //     title: 'Error al agregar funcionario',
-  //     text: '¡Ingrese un número de departamento válido!',
-  //     icon: 'error',
-  //     confirmButtonText: 'Aceptar',
-  //     confirmButtonColor: '#3085d6',
-  //   })
-  //   return
-  // }
-  // if (this.nuevoFuncionario.suplente === "") {
-  //   Swal.fire({
-  //     title: 'Error al agregar funcionario',
-  //     text: '¡Debe seleccionar si el funcionario va a ser suplente o no!',
-  //     icon: 'error',
-  //     confirmButtonText: 'Aceptar',
-  //     confirmButtonColor: '#3085d6',
-  //   })
-  //   return
-  // }
   this.service.guardarFuncionario(this.nuevoFuncionario)
   .subscribe(data =>{
     Swal.fire({
@@ -209,12 +191,11 @@ export class AdministradorComponent implements OnInit {
   
 }
 
+  // Verifica que no exista una Área con el mismo numero de Área que se le está asignando al Área nueva 
   validarNumeroArea(numArea: number) : boolean {
-    console.log(numArea)
     let numAreaDuplicado = false
     this.areas.forEach(a => {
-      // console.log(a.numArea)
-      // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
+      // TODO: Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
       if(a.numArea === Number(numArea)) {
         numAreaDuplicado = true
       }
@@ -239,10 +220,11 @@ export class AdministradorComponent implements OnInit {
     })
   }
 
+  // Verifica que no exista un Departamento con el mismo numero de Departamento que se le está asignando al nuevo Departamento
   validarNumeroDepartamento(numDepa: number) : boolean {
     let numDepaDuplicado = false
     this.departamentos.forEach(d => {
-      // Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
+      // TODO: Este parseo a la variable numDepa es necesario para que funcione, pero no debería de serlo
       if(d.numDepartamento === Number(numDepa)) {
         numDepaDuplicado = true
       }
@@ -250,6 +232,10 @@ export class AdministradorComponent implements OnInit {
     return numDepaDuplicado
   }
 
+  /* 
+    Llama a las validaciones y pregunta si las dos contraseñas ingresadas coinciden, 
+    en caso de hacerlo cambia la contraseña de un funcionario 
+  */
   cambiarContra(): void{
     if(!this.validacionesCCF()){
       return
@@ -284,95 +270,93 @@ export class AdministradorComponent implements OnInit {
 
   }
 
+  // Muestra el pop-up de agregar una nueva Área
    showArea(indexArea) : void {
     this.showModalArea = indexArea;
   }
-
+  // Cerrar el pop-up de agregar una nuevo Área
   closeArea() : void {
     this.showModalArea = -1;
   }
 
-  //Pop up agregar nuevo departamento
-
+  // Pop-up para agregar un nuevo Departamento 
   openModalDpto() : void {
     this.formModalDpto.showDpto();
    }
 
+  // Muestra el pop-up de agregar un nuevo Departamento 
    showDpto(indexDpto) : void {
     this.showModalDpto = indexDpto;
   }
-
+  // Cierra el pop-up de agregar un nuevo Departamento 
   closeDpto() : void {
     this.showModalDpto = -1;
   }
 
-  //Pop up agregar nuevo funcionario
+  //Pop-up agregar nuevo funcionario
   openModalAgrFunc() : void {
     this.formModalAgrFunc.showAgrFunc();
    }
 
+  // Muestra el pop-up de agregar un nuevo Funcionario 
    showAgrFunc(indexAgrFunc) : void {
     this.showModalAgrFunc = indexAgrFunc;
   }
 
+  // Cierra el pop-up de agregar un nuevo Funcionario
   closeAgrFunc() : void {
     this.showModalAgrFunc = -1;
   }
 
-  //Pop up cambiar contrasena a funcionario
-
+  //Pop-up para cambiarle la contrasena a un funcionario
   openModal() : void {
     this.formModalPswrdFunc.showPswrdFunc();
    }
-   
+  
+  // Muestra el pop-up de Cambiar Constraseña de un Funcionario
   showPswrdFunc(indexPswrdFunc) : void {
     this.showModalPswrdFunc = indexPswrdFunc;
   }
 
+  // Cierra el pop-up de Cambiar Constraseña de un Funcionario
   closePswrdFunc() : void {
     this.resetFormNFF()
     this.showModalPswrdFunc = -1;
   }
 
+  // Setea el Departamento al nuevo Funcionario 
   setDepaFuncionario(numDepa: string) : void {
     this.nuevoFuncionario.numDepartamento = Number(numDepa)
   }
 
+  // Setea el Area al nuevo Funcionario
   setAreaDepa(numArea: string) : void {
     this.nuevoDepa.numArea = Number(numArea)
   }
 
-  // setIdFunc(id: string): void {
-  //   this.idfunc = id
-  // }
-
-  // // Cambia el estado del botón a True
-  // confirmarBusquedaFiltros() : void {
-  //   this.confirmarBusqueda = true;
-  // }
-
-  //Apartir de aqui solo hay validaciones de formualrios
+  /*----------------------------------------------------------------------------------
   
-  // un get del formulario NFF
+    Apartir de aqui solo hay validaciones de formualrios. Estas validaciones
+    le avisan al usuario que hay espacios en blanco o que debe cumllir con un formato
+
+  ----------------------------------------------------------------------------------*/
+
+  // get del formulario NFF
   get f() { return this.funcionarioForm.controls; }
 
   //Ejecuta las validaciones de NFF
   validacionesNFF(): boolean {
     this.enviarNFF = true;
-    // El formulario es invalido
+    // El formulario es inválido
     if (this.funcionarioForm.invalid) {
-      //console.log('mal\n\n' + JSON.stringify(this.funcionarioForm.value, null, 7));
         return false;
     }
     else{
-      //console.log("bien")
-      // El formulario esta bien
-    //console.log('SIS!! :-)\n\n' + JSON.stringify(this.funcionarioForm.value, null, 7));
       return true;
     } 
   }
 
-   //Limpia el formulario NFF
+   // Limpia el formulario NFF
    resetFormNFF() : void {
     this.enviarNFF = false;
     this.funcionarioForm.reset();
@@ -409,13 +393,10 @@ export class AdministradorComponent implements OnInit {
     this.enviarNAF = true;
     // El formulario es invalido
     if (this.areaForm.invalid) {
-      console.log('mal\n\n' + JSON.stringify(this.areaForm.value, null, 3));
         return false;
     }
     else{
-      //console.log("bien")
-      // El formulario esta bien
-    console.log('bien\n\n' + JSON.stringify(this.areaForm.value, null, 3));
+      // El formulario está bien
       return true;
     } 
   }
@@ -442,13 +423,11 @@ export class AdministradorComponent implements OnInit {
     this.enviarNDF = true;
     // El formulario es invalido
     if (this.departamentoForm.invalid) {
-      console.log('mal\n\n' + JSON.stringify(this.departamentoForm.value, null, 3));
         return false;
     }
     else{
-      //console.log("bien")
-      // El formulario esta bien
-    console.log('bien\n\n' + JSON.stringify(this.departamentoForm.value, null, 3));
+      // El formulario está bien
+
       return true;
     } 
   }
@@ -468,32 +447,29 @@ export class AdministradorComponent implements OnInit {
     this.nuevoDepa.descripcion = this.departamentoForm.get('descripcion')?.value;
   }
 
-  // un get del formulario NDF
+  // Un get del formulario NDF
   get ccf() { return this.cambiarcontraForm.controls; }
 
-  //Ejecuta las validaciones de NDF
+  // Ejecuta las validaciones de NDF
   validacionesCCF(): boolean {
     this.enviarCCF = true;
     // El formulario es invalido
     if (this.cambiarcontraForm.invalid) {
-      console.log('mal\n\n' + JSON.stringify(this.cambiarcontraForm.value, null, 2));
         return false;
     }
     else{
-      //console.log("bien")
-      // El formulario esta bien
-    console.log('bien\n\n' + JSON.stringify(this.cambiarcontraForm.value, null, 2));
+    // El formulario es correcto
       return true;
     } 
   }
 
-  //Limpia el formulario NDF
+  // Limpia el formulario NDF
   resetFormCCF() : void {
     this.enviarCCF = false;
     this.cambiarcontraForm.reset();
   }
 
-  //Esto es inseguro
+
   cargarContras() : void {
     // Funcionario
     this.idFunc = this.cambiarcontraForm.get('idfuncionario')?.value;
@@ -503,10 +479,9 @@ export class AdministradorComponent implements OnInit {
     this.contra2 = this.cambiarcontraForm.get('contrados')?.value;
   }
 
-  // Carga al funcionario que se va a enviar
+  // Cambia la clave del funcionario
   cargarFuncionarioContraNueva() : void {
     this.funcionarioPojo.idFuncionario = this.idFunc
     this.funcionarioPojo.contrasenna = this.contra1
   }
-
 }

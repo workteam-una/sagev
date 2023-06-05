@@ -1,14 +1,6 @@
 package com.backend.sagev.funcionario;
+
 import javax.persistence.*;
-
-//Hola: Para entender un backend deje unas notas que dicen de que se trata cada clase.
-//Tambien es importante avisar que revisen las clases en este orden:
-//1 modelo(esta) , 2 repositorio, 3 service, 4 serviceImp, 5 controlador
-
-
-//Que hace esta clase?: Esta es la clase principal, la tipica clase JAVA de un objeto
-    //Con la diferencia de que esta clase con el @Colum puede distingir que ese
-    //atributo esta en la base de datos.
 
 @Entity
 @Table(name = "Funcionario")
@@ -43,17 +35,6 @@ public class Funcionario {
 
     @Column(name = "Administrador")
     private String administrador;
-
-    // @Column( name = "Administrador")
-    // private Boolean administrador;
-
-    // public Boolean getAdmin() {
-    //     return administrador;
-    // }
-
-    // public void setAdmin(Boolean administrador) {
-    //     this.administrador = administrador;
-    // }
 
     public String getIdFuncionario() {
         return idFuncionario;
@@ -134,6 +115,4 @@ public class Funcionario {
     public void setAdministrador(String administrador) {
         this.administrador = administrador;
     }
-
-
 }

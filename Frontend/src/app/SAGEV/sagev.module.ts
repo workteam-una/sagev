@@ -3,12 +3,10 @@ import { CommonModule } from '@angular/common';
 import { ReservaComponent } from './pages/reserva/reserva.component';
 import { CancelarComponent } from './pages/cancelar/cancelar.component';
 import { ReservaTablaComponent } from './components/reserva-tabla/reserva-tabla.component';
-import { ServiceService } from '../Service/service.service';
 import { FormularioComponent } from './pages/formulario/formulario.component';
 import { LoginComponent } from './pages/login/login.component';
 import { CitasFuncionarioComponent } from './pages/citas-funcionario/citas-funcionario.component';
 import { CitasFuncionarioTablaComponent } from './components/citas-funcionario-tabla/citas-funcionario-tabla.component';
-import { CitasFuncionarioPopupComponent } from './components/citas-funcionario-popup/citas-funcionario-popup.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -24,7 +22,6 @@ import { AdministradorTablaComponent } from './components/administrador-tabla/ad
     LoginComponent,
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
-    CitasFuncionarioPopupComponent,
     CancelarComponent,
     CancelarTablaComponent,
     AdministradorComponent,
@@ -37,7 +34,6 @@ import { AdministradorTablaComponent } from './components/administrador-tabla/ad
     LoginComponent,
     CitasFuncionarioComponent,
     CitasFuncionarioTablaComponent,
-    CitasFuncionarioPopupComponent,
     CancelarComponent,
     CancelarTablaComponent,
     AdministradorComponent

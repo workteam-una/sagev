@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-// import com.backend.sagev.emailsender.EmailMessage;
 @CrossOrigin(origins = "http://localhost:4200", maxAge = 3600)
 @RestController
 @RequestMapping({"/mail"})
 public class EmailController {
-
+    // Esta clase es la que recibe las peteiciones de enviar corres
     private final EmailSenderService emailSenderService;
 
     public EmailController(EmailSenderService emailSenderService) {
         this.emailSenderService = emailSenderService;        
     }
 
+    //Toma el objeto correo que llego por parametro y manda el correo
     @PostMapping("/sendemail")
     public ResponseEntity<?> sendEmail(@RequestBody EmailMessage emailMessage){
         this.emailSenderService.sendEmail(emailMessage.getTo(), emailMessage.getSubject(), emailMessage.getMessage());

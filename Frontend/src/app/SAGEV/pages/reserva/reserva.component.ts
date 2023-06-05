@@ -1,7 +1,4 @@
-import { getLocaleDateFormat } from '@angular/common';
-import { ChangeDetectorRef, Component, ContentChild, ContentChildren, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Area } from '../../modelo/area';
 import { Cita } from '../../modelo/cita';
@@ -15,41 +12,39 @@ import { Funcionario } from '../../modelo/funcionario';
 })
 export class ReservaComponent implements OnInit {
 
-  // @ContentChild('sA')
-  // prueba: ElementRef;
-
-  // @ViewChild('username')
-  // username: ElementRef<HTMLInputElement>; 
-
   areas: Area[] = []
   departamentos: Departamento[] = []
-  departamentosPorArea: Departamento [] = []
   funcionarios: Funcionario[] = []
-  funcionariosEncargadosPorDepa: Funcionario[] = []
+
+  departamentosPorArea: Departamento [] = []
   descripcionesPorDepa: Departamento[] = []
+  funcionariosEncargadosPorDepa: Funcionario[] = []
 
   // Array para cargar las citas reservadas de un funcionario en específico
   citasReservadas: Cita[] = []
 
-  // Array para cargar las citas auxiliares que se muestran en la tabla
+  // Array para cargar las citas que se muestran en la tabla (las que no han sido reservadas)
   citasDisponibles: Cita[] = []
 
+  // Almacena al funcionario con el que se va a agendar la cita
   funcionarioEncargado: Funcionario = new Funcionario
 
-  //Mostrar botones anterior y siguiente
+  // Almacena el estado de los botones de "anterior y siguiente" que aparecen debajo de la tabla
   mostrarBtns: number = -1;
 
-  // Funciona para limitar la cantidad de citas que se le pueden desplegar al contribuyente
+  // Funcioan para limitar la cantidad de citas que se le pueden desplegar al contribuyente
   contadorSemanas: number = 0;
 
-  // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
+  // Almacena la fecha del día de hoy para no mostrar las citas de la semana anteriores al día actual
   fechaHoy: Date = new Date(Date.now())
 
-  constructor(private service: ServiceService, private router: Router,  private cd:ChangeDetectorRef) {
+  constructor(private service: ServiceService,  private cd: ChangeDetectorRef) {
    
   }
 
+  // Al iniciar el componente carga los arrays de Areas, Departamentos y Funcionarios
   ngOnInit(): void {
+    // Limpia el local storage ya que al iniciar sesión la información del contribuyente se almacena ahí
     localStorage.clear()
     
     this.service.getAreas()
@@ -67,10 +62,6 @@ export class ReservaComponent implements OnInit {
       this.funcionarios = dataFunc
     })
   }
-
-  // prueba($event) {
-  //   console.log($event.target.value)
-  // }
 
   filtrarDepartamentosPorArea(numAreaParam: string) : void {
     this.departamentosPorArea = this.departamentos.filter(
@@ -92,38 +83,36 @@ export class ReservaComponent implements OnInit {
 
   filtrarDescripcionesPorDepa(numDepaParam: string) : void {
     this.descripcionesPorDepa = this.departamentos.filter(
+      // Por alguna razón se debe parsear el numero del departamento a "Number" para que permita la comparativa
       (d) => d.numDepartamento === Number(numDepaParam) 
     )
   }
 
-  // Citas reservadas y las citas de un funcionario son sinónimos
+  // Obtiene las citas reservadas de un funcionario en específico a través de su identificación
   getCitasReservadas(id: string): void {
     // Las citas se tienen que limpiar porque si no se van acumulando cada vez que cambio de departamento (se activa este método)
     this.citasReservadas = []
     this.citasDisponibles = []
 
-    // recuperar citas temporales
+    // Recuperar las citas de la tabla de citas temporales
     this.service.getCitasTempFuncionario(id)
     .subscribe(data => {
       this.citasReservadas = data
- 
-      // this.citasReservadas.forEach(c => {
-      //   console.log(c)
-      // })
 
       // Se están parseando las fechas aquí para solo tener que hacerlo una vez
       this.citasReservadas.forEach(c => {
         c.fecha = this.sqlToJsDate(c.fecha)
       })
       
-      // Tener esto aquí fue la única manera que encontré para que carguen primero las citas reservadas
+      // Llamar este método aquí es necesario para que carguen primero las citas reservadas
       this.citasSemanaActual()
     })
   }
 
+  // La función siempre va a devolver la fecha del lunes de la semana actual haciendo el cálculo con base en la fecha actual
   devolverLunesSemanaActual() : Date {
-    let fechaLunes = new Date() //Fecha del lunes de la semana actual
-    let hoy = new Date().getDay() //Dia de la semana actual
+    let fechaLunes = new Date() // Fecha del lunes de la semana actual
+    let hoy = new Date().getDay() // Dia de la semana actual
 
     if( hoy === 2 ){ fechaLunes.setDate(fechaLunes.getDate() - 1); return fechaLunes }
     if( hoy === 3 ){ fechaLunes.setDate(fechaLunes.getDate() - 2); return fechaLunes }
@@ -146,46 +135,44 @@ export class ReservaComponent implements OnInit {
 
     let lunesSemanaActual: Date = this.devolverLunesSemanaActual()
 
-    //Martes
+    // Martes
     if( diaCita === "Martes" ){
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 1);
       return lunesSemanaActual
     }
-    //Miercoles
+    // Miercoles
     if( diaCita === "Miercoles" ){
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 2);
       return lunesSemanaActual;
     }
-    //Jueves
+    // Jueves
     if( diaCita === "Jueves" ){
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 3)
       return lunesSemanaActual
     }
-    //Viernes
+    // Viernes
     if( diaCita === "Viernes" )
     {
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 4)
       return lunesSemanaActual
     }
-    //Sabado
+    // Sabado
     if( diaCita === "Sabado" ){
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 5)
       return lunesSemanaActual
     }
-    //Domingo
+    // Domingo
     if( diaCita === "Domingo" ){
       lunesSemanaActual.setDate(lunesSemanaActual.getDate() + 6)
       return lunesSemanaActual
     }
 
-    //Hoy es Lunes
+    // Hoy es Lunes
     return lunesSemanaActual
   }
 
-  // Esta función genera las citas de cada funcionario según un horario fijo
+  // Esta función genera las citas de cada funcionario según un horario fijo (martes de 8:00 a 11:30 y jueves de 1:00 a 3:30)
   generaCitasDisponibles(): void {
-
-    // this.contadorCitasDisponibles = this.contadorCitasDisponibles + contadorParametros;
 
     // Martes de la semana actual a las 8:00 a.m
     let fechaMartesI = this.obtenerFechaDiaSemana("Martes")
@@ -202,33 +189,20 @@ export class ReservaComponent implements OnInit {
     // Jueves de la semana actual a las 4:00 p.m
     let fechaJuevesF = this.obtenerFechaDiaSemana("Jueves")
     fechaJuevesF.setHours(16, 0, 0)
-    
-    // if (this.contadorCitasDisponibles != 0) {
-    //   fechaMartesI.getDate() + (7 * this.contadorCitasDisponibles)
-    //   fechaMartesF.getDate() + (7 * this.contadorCitasDisponibles)
-    //   fechaJuevesI.getDate() + (7 * this.contadorCitasDisponibles)
-    //   fechaJuevesF.getDate() + (7 * this.contadorCitasDisponibles)
-    // }
 
     // Genera citas disponibles los días martes de la semana actual
     for (let i = fechaMartesI; i < fechaMartesF; i.setMinutes(fechaMartesI.getMinutes() + 30)) {
 
-      // Generando el objeto cita auxiliar
+      // Generando un objeto cita auxiliar
       let citaAux = new Cita()
       
-      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado,fecha, hora y del dia martes
+      // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, fecha, hora y del dia martes
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = new Date(fechaMartesI)
-
-      // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
-      // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
 
       // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 12 m.d
       if (citaAux.fecha.toLocaleTimeString() !== '12:00:00') {
         this.citasDisponibles.push(citaAux)
-      }
-      else {
-        console.log("Cita ignorada: " + citaAux.fecha)
       }
     }
 
@@ -241,25 +215,19 @@ export class ReservaComponent implements OnInit {
       // Seteando el objeto cita auxiliar con el id del funcionario seleccionado, con fecha y hora del día jueves
       citaAux.idFuncionario = this.funcionarioEncargado.idFuncionario
       citaAux.fecha = new Date(fechaJuevesI)
-      
-      // Pensé que había que hacer esta resta por el formato ISO que suma 6 horas, pero parece que no
-      // citaAux.fecha.setHours(citaAux.fecha.getHours() - 6)
 
       // Esta verificación es necesaria ya que en ocasiones al azar se crean citas que se exceden el límite de tiempo, concretamente a las 4 p.m     
       if(citaAux.fecha.toLocaleTimeString() !== '16:00:00') {
         this.citasDisponibles.push(citaAux)
-      }
-      else {
-        console.log("Cita ignorada: " + citaAux.fecha)
       }
     }
   }
 
   /*
     Filtra las citas disponibles para que muestre solo las que no han sido reservadas. 
-    Itera las citas disponibles y va comparando su fecha una a una con las fechas de todas las citas reservadas, en caso de coincidir, 
-    se elimina la posición donde se encuentra la cita disponible y se actualiza el array.
-    Además, dentro de la comparativa se consula si el estado de la cita es "cancelada", de serlo la posición de esa cita no se elimina.
+    Itera las citas disponibles y va comparando su fecha una a una con las fechas de todas las citas reservadas. 
+    En caso de coincidir, se elimina la posición donde se encuentra la cita disponible y se actualiza el array.
+    Dentro de la comparativa se consulta si el estado de la cita es "cancelada", de serlo, la posición de esa cita no se elimina.
   */
   filtrarCitasDisponibles(): void {
     // Se recorren los dos arrays de citas para comparar las fechas de las citas de ambos
@@ -267,16 +235,10 @@ export class ReservaComponent implements OnInit {
     {
       for (let j = 0; j < this.citasReservadas.length; j++)
       {
-        // console.log("Cita disponible #" + i + ": " + this.citasDisponibles[i].fecha.toLocaleString() +
-        // " // Cita reservada #" + j + ": " + this.citasReservadas[j].fecha.toLocaleString())
-
-        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal. 
+        // Esta comparación entre fechas sí funciona, solo que se tiene que usar LocaleString y no el objeto fecha como tal
         if (this.citasDisponibles[i].fecha.toLocaleString() === this.citasReservadas[j].fecha.toLocaleString() && this.citasReservadas[j].estado !== 'Cancelada') {
 
-          // console.log("Me cumplí con disponible #" + i + " y con reservada #" + j)
-          // console.log("\n")
-
-          // Cuando un elemento del array de citasDispobles coincide con un elemento del array de citasReservadas
+          // Cuando un elemento del array "citasDisponibles" coincide con un elemento del array "citasReservadas"
           // se elimina la posición del array donde se encontró la coincidencia con la hora y la fecha 
           this.citasDisponibles.splice(i, 1)
         }
@@ -287,12 +249,13 @@ export class ReservaComponent implements OnInit {
       Filtrando las citas para eliminar las que tienen fechas anteriores al día actual dentro de la misma semana
       ej. Si hoy es martes a las 7:00 p.m y habian citas en la mañana, no me las va a mostrar
       ej 2. Si hoy es jueves no me va a mostrar las citas del martes de esta semana
-      ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible.
+      ej 3. Si hoy es domingo no me va a mostrar ninguna cita disponible
     */
     this.citasDisponibles = this.citasDisponibles.filter(c => c.fecha > this.fechaHoy)
 
   }
 
+  // Con base en un objeto tipo "Date" devuelvo un string con el nombre en español de ese día
   devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
@@ -300,7 +263,7 @@ export class ReservaComponent implements OnInit {
     return dia
   }
 
-  //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
+  // Recibe el aviso desde el componente "reserva-tabla" de que ya puedo mostrar los botones anterior y siguiente
   recibirMostrarBotones(mostrar: number) : void {
     this.mostrarBtns = mostrar;
     this.cd.detectChanges();
@@ -308,125 +271,120 @@ export class ReservaComponent implements OnInit {
 
   /*
     Al presionar el botón "siguiente" debajo de la tabla de citas disponibles se va a incrementar en una semana la fecha 
-    de las citas, con un límite (modificable) de cuatro semanas para mostrar las citas disponibles de las próximas semanas. 
+    de las citas, con un límite (modificable) de una semana para mostrar las citas disponibles de la próxima semana. 
   */
-    aumentarSemanasCitasDisponibles(contParam: number) : void {
-      // Incrementando en 1 el contador de semanas (porque siempre le va a llegar un "+1" por parámetro)
-      this.contadorSemanas += contParam
-      console.log("Contador en aumentar: " + this.contadorSemanas)
-  
-      // Cuando el contador de semanas supera el valor de 1 (citas de hasta 1 semana después) entonces lo decrementa en 1 y se sale del método
-      if (this.contadorSemanas > 1) {
-        this.contadorSemanas - 1
-        return
-      }
-  
-      /*
-        Se multiplica el número 7 que representa una semana, según el valor del contador. Al inicio el contador es 0, pero al entrar a este 
-        método aumenta en 1, entonces se multiplicaría 7 * 1 = 7, es decir, se suma una semana. La próxima vez que se entre a este método, 
-        el contador sería 2, entonces se multiplicaría 7 * 2 = 14, es decir, se suman dos semanas. La última vez que se entre a este método
-        antes de que se bloquee el uso del botón que lo ejecuta el contador sería 3, entonces se multiplicaría 7 * 3 = 21, es decir tres semanas.
-        Las tres semanas son el tope que se está utilizando, pero es modificable, cambiando el contador y sus validaciones.
-      */
-      this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
-      })
-    }
-  
-    /* 
-      Al presionar el botón "anterior" debajo de la tabla de citas disponibles se va a decrementar en una semana la fecha 
-      de las citas, con la semana actual como límite.
-    */  
-    disminuirSemanasCitasDisponibles(contParam: number): void {
-  
-      // Decrementando en 1 el contador de semanas (porque siempre le va a llegar un "-1" por parámetro)
-      this.contadorSemanas += contParam
-      console.log("Contador en disminuir: " + this.contadorSemanas)
-      /*
-        Recordar que este método se va a poder utilizar solo si previamente se ejecutó al menos una vez el método de aumentarSemanasDisponibles.
-        Como las citas disponibles se vacían y se vuelven a generar partiendo SIEMPRE de la semana actual, entonces la manera de "retroceder" semanas
-        es sumando la cantidad de semanas que antes se habían aumentado menos una semana.
-      */
-      this.citasDisponibles.forEach(c => {
-        c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
-      })
-    }
+  aumentarSemanasCitasDisponibles(contParam: number) : void {
+    // Incrementando en 1 el contador de semanas (porque siempre le va a llegar un "+1" por parámetro)
+    this.contadorSemanas += contParam
 
+    // Cuando el contador de semanas supera el valor de 1 (citas de hasta 1 semana después) entonces lo decrementa en 1 y se sale del método
+    if (this.contadorSemanas > 1) {
+      this.contadorSemanas - 1
+      return
+    }
 
     /*
-      Estos son los "métodos finales", los cuales se apoyan de todos los métodos anteriores
-      para generar las citas de la semana actual o de las siguientes semanas del mes
+      Se multiplica el número 7 (que representa una semana), según el valor del contador. Al inicio el contador es 0, pero al entrar a este 
+      método aumenta en 1, entonces se multiplicaría 7 * 1 = 7, es decir, se suma una semana. La próxima vez que se entre a este método, 
+      el contador sería 2, entonces se multiplicaría 7 * 2 = 14, es decir, se suman dos semanas. La última vez que se entre a este método
+      antes de que se bloquee el uso del botón que lo ejecuta el contador sería 3, entonces se multiplicaría 7 * 3 = 21, es decir tres semanas.
+      Las tres semanas son el tope que se está utilizando, pero es modificable, cambiando el contador y sus validaciones.
     */
-    citasSemanaActual(): void {
-      this.generaCitasDisponibles()
-      this.filtrarCitasDisponibles()
-    }
+    this.citasDisponibles.forEach(c => {
+      c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
+    })
+  }
 
-    citasSemanaSiguiente(): void {
-      this.citasDisponibles = []
-      this.generaCitasDisponibles()
-      this.aumentarSemanasCitasDisponibles(1)
-      this.filtrarCitasDisponibles()
-    }
+  /* 
+    Al presionar el botón "anterior" debajo de la tabla de citas disponibles se va a decrementar en una semana la fecha 
+    de las citas, con la semana actual como límite.
+  */  
+  disminuirSemanasCitasDisponibles(contParam: number): void {
 
-    citasSemanaAnterior(): void {
-      this.citasDisponibles = []
-      this.generaCitasDisponibles()
-      this.disminuirSemanasCitasDisponibles(-1)
-      // this.citasDisponibles.forEach(c => {
-      //   console.log(c)
-      // })
-      this.filtrarCitasDisponibles()
-    }
-
-    /* 
-      El método se activa al cambiar de area o departamento para que al seleccionar 
-      el nuevo funcionario las citas se encuentren partiendo de la semana actual
+    // Decrementando en 1 el contador de semanas (porque siempre le va a llegar un "-1" por parámetro)
+    this.contadorSemanas += contParam
+    /*
+      Recordar que este método se va a poder utilizar solo si previamente se ejecutó al menos una vez el método de "aumentarSemanasDisponibles".
+      Como las citas disponibles se vacían y se vuelven a generar partiendo SIEMPRE de la semana actual, entonces la manera de "retroceder" semanas
+      es sumando la cantidad de semanas que antes se habían aumentado restando una semana.
     */
-    resetearContadorSemanas(): void {
-      this.contadorSemanas = 0
-    }
+    this.citasDisponibles.forEach(c => {
+      c.fecha.setDate(c.fecha.getDate() + (7 * this.contadorSemanas))
+    })
+  }
 
-    /* 
-      Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
-      componente reserva-tabla, al deseleccionar o cambiar un area seguían apareciendo los 
-      botones, con este método, al deseleccionar o cambiar un area se establece el valor 
-      en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
-    */ 
-    mostrarBotonesAnteriorSiguienteArea(): void {
-        this.mostrarBtns = -1
-    }
+  // Genera las citas disponibles de la semana actual
+  citasSemanaActual(): void {
+    this.generaCitasDisponibles()
+    this.filtrarCitasDisponibles()
+  }
 
-    /* 
-      Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
-      componente reserva-tabla, al deseleccionar o cambiar un departamento seguían apareciendo los 
-      botones, con este método, al deseleccionar o cambiar un departamento se establece el valor 
-      en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
-    */
-    mostrarBotonesAnteriorSiguienteDepartamento(valorComboBox: string) : void {
-      // Si el valor del area o departamento es vacío entonces oculte los botones
-      if (valorComboBox === '') {
+  // Genera las citas disponibles de la semana siguiente
+  citasSemanaSiguiente(): void {
+    this.citasDisponibles = []
+    this.generaCitasDisponibles()
+    this.aumentarSemanasCitasDisponibles(1)
+    this.filtrarCitasDisponibles()
+  }
+
+  // Genera las citas disponibles al retroceder una semana
+  citasSemanaAnterior(): void {
+    this.citasDisponibles = []
+    this.generaCitasDisponibles()
+    this.disminuirSemanasCitasDisponibles(-1)
+    this.filtrarCitasDisponibles()
+  }
+
+  /* 
+    El método se activa al cambiar de area o departamento para que al seleccionar 
+    el nuevo funcionario las citas se encuentren partiendo de la semana actual
+  */
+  resetearContadorSemanas(): void {
+    this.contadorSemanas = 0
+  }
+
+  /* 
+    Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
+    componente reserva-tabla, al deseleccionar o cambiar un area seguían apareciendo los 
+    botones, con este método, al deseleccionar o cambiar un area se establece el valor 
+    en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
+  */ 
+  mostrarBotonesAnteriorSiguienteArea(): void {
       this.mostrarBtns = -1
-      }
-    }
+  }
 
-    mostrarTextoSuplente(suplente: string) : string {
-      if(suplente === "S") {
-        return " (funcionario suplente)"
-      }
-      else {
-        return ""
-      }
+  /* 
+    Como los botones de "anterior" y "siguiente" se muestran la primera vez que se carga el 
+    componente reserva-tabla, al deseleccionar o cambiar un departamento seguían apareciendo los 
+    botones, con este método, al deseleccionar o cambiar un departamento se establece el valor 
+    en -1 a la variable "mostrarBtns" que hacía que se mostraran para que se oculten.
+  */
+  mostrarBotonesAnteriorSiguienteDepartamento(valorComboBox: string) : void {
+    // Si el valor del area o departamento es vacío entonces oculte los botones
+    if (valorComboBox === '') {
+    this.mostrarBtns = -1
     }
+  }
 
-    mostrarAvisoSuplente(suplente: string) : boolean {
-      if(suplente === "S") {
-        return true
-      }
-      else {
-        return false
-      }
+  // Si el funcionario suplente está como encargado inserta el texto "funcioario suplente" en el HTML
+  mostrarTextoSuplente(suplente: string) : string {
+    if(suplente === "S") {
+      return " (funcionario suplente)"
     }
+    else {
+      return ""
+    }
+  }
+
+  // Si el funcionario suplente está como encargado muestra un texto especial en el HTML
+  mostrarAvisoSuplente(suplente: string) : boolean {
+    if(suplente === "S") {
+      return true
+    }
+    else {
+      return false
+    }
+  }
 
   // Convierte un objeto DateTime de SQL a un objeto Date de TS
   sqlToJsDate(sqlDate: any) : Date {
@@ -450,30 +408,5 @@ export class ReservaComponent implements OnInit {
     let sMillisecond = sqlDateArr4[1]
 
     return new Date(sYear, sMonth, sDay, sHour, sMinute, sSecond, sMillisecond)
-}
-    //-----------------------------------------------------------------
-  // Convierte el formato por defecto de Date en JS a YYYY-MM-DD
-  // convertDate(date: Date) {
-  //   let yyyy = date.getFullYear().toString();
-  //   let mm = (date.getMonth() + 1).toString();
-  //   let dd  = date.getDate().toString();
-  
-  //   let mmChars = mm.split('');
-  //   let ddChars = dd.split('');
-  
-  //   return yyyy + '-' + (mmChars[1] ? mm: "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
-  // }
-
-  // obtenerFuncionarioEncargado(): void {
-  //   if (this.funcionariosPorDepa.length != 0) {
-  //     this.idFuncionarioEncargado = this.funcionariosPorDepa.filter( 
-  //       (f) => f.encargado === "Encargado" 
-  //     )[0].idFuncionario;
-  //   }
-  // }
-
-  // EnviarHijo(idFuncionarioEncargado: number) {
-  //   // al hacer el clic en el botón se asigna el valor del input a la variable
-  //   this.recibidoDePadre = idFuncionarioEncargado;
-  // }
+  }
 }

@@ -7,8 +7,8 @@ import { CitasFuncionarioComponent } from './SAGEV/pages/citas-funcionario/citas
 import { CancelarComponent } from './SAGEV/pages/cancelar/cancelar.component';
 import { AdministradorComponent } from './SAGEV/pages/administrador/administrador.component';
 
+// A la ruta del administador se le agregó un código hash para que fuese más difícil acceder
 const routes: Routes = [
-  
   {
     path: '',
     component: ReservaComponent,
@@ -38,8 +38,6 @@ const routes: Routes = [
     path: '**',
     redirectTo: ''
   }
-  
-
 ];
 
 @NgModule({

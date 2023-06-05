@@ -22,73 +22,70 @@ export class ReservaTablaComponent implements OnInit {
   // Para mostrar la fecha como un string 
   fechaCitaString: string = ""
 
-  // Para Mostrar la hora formateada en el formulario 
+  // Para Mostrar la hora reformateada en el formulario 
   horaCitaFormateada: string = ""
 
   // Para mostrar el nombre del funcionario en el formulario 
   nombreFuncionario: string = ""
 
-  seleccionado = false; //Creo que esto esta al revez XD
+  seleccionado = false;
+
+  showModal: number
+
+  // Texto del boton
   status = 'Reserva';
 
+  // Me ayuda cambiar el color del boton 
   botonEstilo = {'background-color': 'blue', 'value': 'seleccionado'};
 
   // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
   fechaHoy: Date = new Date(Date.now())
 
-  //Variable que le avisa al componente reserva que ya puede mostrar los botones de anterior y siguiente
+  // Variable que le avisa al componente reserva que ya puede mostrar los botones de anterior y siguiente
   @Output()
   mostrarBotones = new EventEmitter<number>();
 
-  ngOnInit(): void {
-    // this.getCitasReservadas(this.funcionarioEncargado.idFuncionario)
-    
-    //Enviando variable al componente padre para avisar que ya se cargo este componente
+  ngOnInit(): void { 
+    // Enviando variable al componente padre para avisar que ya se cargo el componente actual
     this.mostrarBotones.emit(1);
+    // Hace un pequeño scroll para que sea fácil darse cuenta de que se cargo una tabla
     this.scroller.scrollToAnchor("tabla-reserva")
   }
 
-  showModal: number
-
-  //Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
+  // Recibe el aviso desde el componente 'reserva-tabla' de que ya puedo mostrar los botones anterior y siguiente
   recibirshModal(shModal: number) : void {
     this.showModal = shModal;
     this.cd.detectChanges();
-    console.log("recibi el valor: "+ this.showModal)
   }
 
+  //Refresca el pop-up
   refrescarShowModal(): void{
-    this.showModal=1
+    this.showModal = 1
   }
 
   botonEstiloCambiaColor(): void {
     this.botonEstilo["background-color"] = 'green'
   } 
 
-  // citaPadre es la cita que se va a cargar con los datos reales que el usuario desee seleccionar
-  // En este metodo citaPadre toma la hora y fecha de las citas disponibles que se generaron
+  // "citaPadre" es la cita que se va a cargar con los datos reales que el usuario desee seleccionar
+  // En este metodo citaPadre toma la hora y fecha de una de las citas disponibles que el contribuyente selecciono
   
-  /*
-    Comentario temporal:
-    Creo que con estos seteos ya no es necesario hacer una citaHija, porque ya cita padre agarro lo que 
-    quiso de cita monito, sin tener que agarrar su Id, es decir, cita padre queda con ID null, como debede ser
-  */
-
-  cargarDatosFormulario(): void {
+  // Cargo la cita con
+  cargarFechaHora(): void {
     this.fechaCitaString = this.citaPadre.fecha.toLocaleDateString()
     this.horaCitaFormateada = this.citaPadre.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})
-    //this.nombreFuncionario = this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 
   }
 
+  // Carga la cita con los datos del formulario ingresados por el contribuyente
   cargarCitaPadre(citaSelec: Cita): void {
     this.citaPadre.fecha = citaSelec.fecha;
     this.citaPadre.idFuncionario = this.funcionarioEncargado.idFuncionario
     this.citaPadre.nombreFuncionario = this.funcionarioEncargado.nombre
     this.citaPadre.apellido1Funcionario = this.funcionarioEncargado.apellido1
     this.citaPadre.apellido2Funcionario = this.funcionarioEncargado.apellido2
-    console.log("Reserva tabla: "+ this.citaPadre.nombreFuncionario)
   }
 
+  // En base a una fecha, calcula que dia de la semana es esa fecha
   devuelveDiaSemana(d: Date): string {
     // Array que funciona como "traductor" para poder imprimir el nombre del día
     const diaSemana = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"]
