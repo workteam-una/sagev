@@ -23,8 +23,9 @@ export class CitasFuncionarioTablaComponent implements OnInit {
   citasDisponibles: Cita[] = []
   citasDisponiblesReagenda: Cita[] = []
   citaReagendada: Cita
-  // fechaCitaString: string = ''
-  // horaCitaFormateada: string = ''
+
+  // Esta es la cita que se selecciona para poder mostrar la información de ella en el correo de reagenda 
+  citaOriginal: Cita = new Cita
 
   // Fecha del día de hoy para no mostrar las citas de la semana actual que "ya pasaron"
   fechaHoy: Date = new Date(Date.now())
@@ -138,8 +139,10 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     }
   }
 
-  cargarCitaReagendada(cita: Cita) : void {
-    this.citaReagendada = cita
+  // Carga la cita original (la que va a ser reagendada) y la nueva cita (reagendada) con la cita que se seleccionó
+  cargarCitaReagendadaOriginal(cita: Cita) : void {
+    this.citaOriginal = this.deepCopy<Cita>(cita)
+    this.citaReagendada = this.deepCopy<Cita>(cita)
   }
 
   modificarCitaReagendada(fecha: string, razon: string) : void {
@@ -161,7 +164,14 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     // Como esta cita va a ser completamente nueva, con base en los datos anteriores debo reestablecer el valor del estado
     this.citaReagendada.estado = 'Pendiente'
     this.citaReagendada.fecha = new Date(fecha)
-    this.citaReagendada.razonReagenda = razon
+      // Motivo de la cita
+      if(this.citaReagendada.razonReagenda !== undefined){
+        this.citaReagendada.razonReagenda = razon
+      }
+      else
+      {
+        this.citaReagendada.razonReagenda = "Sin especificar"
+      }
     // se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
     this.citaReagendada.fecha.setHours(this.citaReagendada.fecha.getHours() - 6)
     // Si la cita se genera con los milisegundos en .000 entonces al recuperarla de la base de datos lo hace con un formato inválido
@@ -185,7 +195,7 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       .subscribe(data => {
         this.closeReagenda()
       })
-    this.enviarCorreo(this.citaReagendada)
+    this.enviarCorreo(this.citaOriginal, this.citaReagendada)
   }
 
   // Guardar las citas reagendadas en tabla histórica de citas
@@ -196,18 +206,19 @@ export class CitasFuncionarioTablaComponent implements OnInit {
       })
   }
 
-  enviarCorreo(cita: Cita) : void {
+  enviarCorreo(citaOriginal: Cita, citaReagendada: Cita) : void {
     let correo: Correo = new Correo
 
     // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
-    cita.fecha.setHours(cita.fecha.getHours() + 6)
+    citaReagendada.fecha.setHours(citaReagendada.fecha.getHours() + 6)
 
-    correo.to = cita.correoContribuyente
+    correo.to = citaOriginal.correoContribuyente
     correo.subject = "Reagenda de su cita en la Municipalidad de Santo Domingo"
-    correo.message = "Estimado/a " + this.citaReagendada.nombreContribuyente + "\n\n" + "Le informamos que el funcionario a cargo de su cita la ha reagendado para el día " + this.devuelveDiaSemana(cita.fecha) + " "
-      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
-      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + cita.razonReagenda
-      + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, pedimos las disculpas del caso."
+    correo.message = "Estimado/a " + this.citaOriginal.nombreContribuyente + "\n\n" + "Le informamos que su cita programada para el " + this.devuelveDiaSemana(citaOriginal.fecha) + " "
+    + citaOriginal.fecha.getDate() + " de " + this.devuelveMes(citaOriginal.fecha) + " a las " + citaOriginal.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) 
+    + " ha sido reagendada por el funcionario a cargo.\nAhora está programada para el día " + this.devuelveDiaSemana(citaReagendada.fecha) + " " + citaReagendada.fecha.getDate() + " de " + this.devuelveMes(citaReagendada.fecha) 
+    + " a las " + citaReagendada.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + citaReagendada.razonReagenda
+    + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, le pedimos disculpas por cualquier inconveniente causado."
 
     console.log(correo.message)
 
@@ -455,4 +466,36 @@ export class CitasFuncionarioTablaComponent implements OnInit {
 
     return yyyy + '-' + (mmChars[1] ? mm : "0" + mmChars[0]) + '-' + (ddChars[1] ? dd : "0" + ddChars[0]);
   }
+
+  // Copiar un objeto a profundidad para obtener todos los valores sin afectar al objeto original
+  deepCopy<T>(instance : T) : T {
+    if (instance == null){
+        return instance;
+    }
+
+    // handle Dates
+    if (instance instanceof Date) {
+        return new Date(instance.getTime()) as any;
+    }
+
+    // handle Array types
+    if (instance instanceof Array){
+        var cloneArr = [] as any[];
+        (instance as any[]).forEach((value)  => {cloneArr.push(value)});
+        // for nested objects
+        return cloneArr.map((value: any) => this.deepCopy<any>(value)) as any;
+    }
+    // handle objects
+    if (instance instanceof Object) {
+        var copyInstance = { ...(instance as { [key: string]: any }
+        ) } as { [key: string]: any };
+        for (var attr in instance) {
+            if ( (instance as Object).hasOwnProperty(attr)) 
+                copyInstance[attr] = this.deepCopy<any>(instance[attr]);
+        }
+        return copyInstance as T;
+    }
+    // handling primitive data types
+    return instance;
+}
 }

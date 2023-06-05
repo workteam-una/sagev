@@ -61,7 +61,8 @@ export class CancelarTablaComponent implements OnInit {
     let tokenCita: string = inputTokenCita
     if(tokenCita !== this.tokenCitaSeleccionada){
       Swal.fire({
-        title: 'El identificador ingresado es incorrecto',
+        title: 'Error al cancelar la cita',
+        text: '¡Identificador único incorrecto!',
         icon: 'error',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#3085d6',

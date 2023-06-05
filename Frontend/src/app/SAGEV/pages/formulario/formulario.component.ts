@@ -152,6 +152,7 @@ export class FormularioComponent implements OnInit {
       })
     })
     this.enviarCorreo(this.citaPadre)
+    
     this.resetForm()
     Notiflix.Loading.remove();
   }
@@ -165,9 +166,10 @@ export class FormularioComponent implements OnInit {
     correo.to = cita.correoContribuyente
     correo.subject = "Confirmación de su cita en la Municipalidad de Santo Domingo"
     correo.message = "Estimado/a " + this.citaPadre.nombreContribuyente + "\n\n" 
-      + 'Le informamos que su cita con motivo: "' + cita.detalle + '" a cargo de ' + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + " "
+      + "Le informamos que su cita a cargo de " + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + " "
       + "para el " + this.devuelveDiaSemana(cita.fecha) + " " + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " 
       + cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + " ha sido reservada con éxito." + "\n\n" 
+      + "Motivo de la cita: " + cita.detalle + "\n\n" 
       + "En caso de que necesite cancelar su cita, el identificador único de la misma es: " + cita.token + "\n\n"
       + "Este correo es generado de forma automática, favor no responder."
 
@@ -175,10 +177,38 @@ export class FormularioComponent implements OnInit {
 
     this.service.enviaCorreo(correo)
       .subscribe(data => {
+        this.enviarCorreoFunc(this.citaPadre)
         // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
       })
 
   }
+
+  enviarCorreoFunc(cita: Cita) : void {
+    let correo: Correo = new Correo
+    // Se tiene que hacer este incremento por el decremento realizado en el método de guardarCita() 
+    cita.fecha.setHours(cita.fecha.getHours() + 6)
+    correo.to = this.funcionarioEncargado.correo
+    correo.subject = "SAGEV: Nueva cita con " + cita.nombreContribuyente + " para el " + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha)
+    correo.message = "Estimado/a " + this.funcionarioEncargado.nombre + " " + this.funcionarioEncargado.apellido1 + "\n\n" + 
+    "Se le informa que tiene una nueva cita agendada para el " + this.devuelveDiaSemana(cita.fecha) + " "
+      + cita.fecha.getDate() + " de " + this.devuelveMes(cita.fecha) + " a las " +
+      cita.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\n" +
+      "Contribuyente: " + cita.nombreContribuyente + " " + cita.apellido1Contribuyente + " " + cita.apellido2Contribuyente + "\n" +
+      "Teléfono: " + cita.telefonoContribuyente + "\n" +
+      "Correo: " + cita.correoContribuyente + "\n" +
+      "Necesidad del contribuyente: " + cita.detalle + "\n\n" + 
+      "Este correo es generado de forma automática, favor no responder."
+
+    console.log(correo.message)
+
+    this.service.enviaCorreo(correo)
+      .subscribe(() => {
+        // Aquí podría ir un alert diciendo que el correo fue enviado, pero por como están hechos los pasos previos creo que ya es algo innecesario
+      })
+
+  }
+
+
 
   // <td>{{devuelveDiaSemana(cita.fecha)}}</td>
   // <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
@@ -199,7 +229,7 @@ export class FormularioComponent implements OnInit {
 
   creaToken(): string {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const characters = 'ABCDEFGHJKMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789';
     const charactersLength = characters.length;
     let counter = 0;
     // El valor es 10 por defecto, se puede modificar

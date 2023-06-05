@@ -4,7 +4,7 @@
       <th scope="col">Fecha</th>
       <th scope="col">Hora</th>
       <th scope="col">Contribuyente</th>
-      <th scope="col">Cédula</th>
+      <th scope="col">Teléfono</th>
       <th scope="col">Motivo</th>
       <th scope="col">Estado</th>
       <th scope="col" class="text-center">Reagendar cita</th>
@@ -16,12 +16,12 @@
       <td>{{cita.fecha.toLocaleDateString()}}</td>
       <td>{{cita.fecha.toLocaleTimeString('en-US', {hour12: true, hour: '2-digit', minute: '2-digit'})}}</td>
       <td>{{cita.nombreContribuyente}} {{cita.apellido1Contribuyente}}</td>
-      <td>{{cita.idContribuyente}}</td>
+      <td>{{cita.telefonoContribuyente}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
       <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada' && cita.estado !== 'Completada' && cita.estado !== 'Ausente'" class="text-center">
         <button type="button" class="btn btn-primary col-10" 
-        (click)="showReagenda(1, cita.id); cargarCitaReagendada(cita)">Reagendar</button>
+        (click)="showReagenda(1, cita.id); cargarCitaReagendadaOriginal(cita)">Reagendar</button>
       </td>
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
         <button type="button" class="btn btn-danger btn-reagendar col-10" disabled>Reagendar</button>
