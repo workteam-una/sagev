@@ -5,16 +5,15 @@
 
   <!-- Botón de Inicio de sesión para funcionarios -->
   <div style="background: #2581C4; width: 30%;" id="dropdown6">
-    <div class="container-fluid mt-4 mb-3 text-center">
-      <div class="text-center mx-3" style="border: 1px solid #41b9f1; border-radius: 10px; box-shadow: 0 0 10px #184e83;" >
-        <a style=" margin: 0.5%; font-size: medium; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" 
-        class="navbar-brand text-white" routerLink="login" routerLinkActive="active">
-        <i class="fas fa-user-circle"></i> INICIO DE SESIÓN PARA FUNCIONARIOS</a>
-      </div>
+
+    <div class="container-fluid mt-3 mb-3 text-center">
+        <button style="font-size: medium; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; border: 1px solid #41b9f1; border-radius: 10px; box-shadow: 0 0 10px #184e83;" 
+        class="btn text-white" routerLink="login" routerLinkActive="active">
+        <i class="fas fa-user-circle"></i> INICIO DE SESIÓN PARA FUNCIONARIOS</button>
     </div>
   
     <!-- Botón de tipo "dropdown" para reservar o cancelar una cita -->
-    <nav class="navbar navbar-expand-lg navbar">
+    <!-- <nav class="navbar navbar-expand-lg navbar">
       <div class="container-fluid" style="width: auto; border: 1px solid #41b9f1; border-radius: 10px; box-shadow: 0 0 10px #184e83; ">
         <div class="collapse navbar-collapse text-center" id="navbarNavDropdown">
           <ul class="navbar-nav">
@@ -32,6 +31,19 @@
           </ul>
         </div>
       </div>
-    </nav>
+    </nav> -->
+
+    <div class="dropdown container-fluid text-center" style="background: #2581C4">
+      <button class="btn dropdown-toggle text-white active" style="border: 1px solid #41b9f1; border-radius: 10px; box-shadow: 0 0 10px #184e83;" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar2-check-fill mb-1" viewBox="0 0 16 16">
+          <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zm9.954 3H2.545c-.3 0-.545.224-.545.5v1c0 .276.244.5.545.5h10.91c.3 0 .545-.224.545-.5v-1c0-.276-.244-.5-.546-.5zm-2.6 5.854a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z"/>
+        </svg>
+        RESERVAR O CANCELAR UNA CITA
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a routerLink="" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dropdown-item" href="#">Reservar una cita</a></li>
+        <li><a routerLink="cancelar" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="dropdown-item" href="#">Cancelar citas reservadas</a></li>
+      </ul>
+    </div>
   </div>
 </div>
