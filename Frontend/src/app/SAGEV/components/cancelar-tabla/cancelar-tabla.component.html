@@ -24,13 +24,13 @@
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
       <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada'" class="text-center" id="boton-cancelar">
-        <button type="button" class="btn btn-primary col-7" (click)="show(1, cita.id, cita.token);">Cancelar</button>
+        <button type="button" class="btn btn-primary col-8" (click)="show(1, cita.id, cita.token);">Cancelar</button>
       </td>
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
-        <button type="button" class="btn btn-danger col-7" disabled>Cancelada</button>
+        <button type="button" class="btn btn-danger col-8" disabled>Cancelada</button>
       </td>
       <td *ngIf="cita.estado === 'Reagendada'" class="text-center">
-        <button type="button" class="btn btn-warning col-7" disabled>Reagendada</button>
+        <button type="button" class="btn btn-warning col-8" disabled>Reagendada</button>
       </td>
     </tr>
   </tbody>
@@ -46,7 +46,7 @@
       <h4>Cancelar su cita</h4>
     </div>
     <div class="uc-m-body">
-      <label class="fs-3">Digite el identificador único de la cita</label><br>
+      <label class="fs-5">Digite el identificador único de la cita</label><br>
     </div>
     <div class="inputToken">
       <input #tokenCita name="tokenCita" type="text" class="form-control" />

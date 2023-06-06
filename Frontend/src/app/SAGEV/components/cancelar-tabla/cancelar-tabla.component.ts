@@ -36,12 +36,14 @@ export class CancelarTablaComponent implements OnInit {
   // Se obtienen las citas reservadas según la cédula de contribuyente ingresada
   getCitasTempReservadasContribuyente() : void {
     this.service.getCitasTempContribuyente(this.idContribuyente)
-    .subscribe(data => {
-      this.citasContribuyente = data     
-      // Parseando la fecha de las citas a un formato que TS entiende
-      this.citasContribuyente.forEach(c => {
-        c.fecha = this.sqlToJsDate(c.fecha)
-      })
+    .subscribe({
+      next: (data) => {
+        this.citasContribuyente = data     
+        // Parseando la fecha de las citas a un formato que TS entiende
+        this.citasContribuyente.forEach(c => {
+          c.fecha = this.sqlToJsDate(c.fecha)
+        })
+      }
     })
   }
 
@@ -59,7 +61,9 @@ export class CancelarTablaComponent implements OnInit {
       return
     }
     this.service.actualizarEstadoCanceladaTemp(this.idCitaSeleccionada)
-    .subscribe(data => {
+    .subscribe({
+      next: () => {
+      // Desplegar pop-up
       Swal.fire({
         title: '¡Cita cancelada con éxito!',
         icon: 'success',
@@ -68,6 +72,17 @@ export class CancelarTablaComponent implements OnInit {
       })
       this.ngOnInit()
       this.close()
+    },
+    error: () => {
+      // Desplegar pop-up
+      Swal.fire({
+        title:'Error al cancelar la cita',
+        text: 'Por favor, inténtelo nuevamente',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+    }
     })
   }
 

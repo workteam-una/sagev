@@ -27,19 +27,21 @@ export class CancelarComponent implements OnInit {
       return
     }
     this.service.getCitasTempContribuyente(id)
-    .subscribe(data => {
-      this.citasContribuyente = data
+    .subscribe({
+      next: (data) => {
+        this.citasContribuyente = data
 
-      if (this.citasContribuyente.length === 0) {
-      this.noExisteCedula = true
-      
-      // Se setea a vacío para poder cerrar el componente "citas-funcionario-tabla" en el HTML, ya que este está condicionado al valor de esta variable
-      this.idContribuyente = ""
-      }
-      else {
-        this.noExisteCedula = false
-        // Seteando el id del contribuyente para enviarselo a la tabla
-        this.idContribuyente = id 
+        if (this.citasContribuyente.length === 0) {
+        this.noExisteCedula = true
+        
+        // Se setea a vacío para poder cerrar el componente "citas-funcionario-tabla" en el HTML, ya que este está condicionado al valor de esta variable
+        this.idContribuyente = ""
+        }
+        else {
+          this.noExisteCedula = false
+          // Seteando el id del contribuyente para enviarselo a la tabla
+          this.idContribuyente = id 
+        }
       }
     })
   }

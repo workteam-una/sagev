@@ -3,6 +3,7 @@ import { Funcionario } from '../../modelo/funcionario';
 import { Router } from '@angular/router';
 import { ServiceService } from 'src/app/Service/service.service';
 import Swal from 'sweetalert2';
+import * as Notiflix from 'notiflix';
 
 @Component({
   selector: 'app-citas-funcionario',
@@ -41,8 +42,10 @@ export class CitasFuncionarioComponent implements OnInit {
       de datos con el estado actualizado al refrescar la página o refrescar el componente.
     */
     this.service.getFuncionarioId(this.modeloFuncionario.idFuncionario)
-    .subscribe(dataFunc => {
-      this.modeloFuncionario = dataFunc
+    .subscribe({
+      next: (data) => {
+        this.modeloFuncionario = data
+      }
     })    
   }
 
@@ -69,9 +72,11 @@ export class CitasFuncionarioComponent implements OnInit {
   // Cargar los funcionarios por el departamento del funcionario en sesión
   cargarFuncionariosDepa() : void {
     this.service.getFuncionarios()
-    .subscribe(dataFunc => {
-      this.funcionarios = dataFunc
-      this.filtrarFuncionariosEncargadosPorDepa(this.modeloFuncionario.numDepartamento)
+    .subscribe({
+      next: (data) => {
+        this.funcionarios = data
+        this.filtrarFuncionariosEncargadosPorDepa(this.modeloFuncionario.numDepartamento)
+      }
     })    
   }
 
@@ -86,6 +91,7 @@ export class CitasFuncionarioComponent implements OnInit {
     let suplenteEncargado: boolean = false
     let suplenteDiferenteEncargado: boolean = false
     let resultado: boolean = false
+
     this.funcionariosEncargadosPorDepa.forEach(
       (f) => {
         // Si el suplente que recibe no está como encargado
@@ -107,8 +113,22 @@ export class CitasFuncionarioComponent implements OnInit {
 
   // Asigna o desasigna como encargado a un funcionario suplente al desasignar o asignar al funcionario en sesión
   modificarFuncionarioEncargado(idSuplente: string) : void {
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
     // Si se selecciona la opción por defecto entonces salga de la función y no haga nada
     if (idSuplente === "") {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
+      // Desplegar pop-up
+      Swal.fire({
+        title: '¡Seleccione un valor válido!',
+        icon:  'warning',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       return
     }
     /*
@@ -120,7 +140,12 @@ export class CitasFuncionarioComponent implements OnInit {
     if (this.modeloFuncionario.encargado === 'S') {
       // Se actualiza el estado del funcionario suplente como 'S', es decir, queda como encargado
       this.service.actualizarEncargadoSi(idSuplente)
-      .subscribe(data => {
+      .subscribe({
+        next: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar pop-up
         Swal.fire({
           title: '¡Funcionario suplente asignado como encargado con éxito!',
           text: 'Ahora las citas serán agendadas al suplente',
@@ -130,11 +155,40 @@ export class CitasFuncionarioComponent implements OnInit {
         })
         // Se actualiza el estado del funcionario en sesión como 'N', es decir, ya NO queda como encargado
         this.service.actualizarEncargadoNo(this.modeloFuncionario.idFuncionario)
-        .subscribe(data => {
-          // Refrescando el componente para que se reflejen los cambios
-          this.ngOnInit()
+        .subscribe({
+          next: () => {
+            // Refrescando el componente para que se reflejen los cambios
+            this.ngOnInit()
+          },
+          error: () => {
+            // Remover los puntos de carga
+            Notiflix.Loading.remove()
+
+            // Desplegar pop-up
+            Swal.fire({
+              title: 'Error al desasignarse como encargado',
+              text:  'Por favor, inténtelo nuevamente',
+              icon:  'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+          }
         })
-      })
+      },
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar pop-up
+        Swal.fire({
+          title: 'Error al asignar suplente como encargado',
+          text:  'Por favor, inténtelo nuevamente',
+          icon:  'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      }
+    })
     }
     /*
       Validación 2: Si ya hay un funcionario suplente como encargado distinto al que estoy seleccionando, no me permite asignar 
@@ -144,6 +198,9 @@ export class CitasFuncionarioComponent implements OnInit {
       suplentes, por lo que quedaría más de un funcionario como encargado.
     */ 
     if (this.buscarOtroFuncionarioSuplenteEncargado(idSuplente) === true) {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
       Swal.fire({
         title: 'Error al modificar funcionario encargado',
         text: 'Ya existe un funcionario suplente asignado como encargado del departamento',
@@ -163,20 +220,53 @@ export class CitasFuncionarioComponent implements OnInit {
     if (this.modeloFuncionario.encargado === 'N') {
       // Se actualiza el estado del funcionario en sesión como 'S', es decir, queda como encargado
       this.service.actualizarEncargadoSi(this.modeloFuncionario.idFuncionario)
-      .subscribe(data => {
-        Swal.fire({
-          title: '¡Usted ha sido asignado como encargado con éxito!',
-          text: 'Ahora las citas le serán agendadas a usted',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#3085d6',
-        })
-        // Se actualiza el estado del funcionario suplente como 'N', es decir, ya NO queda como encargado
-        this.service.actualizarEncargadoNo(idSuplente)
-        .subscribe(data => {
-          // Refrescando el componente para que se reflejen los cambios
-          this.ngOnInit()
-        })
+      .subscribe({
+        next: () => {
+          // Se actualiza el estado del funcionario suplente como 'N', es decir, ya NO queda como encargado
+          this.service.actualizarEncargadoNo(idSuplente)
+          .subscribe({
+            next: () => {
+              // Remover los puntos de carga
+              Notiflix.Loading.remove()
+
+              Swal.fire({
+                title: '¡Usted ha sido asignado como encargado con éxito!',
+                text: 'Ahora las citas le serán agendadas a usted',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6',
+              })
+              // Refrescando el componente para que se reflejen los cambios
+              this.ngOnInit()
+            },
+            error: () => {
+              // Remover los puntos de carga
+              Notiflix.Loading.remove()
+
+              // Desplegar pop-up
+              Swal.fire({
+                title: 'Error al asignarse como encargado',
+                text:  'Por favor, inténtelo nuevamente',
+                icon:  'error',
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6',
+              })
+            }
+          })
+        },
+        error: () => {
+          // Remover los puntos de carga
+          Notiflix.Loading.remove()
+
+          // Desplegar pop-up
+          Swal.fire({
+            title: 'Error al asignarse como encargado',
+            text:  'Por favor, inténtelo nuevamente',
+            icon:  'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
+        }
       })
     }
   }

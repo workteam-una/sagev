@@ -94,41 +94,66 @@ export class FormularioComponent implements OnInit {
     enviar el correo de confirmación de la cita tanto para el funcionario como para el contribuyente
   */
   guardarCitasEnviarCorreos() : void {
-    Notiflix.Loading.dots({
-      backgroundColor: 'rgba(0,0,0,0.1)',
-      svgSize: '100px',
-    })
     this.guardarCita()
-    // Se sacó un promedio del tiempo empleado y este fue el resultado
-    Notiflix.Loading.remove(5000)
   }
 
   // Almacena la cita en la base de datos
   guardarCita() : void {
-    // Si las validaciones encuentran un error se sale del método
-    if (!this.validaciones()) {
-      return
-    }
+  // Si las validaciones encuentran un error se sale del método
+  if (!this.validaciones()) {
+    return
+  }
 
-   // Carga la cita con los valores ingresados en el formulario
-   this.cargarCita()
-    // Se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
-    this.citaPadre.fecha.setHours(this.citaPadre.fecha.getHours() - 6)
-    // Guardar en la tabla histórica de citas 
-    this.service.guardarCita(this.citaPadre)
-      .subscribe(data => {
-        // Guardar cita en la tabla temporal de citas
-        this.guardarCitaTemp()
+  // Empiezan los puntos de carga
+  Notiflix.Loading.dots({
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    svgSize: '100px',
+  })
+
+  // Carga la cita con los valores ingresados en el formulario
+  this.cargarCita()
+
+  // Se restan 6 horas a la cita para que llegue con la hora en zona horaria local y no en ISO (+6 horas)
+  this.citaPadre.fecha.setHours(this.citaPadre.fecha.getHours() - 6)
+
+  // Guardar en la tabla histórica de citas 
+  this.service.guardarCita(this.citaPadre)
+    .subscribe({
+      next: () => this.guardarCitaTemp(),
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar pop-up
+        Swal.fire({
+          title: 'Error al reservar la cita',
+          text: 'Por favor, inténtelo nuevamente',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      }
     })
-    
   }
 
   // Guardar la cita en la tabla temporal de citas
   guardarCitaTemp() : void {
     this.service.guardarCitaTemp(this.citaPadre)
-    .subscribe(data => {
-      this.enviarCorreo(this.citaPadre)
+    .subscribe({
+      next: () => this.enviarCorreo(this.citaPadre),
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
 
+        // Desplegar el pop-up
+        Swal.fire({
+          title: 'Error al reservar la cita',
+          text: 'Por favor, intente reservar nuevamente',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      }
     })
   }
 
@@ -148,8 +173,24 @@ export class FormularioComponent implements OnInit {
       + "Este correo es generado de forma automática, favor no responder."
 
     this.service.enviaCorreo(correo)
-      .subscribe(data => {
-        this.enviarCorreoFunc(this.citaPadre)
+      .subscribe({
+        next: () => this.enviarCorreoFunc(this.citaPadre),
+        error: () => {
+          // Remover los puntos de carga
+          Notiflix.Loading.remove()
+
+          // Desplegar pop-up
+          Swal.fire({
+            title: '¡Algo salió mal!',
+            text:  'Puede que no reciba el correo electrónico con los detalles de su cita',
+            icon:  'warning',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          }).then(() => {
+            // Refrescar la página
+            window.location.reload()
+          })
+        }
       })
   }
 
@@ -168,7 +209,28 @@ export class FormularioComponent implements OnInit {
       "Necesidad del contribuyente: " + cita.detalle
 
     this.service.enviaCorreo(correo)
-      .subscribe(() => {
+    .subscribe({
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+        
+        // Nota: Como este es el correo de confirmación dirigido hacia el funcionario
+        // no se considera prudente confundir al contribuyente al desplegar este pop-up
+
+        // Desplegar pop-up
+        // Swal.fire({
+        //   title: 'Error al enviar correo',
+        //   text: 'Ocurrió un error durante el envío del correo de confirmación dirigido al funcionario',
+        //   icon: 'error',
+        //   confirmButtonText: 'Aceptar',
+        //   confirmButtonColor: '#3085d6',
+        // })
+      },
+      complete: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar el pop-up
         Swal.fire({
           title: '¡Cita reservada con éxito!',
           text: 'Los detalles de la reserva serán enviados al correo electrónico ingresado',
@@ -176,10 +238,11 @@ export class FormularioComponent implements OnInit {
           confirmButtonText: 'Aceptar',
           confirmButtonColor: '#3085d6'
         }).then(() => {
-          // Limpiar el formulario y refrescar la página
-          this.resetForm()
+          // Refrescar la página
+          window.location.reload()
         })
-      })
+      }
+    })
   }
 
   // Mostrar el pop-up

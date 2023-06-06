@@ -48,19 +48,24 @@ export class ReservaComponent implements OnInit {
     localStorage.clear()
     
     this.service.getAreas()
-    .subscribe(dataArea => {
-      this.areas = dataArea
+    .subscribe({
+      next: (data) => {  
+        this.areas = data
+      }
     })
     
     this.service.getDepartamentos()
-    .subscribe(dataDep => {
-      this.departamentos = dataDep
-    })
+    .subscribe({
+      next: (data) => {
+        this.departamentos = data
+      }
+    } )
 
     this.service.getFuncionarios()
-    .subscribe(dataFunc => {
-      this.funcionarios = dataFunc
-    })
+    .subscribe({
+      next: (data) => {
+      this.funcionarios = data
+    }})
   }
 
   filtrarDepartamentosPorArea(numAreaParam: string) : void {
@@ -96,7 +101,8 @@ export class ReservaComponent implements OnInit {
 
     // Recuperar las citas de la tabla de citas temporales
     this.service.getCitasTempFuncionario(id)
-    .subscribe(data => {
+    .subscribe({
+      next: (data) => {
       this.citasReservadas = data
 
       // Se están parseando las fechas aquí para solo tener que hacerlo una vez
@@ -106,7 +112,8 @@ export class ReservaComponent implements OnInit {
       
       // Llamar este método aquí es necesario para que carguen primero las citas reservadas
       this.citasSemanaActual()
-    })
+    }
+  })
   }
 
   // La función siempre va a devolver la fecha del lunes de la semana actual haciendo el cálculo con base en la fecha actual

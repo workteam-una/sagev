@@ -32,29 +32,59 @@ export class LoginComponent implements OnInit {
   obtenerFuncionario(): void {
     // Guardando el id del textfield de login
     let id: string = this.modeloFuncionario.idFuncionario
+
+    // Agregando puntos de carga
+      Notiflix.Loading.dots({
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        svgSize: '100px',
+      })
+
       this.service.getFuncionarioId(id)
-      .subscribe(data => {
-        this.modeloFuncionarioCargado = data
-        // Este try está validando la existencia del id del funcionario
-        try {
-          this.validarCredenciales();
-        }
-        catch (error) {
+      .subscribe({
+        next: (data) => {
+          this.modeloFuncionarioCargado = data
+          // Este try está validando la existencia del id del funcionario
+          try {
+            this.validarCredenciales();
+          }
+          catch (error) {
+            // Remover los puntos de carga
+            Notiflix.Loading.remove()
+
+            // Desplegando el pop-up
+            Swal.fire({
+              title: 'Error al iniciar sesión',
+              text: '¡La cédula o contraseña son incorrectas!',
+              icon: 'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6'
+            })
+          }
+        },
+        error: () => {
+          // Remover los puntos de carga
+          Notiflix.Loading.remove()
+  
+          // Desplegar el pop-up
           Swal.fire({
             title: 'Error al iniciar sesión',
-            text: 'La cédula o contraseña son incorrectas',
+            text: 'Por favor, inténtelo nuevamente',
             icon: 'error',
             confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#3085d6'
+            confirmButtonColor: '#3085d6',
           })
         }
-      });
+      })
   }
 
   // Valida que tanto el id como la contraseña del funcionario sean correctas
   validarCredenciales(): void {
     let idMal: Boolean
     let passwordMal: Boolean
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
     if(this.modeloFuncionarioCargado === null){
       idMal = true
     }
@@ -62,9 +92,13 @@ export class LoginComponent implements OnInit {
       passwordMal = true
     }
     if(idMal || passwordMal){
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
+      // Desplegando el pop-up
       Swal.fire({
             title: 'Error al iniciar sesión',
-            text: 'La cédula o contraseña son incorrectas',
+            text: '¡La cédula o contraseña son incorrectas!',
             icon: 'error',
             confirmButtonText: 'Aceptar',
             confirmButtonColor: '#3085d6'
@@ -72,25 +106,24 @@ export class LoginComponent implements OnInit {
       return
     }
     if(this.modeloFuncionarioCargado.administrador === 'S'){
-      Notiflix.Loading.dots({
-        backgroundColor: 'rgba(0,0,0,0.1)',
-        svgSize: '100px',
-      })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
       // Forward hacia la vista del administrador
       this.router.navigate(["administrador/063d0217"])
+
+      // Remover los puntos de carga
       Notiflix.Loading.remove()
     } 
     else {
-      Notiflix.Loading.dots({
-      backgroundColor: 'rgba(0,0,0,0.1)',
-      svgSize: '100px',
-      })
       this.guardarLocalStorage(this.modeloFuncionarioCargado);
       // Forward hacia la vista del funcionario
       this.router.navigate(["citasFunc"])
+
+      // Remover los puntos de carga
       Notiflix.Loading.remove()
     }
+
+    // Remover los puntos de carga
+    Notiflix.Loading.remove()
   }
 
   // Guarda el objeto funcionario que se cargó luego de ingresar las credenciales en el local storage del navegador

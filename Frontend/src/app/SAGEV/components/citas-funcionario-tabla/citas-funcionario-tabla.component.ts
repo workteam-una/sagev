@@ -78,13 +78,15 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     this.citasDisponibles = []
     this.citasDisponiblesReagenda = []
     this.service.getCitasTempFuncionario(id)
-      .subscribe(data => {
-        this.citasFuncionario = data
-        // Se están parsean las fechas de formato SQL a formato TypeScript
-        this.citasFuncionario.forEach(c => {
-          c.fecha = this.sqlToJsDate(c.fecha)
-        })
-        this.generaCitasDisponiblesReagenda()
+      .subscribe({
+        next: (data) => {
+          this.citasFuncionario = data
+          // Se están parsean las fechas de formato SQL a formato TypeScript
+          this.citasFuncionario.forEach(c => {
+            c.fecha = this.sqlToJsDate(c.fecha)
+          })
+          this.generaCitasDisponiblesReagenda()
+        }
       })
   }
 
@@ -132,68 +134,134 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     })
     // Una vez seteados los datos de la cita reagendada se procede a guardarlos en ambas tablas y cambiar su estado
     this.guardarCitaTemp()
-    Notiflix.Loading.remove();
+
   }
 
   // Guardar las citas reagendadas en tabla temporal de citas
   guardarCitaTemp(): void {
     this.service.guardarCitaTemp(this.citaReagendada)
-      .subscribe(data => {
-        this.guardarCita()
-        this.closeReagenda()
+      .subscribe({
+        next: () => {
+          this.guardarCita()
+        },
+        error: () => {
+          Notiflix.Loading.remove();
+          // Desplegar pop-up
+          Swal.fire({
+            title: 'Error al reagendar',
+            text:  'Por favor, inténtelo nuevamente',
+            icon:  'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
+        }
       })
   }
 
   // Guardar las citas reagendadas en tabla histórica de citas
   guardarCita(): void {
     this.service.guardarCita(this.citaReagendada)
-      .subscribe(data => {
-        this.actualizarEstado("reagendada")
+      .subscribe({
+        next: () => {
+          this.actualizarEstado("reagendada")
+        },
+        error: () => {
+          Notiflix.Loading.remove();
+          // Desplegar pop-up
+          Swal.fire({
+            title: 'Error al reagendar',
+            text:  'Por favor, inténtelo nuevamente',
+            icon:  'error',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
+        }
       })
   }
 
   // Acutaliza el estado de una cita seleccionada
   actualizarEstado(estado: string): void {
+    // Iniciando los puntos de carga
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+
     if (estado === "completada") {
       this.service.actualizarEstadoCompletadaTemp(this.idCitaSeleccionada)
-        .subscribe(data => {
-          Swal.fire({
-            title: '¡Cambio de estado exitoso!',
-            text: 'La cita ha cambiado su estado a "completada"',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#3085d6',
-          })
-          this.ngOnInit()
-          this.closeEstado()
+        .subscribe({
+          next: () => {
+            Notiflix.Loading.remove();
+            // Desplegar pop-up
+            Swal.fire({
+              title: '¡Cambio de estado exitoso!',
+              text: 'La cita ha cambiado su estado a "completada"',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+            this.ngOnInit()
+            this.closeEstado()
+          },
+          error: () => {
+            Notiflix.Loading.remove();
+            // Desplegar pop-up
+            Swal.fire({
+              title: 'Error al cambiar el estado',
+              text:  'Por favor, inténtelo nuevamente',
+              icon:  'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+          }
         })
     }
     if (estado === "ausente") {
       this.service.actualizarEstadoAusenteTemp(this.idCitaSeleccionada)
-        .subscribe(data => {
-          Swal.fire({
-            title: '¡Cambio de estado exitoso!',
-            text: 'La cita ha cambiado su estado a "ausente"',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#3085d6',
-          })
-          this.ngOnInit()
-          this.closeEstado()
+        .subscribe({
+          next: () => {
+            Notiflix.Loading.remove();
+            // Desplegar pop-up
+            Swal.fire({
+              title: '¡Cambio de estado exitoso!',
+              text:  'La cita ha cambiado su estado a "ausente"',
+              icon:  'success',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+            this.ngOnInit()
+            this.closeEstado()
+          },
+          error: () => {
+            Notiflix.Loading.remove();
+            // Desplegar pop-up
+            Swal.fire({
+              title: 'Error al cambiar el estado',
+              text:  'Por favor, inténtelo nuevamente',
+              icon:  'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+          }
         })
     }
     if (estado === "reagendada") {
       this.service.actualizarEstadoReagendadaTemp(this.idCitaSeleccionada)
-        .subscribe(data => {
-          Swal.fire({
-            title: '¡Cita reagendada con éxito!',
-            text: 'Los detalles de la reagenda serán enviados al contribuyente vía correo electrónico',
-            icon: 'success',
-            confirmButtonText: 'Aceptar',
-            confirmButtonColor: '#3085d6',
-          })
-          this.enviarCorreo(this.citaOriginal, this.citaReagendada)
-          this.ngOnInit()
+        .subscribe({
+          next: () => {
+            this.enviarCorreo(this.citaOriginal, this.citaReagendada)
+          },
+          error: () => {
+            Notiflix.Loading.remove();
+            // Desplegar pop-up
+            Swal.fire({
+              title: 'Error al cambiar estado de la cita',
+              text:  'Por favor, inténtelo nuevamente',
+              icon:  'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+          }
         })
     }
   }
@@ -209,10 +277,34 @@ export class CitasFuncionarioTablaComponent implements OnInit {
     + citaOriginal.fecha.getDate() + " de " + this.devuelveMes(citaOriginal.fecha) + " a las " + citaOriginal.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) 
     + " ha sido reagendada por el funcionario a cargo.\nAhora la cita se encuentra programada para el día " + this.devuelveDiaSemana(citaReagendada.fecha) + " " + citaReagendada.fecha.getDate() + " de " + this.devuelveMes(citaReagendada.fecha) 
     + " a las " + citaReagendada.fecha.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit' }) + ".\n\nLa razón de la reagenda es: " + citaReagendada.razonReagenda
-    + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita y agendar una nueva que se acomode a su conveniencia. De antemano, le pedimos disculpas por cualquier inconveniente causado."
+    + "\n\n" + "En caso de no poder presentarse, favor cancelar su cita utilizando el mismo identificador único que se encuentra en el correo que se le envió previamente con los detalles de su cita anterior y agendar una nueva que se acomode a su conveniencia. De antemano, le pedimos disculpas por cualquier inconveniente causado."
     this.service.enviaCorreo(correo)
-      .subscribe(data => {
-        
+      .subscribe({
+        next: () => {
+          Notiflix.Loading.remove();
+          // Desplegar pop-up
+          Swal.fire({
+            title: '¡Cita reagendada con éxito!',
+            text: 'Los detalles de la reagenda serán enviados al contribuyente vía correo electrónico',
+            icon: 'success',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
+          this.closeReagenda()
+          this.ngOnInit()
+        },
+        error: () => {
+          Notiflix.Loading.remove();
+
+          // Desplegar pop-up
+          Swal.fire({
+            title: '¡Algo salió mal!',
+            text:  'Puede que el contribuyente no reciba el correo electrónico con los detalles de la reagenda',
+            icon:  'warning',
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#3085d6',
+          })
+        }
       })
   }
 

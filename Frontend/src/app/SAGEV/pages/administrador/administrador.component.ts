@@ -6,6 +6,7 @@ import { Funcionario } from '../../modelo/funcionario';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Area } from '../../modelo/area';
 import Swal from 'sweetalert2';
+import * as Notiflix from 'notiflix';
 
 @Component({
   selector: 'app-administrador',
@@ -105,18 +106,52 @@ export class AdministradorComponent implements OnInit {
 
    getAreas() : void {
    this.service.getAreas()
-    .subscribe(dataArea => {
-      this.areas = dataArea
+    .subscribe({
+      next: (data) => {
+        this.areas = data
+      }
+    })
+  }
+
+  getDepartamentos(): void {
+    this.service.getDepartamentos()
+    .subscribe({
+      next: (data) => {
+        this.departamentos = data
+      }
+    })
+  }
+
+  getFuncionarios(): void {
+    this.service.getFuncionarios()
+    .subscribe({
+      next: (data) => {
+        this.funcionarios = data
+        // Remover el funcionario administrador para no permitir cambiarle la contraseña
+        this.funcionarios = this.funcionarios.filter(f => f.administrador !== 'S')
+      }
     })
   }
 
   // Llama a las validaciones de le la nueva área a agregar y si son correctas la agrega
   guardarAreas(a: Area) : void {
+    // Puntos de carga
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+    
     if(!this.validacionesNAF()){
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
       return
     }
     this.cargarNuevaArea()
     if (this.validarNumeroArea(a.numArea)) {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
+      // Desplegar pop-up
       Swal.fire({
         title: 'Error al agregar nueva área',
         text: 'El número de área digitado ya está en uso',
@@ -127,28 +162,57 @@ export class AdministradorComponent implements OnInit {
       return
     }
     this.service.guardarArea(a)
-    .subscribe(data => {
-      Swal.fire({
-        title: '¡Área agregada con éxito!',
-        icon: 'success',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6',
-      })
-      this.ngOnInit()
+    .subscribe({
+      next: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar pop-up
+        Swal.fire({
+          title: '¡Área agregada con éxito!',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+        this.ngOnInit()
+        this.resetFormNAF()
+        this.closeArea()  
+      },
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        // Desplegar pop-up
+        Swal.fire({
+          title: 'Error al agregar nueva área',
+          text:  'Por favor, inténtelo nuevamente',
+          icon:  'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      }
     })
-    this.resetFormNAF()
-    this.closeArea()  
   }
 
   // Llama a las validaciones del nuevo departamento a agregar y si son correctas la agrega
   guardarDepartamento(d: Departamento) : void {
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
     if(!this.validacionesNDF()){
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
       return
     }
     this.cargarNuevoDepartamento()
     if (this.validarNumeroDepartamento(d.numDepartamento)) {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
+      // Desplegar pop-up
       Swal.fire({
-        title: 'Error al agregar nueva departamento',
+        title: 'Error al agregar nuevo departamento',
         text: 'El número de departamento digitado ya está en uso',
         icon: 'error',
         confirmButtonText: 'Aceptar',
@@ -157,43 +221,152 @@ export class AdministradorComponent implements OnInit {
       return
     }
     this.service.guardarDepartamentos(d)
-    .subscribe(data => {
+    .subscribe({
+      next: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+
+        Swal.fire({
+          title: '¡Departamento agregado con éxito!',
+          icon: 'success',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+        this.ngOnInit()
+        this.resetFormNDF()
+        this.closeDpto()
+      },
+      error: () => {
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+      
+        // Desplegar pop-up
+        Swal.fire({
+          title: 'Error al agregar nuevo departamento',
+          text:  'Por favor, inténtelo nuevamente',
+          icon:  'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+      }
+    })
+  }
+
+  // Llama a las validaciones del nuevo funcionario a agregar y si son correctas la agrega
+  guardarFuncionario(): void {
+    // Puntos de carga
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
+
+    if(!this.validacionesNFF()) {
+    // Remover los puntos de carga
+    Notiflix.Loading.remove()
+      return
+    }
+
+  this.cargarNuevoFuncionario()
+  this.service.guardarFuncionario(this.nuevoFuncionario)
+  .subscribe({
+    next: () => {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
       Swal.fire({
-        title: '¡Departamento agregado con éxito!',
+        title: '¡Funcionario agregado con éxito!',
         icon: 'success',
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#3085d6',
       })
       this.ngOnInit()
-    })
-    this.resetFormNDF()
-    this.closeDpto()
+      this.resetFormNFF()
+      this.closeAgrFunc()
+    },
+    error: () => {
+      // Remover los puntos de carga
+      Notiflix.Loading.remove()
+
+      // Desplegar pop-up
+      Swal.fire({
+        title: 'Error al agregar un nuevo funcionario',
+        text:  'Por favor, inténtelo nuevamente',
+        icon:  'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
+    }
+  })
   }
 
-  // Llama a las validaciones del nuevo funcionario a agregar y si son correctas la agrega
-  guardarFuncionario(): void {
-    if(!this.validacionesNFF()) {
-     return
+    /* 
+    Llama a las validaciones y pregunta si las dos contraseñas ingresadas coinciden, 
+    en caso de hacerlo cambia la contraseña de un funcionario 
+  */
+    cambiarContra(): void {
+      // Puntos de carga
+      Notiflix.Loading.dots({
+        backgroundColor: 'rgba(0,0,0,0.1)',
+        svgSize: '100px',
+      })
+      if(!this.validacionesCCF()){
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+        return
+      }
+      this.cargarContras()
+      if(this.contra1 != this.contra2){
+        // Remover los puntos de carga
+        Notiflix.Loading.remove()
+        Swal.fire({
+          title: 'Error al modificar la contraseña',
+          text: 'Las contraseñas ingresadas no coinciden',
+          icon: 'error',
+          confirmButtonText: 'Aceptar',
+          confirmButtonColor: '#3085d6',
+        })
+        return
+      }
+      else {
+        // Cargando al funcionario con el id y contraseña ya validadas para permitir el cambio
+        this.cargarFuncionarioContraNueva()
+        this.service.cambiarContraFunc(this.funcionarioPojo)
+        .subscribe({
+          next: () => {
+            // Remover los puntos de carga
+            Notiflix.Loading.remove()
+
+            // Desplegar pop-up
+            Swal.fire({
+              title: '¡Contraseña modificada con éxito!',
+              icon: 'success',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+            this.ngOnInit()
+            this.resetFormCCF()
+            this.closePswrdFunc()
+          },
+          error: () => {
+            // Remover los puntos de carga
+            Notiflix.Loading.remove()
+
+            // Desplegar pop-up
+            Swal.fire({
+              title: 'Error al modificar la contraseña',
+              text:  'Por favor, inténtelo nuevamente',
+              icon:  'error',
+              confirmButtonText: 'Aceptar',
+              confirmButtonColor: '#3085d6',
+            })
+          }
+        })
+      }
     }
-  this.cargarNuevoFuncionario()
-  this.service.guardarFuncionario(this.nuevoFuncionario)
-  .subscribe(data =>{
-    Swal.fire({
-      title: '¡Funcionario agregado con éxito!',
-      icon: 'success',
-      confirmButtonText: 'Aceptar',
-      confirmButtonColor: '#3085d6',
-    })
-    this.ngOnInit()
-  })
-  this.resetFormNFF()
-  this.closeAgrFunc()
-  
-}
 
   // Verifica que no exista una Área con el mismo numero de Área que se le está asignando al Área nueva 
   validarNumeroArea(numArea: number) : boolean {
     let numAreaDuplicado = false
+
     this.areas.forEach(a => {
       // TODO: Este parseo a la variable numArea es necesario para que funcione, pero no debería de serlo
       if(a.numArea === Number(numArea)) {
@@ -201,23 +374,6 @@ export class AdministradorComponent implements OnInit {
       }
     })
     return numAreaDuplicado
-  }
-
-  getDepartamentos(): void {
-    this.service.getDepartamentos()
-    .subscribe(dataDep => {
-      this.departamentos = dataDep
-    })
-  }
-
-  getFuncionarios(): void {
-    this.service.getFuncionarios()
-    .subscribe(dataFunc => {
-      this.funcionarios = dataFunc
-      // Remover el funcionario administrador para no permitir cambiarle la contraseña
-      this.funcionarios = this.funcionarios.filter(f => f.administrador !== 'S')
-      
-    })
   }
 
   // Verifica que no exista un Departamento con el mismo numero de Departamento que se le está asignando al nuevo Departamento
@@ -230,44 +386,6 @@ export class AdministradorComponent implements OnInit {
       }
     })
     return numDepaDuplicado
-  }
-
-  /* 
-    Llama a las validaciones y pregunta si las dos contraseñas ingresadas coinciden, 
-    en caso de hacerlo cambia la contraseña de un funcionario 
-  */
-  cambiarContra(): void{
-    if(!this.validacionesCCF()){
-      return
-    }
-    this.cargarContras()
-    if(this.contra1 != this.contra2){
-      Swal.fire({
-        title: 'Error al modificar la contraseña',
-        text: 'Las contraseñas ingresadas no coinciden',
-        icon: 'error',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#3085d6',
-      })
-      return
-    }
-    else{
-      // Cargando al funcionario con el id y contraseña ya validadas para permitir el cambio
-      this.cargarFuncionarioContraNueva()
-      this.service.cambiarContraFunc(this.funcionarioPojo)
-      .subscribe(data => {
-        Swal.fire({
-          title: '¡Contraseña modificada con éxito!',
-          icon: 'success',
-          confirmButtonText: 'Aceptar',
-          confirmButtonColor: '#3085d6',
-        })
-        this.ngOnInit()
-      })
-      this.resetFormCCF()
-      this.closePswrdFunc()
-    }
-
   }
 
   // Muestra el pop-up de agregar una nueva Área

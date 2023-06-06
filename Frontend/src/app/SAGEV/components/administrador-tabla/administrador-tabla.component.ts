@@ -31,15 +31,17 @@ export class AdministradorTablaComponent implements OnInit {
    // Nota: Las citas reservadas contienen todas las que han sido reservadas con todos los funcionarios
    getCitasReservadas(): void {
     this.service.getCitasReservadas()
-    .subscribe(data => {
-      this.citasReservadas = data
-      // Se parsea el formato de las fechas de SQL a Typescript para que sean compatibles con el proyecto
-      // Se están parseando las fechas aquí para solo tener que hacerlo una vez
-      this.citasReservadas.forEach(c => {
-        c.fecha = this.sqlToJsDate(c.fecha)
-      })
-      this.citasReservadasFiltradas = this.citasReservadas
-      })
+    .subscribe({ 
+      next: (data) => {
+        this.citasReservadas = data
+        // Se parsea el formato de las fechas de SQL a Typescript para que sean compatibles con el proyecto
+        // Se están parseando las fechas aquí para solo tener que hacerlo una vez
+        this.citasReservadas.forEach(c => {
+          c.fecha = this.sqlToJsDate(c.fecha)
+        })
+        this.citasReservadasFiltradas = this.citasReservadas
+      }
+    })
   }
 
   // Método para filtrar el historial de citas por una rango de fechas
