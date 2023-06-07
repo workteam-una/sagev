@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceService } from 'src/app/Service/service.service';
 import { Cita } from '../../modelo/cita';
+import Swal from 'sweetalert2';
+import * as Notiflix from 'notiflix';
 
 @Component({
   selector: 'app-cancelar',
@@ -23,12 +25,19 @@ export class CancelarComponent implements OnInit {
 
   // Valida la existencia de la cédula del contribuyente y carga sus citas en caso de que tenga citas reservadas
   verificarCitasContribuyente(id: string) : void {
+    // Iniciando los puntos de carga
+    Notiflix.Loading.dots({
+      backgroundColor: 'rgba(0,0,0,0.1)',
+      svgSize: '100px',
+    })
     if (id === "") {
+      Notiflix.Loading.remove()
       return
     }
     this.service.getCitasTempContribuyente(id)
     .subscribe({
       next: (data) => {
+        Notiflix.Loading.remove()
         this.citasContribuyente = data
 
         if (this.citasContribuyente.length === 0) {
@@ -38,10 +47,22 @@ export class CancelarComponent implements OnInit {
         this.idContribuyente = ""
         }
         else {
+          Notiflix.Loading.remove()
           this.noExisteCedula = false
           // Seteando el id del contribuyente para enviarselo a la tabla
           this.idContribuyente = id 
         }
+      },
+      error: () => {
+        Notiflix.Loading.remove()
+        // Desplegar pop-up
+        Swal.fire({
+        title:'Algo salió mal',
+        text: 'Por favor, inténtelo nuevamente',
+        icon: 'error',
+        confirmButtonText: 'Aceptar',
+        confirmButtonColor: '#3085d6',
+      })
       }
     })
   }
