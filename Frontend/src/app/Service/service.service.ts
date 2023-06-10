@@ -14,33 +14,33 @@ export class ServiceService {
   constructor(private http: HttpClient) { }
 
   // Endpoint para comunicarse con el backend
-  url = 'http://localhost:8080/sagev/';
+  url = 'http://localhost:8055/sagev/'
 
   // Obtiene las áreas de la municipalidad
   getAreas(){
-    return this.http.get<Area[]>(this.url + "areas");
+    return this.http.get<Area[]>(this.url + "areas")
   }
 
   // Obtiene todos los departamentos de la municipalidad
   getDepartamentos(){
-    return this.http.get<Departamento[]>(this.url + "departamentos");
+    return this.http.get<Departamento[]>(this.url + "departamentos")
   }
 
   // Obtiene todos los funcionarios de la municipalidad
   getFuncionarios(){
-    return this.http.get<Funcionario[]>(this.url + "funcionarios");
+    return this.http.get<Funcionario[]>(this.url + "funcionarios")
   }
 
   // Obtiene un funcionario por el número de identificación
   getFuncionarioId(id: String){
-    return this.http.get<Funcionario>(this.url + "funcionarios" + "/" + id);
+    return this.http.get<Funcionario>(this.url + "funcionarios" + "/" + id)
   }
 
   // La tabla "Citas" almacena todas las citas existentes 
 
   // Obtiene las citas que han sido reservadas
   getCitasReservadas(){
-    return this.http.get<Cita[]>(this.url + "citas");
+    return this.http.get<Cita[]>(this.url + "citas")
   }
 
   // Obtiene las citas de un funcionario en específico a través de su identificación
@@ -55,14 +55,14 @@ export class ServiceService {
 
   // Ingresa una cita en la base de datos
   guardarCita(cita: Cita){
-    return this.http.post<Cita>(this.url + "citas", cita);
+    return this.http.post<Cita>(this.url + "citas", cita)
   }
 
   // La tabla "CitasTemp" almacena todas las citas reservadas que van a ser limpiadas mensualmente
 
   // Obtiene las citas que han sido reservadas en la tabla de citas temporales
   getCitasTempReservadas(){
-    return this.http.get<Cita[]>(this.url + "citasTemp");
+    return this.http.get<Cita[]>(this.url + "citasTemp")
   }
 
   // Obtiene las citas de un funcionario en específico a través de su identificación
@@ -77,17 +77,17 @@ export class ServiceService {
 
   // Ingresa una cita en la tabla de citas temporales de la base de datos 
   guardarCitaTemp(cita: Cita){
-    return this.http.post<Cita>(this.url + "citasTemp", cita);
+    return this.http.post<Cita>(this.url + "citasTemp", cita)
   }
 
   // Ubica una cita en la tabla de citas temporales de la base de datos con base en su id y actualiza su estado a "completada"
   actualizarEstadoCompletadaTemp(id: number){
-    return this.http.put<number>(this.url + "citasTemp" + "/completada/" + id, id);
+    return this.http.put<number>(this.url + "citasTemp" + "/completada/" + id, id)
   }
 
   // Ubica una cita en la tabla de citas temporales de la base de datos con base en su id y actualiza su estado a "ausente"
   actualizarEstadoAusenteTemp(id: number){
-    return this.http.put<number>(this.url + "citasTemp" + "/ausente/" + id, id);
+    return this.http.put<number>(this.url + "citasTemp" + "/ausente/" + id, id)
   }
 
   // Ubica una cita en la tabla de citas temporales de la base de datos con base en su id y actualiza su estado a "cancelada"
@@ -102,17 +102,17 @@ export class ServiceService {
 
   // Actualiza el estado de "Encargado" del funcionario a "S" (Si)
   actualizarEncargadoSi(id: String){
-    return this.http.put<String>(this.url + "funcionarios" + "/encargado/si/" + id, id);
+    return this.http.put<String>(this.url + "funcionarios" + "/encargado/si/" + id, id)
   }
 
   // Actualiza el estado de "Encargado" del funcionario a "N" (No)
   actualizarEncargadoNo(id: String){
-    return this.http.put<String>(this.url + "funcionarios" + "/encargado/no/" + id, id);
+    return this.http.put<String>(this.url + "funcionarios" + "/encargado/no/" + id, id)
   }
 
   // Almacena un nuevo funcionario en la base de datos
   guardarFuncionario(func: Funcionario){
-    return this.http.post<Funcionario>(this.url + "funcionarios", func);
+    return this.http.post<Funcionario>(this.url + "funcionarios", func)
   }
 
   // Almacena una nueva área en la base de datos

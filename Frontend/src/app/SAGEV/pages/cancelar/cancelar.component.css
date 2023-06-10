@@ -30,6 +30,7 @@
     margin: auto;
     width: 85%;
     padding: 10px;
+    overflow-x: auto;
 }
 
 .divBusqueda{
