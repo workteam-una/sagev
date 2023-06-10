@@ -23,7 +23,7 @@
       <td>{{cita.nombreFuncionario}} {{cita.apellido1Funcionario}} {{cita.apellido2Funcionario}}</td>
       <td>{{cita.detalle}}</td>
       <td>{{cita.estado}}</td>
-      <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada'" class="text-center" id="boton-cancelar">
+      <td *ngIf="cita.estado !== 'Cancelada' && cita.estado !== 'Reagendada' && cita.estado !== 'Completada' && cita.estado !== 'Ausente'" class="text-center" id="boton-cancelar">
         <button type="button" class="btn btn-primary col-8" (click)="show(1, cita.id, cita.token);">Cancelar</button>
       </td>
       <td *ngIf="cita.estado === 'Cancelada'" class="text-center">
@@ -31,6 +31,12 @@
       </td>
       <td *ngIf="cita.estado === 'Reagendada'" class="text-center">
         <button type="button" class="btn btn-warning col-8" disabled>Reagendada</button>
+      </td>
+      <td *ngIf="cita.estado === 'Completada'" class="text-center">
+        <button type="button" class="btn btn-success col-8" disabled>Completada</button>
+      </td>
+      <td *ngIf="cita.estado === 'Ausente'" class="text-center">
+        <button type="button" class="btn btn-light col-8" disabled>Ausente</button>
       </td>
     </tr>
   </tbody>
