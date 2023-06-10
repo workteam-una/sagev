@@ -6,6 +6,7 @@ import { SharedModule } from './shared/shared.module';
 import { SAGEVModule } from './SAGEV/sagev.module';
 import { ServiceService } from './Service/service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
     SAGEVModule,
     HttpClientModule
   ],
-  providers: [ServiceService],
+  providers: [ServiceService, {provide: LocationStrategy, useClass: HashLocationStrategy}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

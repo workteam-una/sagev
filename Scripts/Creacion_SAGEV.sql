@@ -3,7 +3,7 @@
 ----Dropear las tablas
 --drop table Cita;
 --drop table CitaTemp;
---drop table Horario;
+----drop table Horario;
 --drop table Funcionario;
 --drop table Departamento;
 --drop table Area;
@@ -11,7 +11,7 @@
 ----Dropear las secuencias
 --drop sequence sec_Id_cita;
 --drop sequence sec_Id_cita_temp;
---drop sequence sec_Id_Horario;
+----drop sequence sec_Id_Horario;
 
 ------Dropear el trigger
 --drop trigger if exists tr_eliminar_citas_antiguas;
@@ -48,16 +48,16 @@ create table Funcionario
   Administrador char(1) null
 );
 
-create table Horario
-(
-  Id int not null,
-  IdFuncionario varchar(30) not null,
-  --Jornada
-  HoraInicio varchar(10) not null,
-  HoraFinal varchar(10) not null,
-  duracion varchar(10) not null,
-  dia varchar(10) not null
-);
+-- create table Horario
+-- (
+--   Id int not null,
+--   IdFuncionario varchar(30) not null,
+--   --Jornada
+--   HoraInicio varchar(10) not null,
+--   HoraFinal varchar(10) not null,
+--   duracion varchar(10) not null,
+--   dia varchar(10) not null
+-- );
 
 create table Cita
 (
@@ -111,9 +111,9 @@ create sequence sec_Id_cita_temp as int
 	start with 1000
 	increment by 1;
 
-create sequence sec_Id_Horario as int
-	start with 1
-	increment by 1;
+-- create sequence sec_Id_Horario as int
+-- 	start with 1
+-- 	increment by 1;
 
 --PKs
 alter table Area add primary key (NumArea);
@@ -121,7 +121,7 @@ alter table Departamento add primary key (NumDepartamento);
 alter table Funcionario add primary key (IdFuncionario);
 alter table Cita add primary key (Id);
 alter table CitaTemp add primary key (Id);
-alter table Horario add primary key (Id);
+-- alter table Horario add primary key (Id);
 
 --FKs
 
@@ -142,8 +142,8 @@ alter table CitaTemp add constraint cita_temp_fk_funcionario
 foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 
 --Horario_fk_funcionario
-alter table Horario add constraint Horario_fk_funcionario
-foreign key (IdFuncionario) references Funcionario(IdFuncionario);
+-- alter table Horario add constraint Horario_fk_funcionario
+-- foreign key (IdFuncionario) references Funcionario(IdFuncionario);
 
 --CKs
 
@@ -288,36 +288,36 @@ go
 
 --Tabla Horario
 
---Procedimiento de insertar en tabla Horario
-create or alter procedure usp_insertar_Horario @PIdFuncionario varchar(30), 
-@PHoraInicio varchar(10), @PHoraFinal varchar(10), @Pduracion varchar(10), @Pdia varchar(10)
-as
-begin
-    insert into Horario (Id, IdFuncionario, HoraInicio, HoraFinal, duracion, dia) 
-    values (next value for sec_Id_Horario, @PIdFuncionario, @PHoraInicio, @PHoraFinal, 
-    @Pduracion, @Pdia);
-end;
-go
+-- --Procedimiento de insertar en tabla Horario
+-- create or alter procedure usp_insertar_Horario @PIdFuncionario varchar(30), 
+-- @PHoraInicio varchar(10), @PHoraFinal varchar(10), @Pduracion varchar(10), @Pdia varchar(10)
+-- as
+-- begin
+--     insert into Horario (Id, IdFuncionario, HoraInicio, HoraFinal, duracion, dia) 
+--     values (next value for sec_Id_Horario, @PIdFuncionario, @PHoraInicio, @PHoraFinal, 
+--     @Pduracion, @Pdia);
+-- end;
+-- go
 
---Procedimiento de actualizar en tabla Horario
-create or alter procedure usp_actualizar_Horario @PId int, @PIdFuncionario varchar(30), 
-@PHoraInicio varchar(10), @PHoraFinal varchar(10), @Pduracion varchar(10), @Pdia varchar(10)
-as
-begin
-    update Horario 
-        set Id = @PId, IdFuncionario = @PIdFuncionario, HoraInicio = @PHoraInicio,
-        HoraFinal = @PHoraFinal, duracion = @Pduracion, dia = @Pdia
-    where @PId = Id;
-end;
-go
+-- --Procedimiento de actualizar en tabla Horario
+-- create or alter procedure usp_actualizar_Horario @PId int, @PIdFuncionario varchar(30), 
+-- @PHoraInicio varchar(10), @PHoraFinal varchar(10), @Pduracion varchar(10), @Pdia varchar(10)
+-- as
+-- begin
+--     update Horario 
+--         set Id = @PId, IdFuncionario = @PIdFuncionario, HoraInicio = @PHoraInicio,
+--         HoraFinal = @PHoraFinal, duracion = @Pduracion, dia = @Pdia
+--     where @PId = Id;
+-- end;
+-- go
 
---Procedimiento de borrar en tabla Horario
-create or alter procedure usp_eliminar_Horario @PId int 
-as
-begin
-    delete from Horario where Id = @PId;
-end; 
-go
+-- --Procedimiento de borrar en tabla Horario
+-- create or alter procedure usp_eliminar_Horario @PId int 
+-- as
+-- begin
+--     delete from Horario where Id = @PId;
+-- end; 
+-- go
 
 --Tabla Cita
  
